@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'thanks.apps.ThanksConfig',
     'homepage.apps.HomepageConfig',
     'games.apps.GameConfig',
+    'users.apps.UsersConfig'
 ]
 
 MIDDLEWARE = [
