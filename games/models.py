@@ -2,7 +2,7 @@ from django.db import models
 
 # Create your models here.
 
-class Game(models.Model):
+class Games(models.Model):
     id = models.AutoField(primary_key=True)
     price_id = models.CharField(max_length=255, unique=True)
     title = models.CharField(max_length=255)
