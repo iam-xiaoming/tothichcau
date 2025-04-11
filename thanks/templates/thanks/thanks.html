@@ -1,0 +1,29 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank you for visiting this site</title>
+    <link rel="stylesheet" href="{% static 'thanks/css/style.css' %}">
+</head>
+<body>
+    <div id="clickText">Click anywhere to reveal</div>
+    <div id="fullscreenImage"></div>
+    <audio loop id="audio" src="{% static audio_url %}"></audio>
+    
+    <script>
+        document.body.addEventListener("click", function() {
+            let image = document.getElementById("fullscreenImage");
+            let audio = document.getElementById("audio");
+            
+            image.style.backgroundImage = "url('{% static img_url %}')";
+            image.style.display = "block";
+            setTimeout(() => image.style.opacity = "1", 10);
+            
+            audio.play();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memorable</title>
+    <link rel="stylesheet" href="{% static 'thanks/css/style.css' %}">
+</head>
+<body>
+    <div id="clickText">Nhấn vào đây</div>
+    <div id="message" class="highlight_m"></div>
+    <audio loop id="audio" src="{% static 'thanks/audio/lc3.mp3' %}"></audio>
+    
+    <script>
+        const lines = [
+            "If you could find this site, you're definitely not careless in order to review my code. The sound under the background looks pretty nostalgic, right?"
+        ];
+        
+        document.getElementById("clickText").addEventListener("click", function() {
+            let audio = document.getElementById("audio");
+            audio.play();
+            document.getElementById("clickText").style.display = "none";
+            
+            let message = document.getElementById("message");
+            let index = 0;
+            
+            function showLine() {
+                if (index < lines.length) {
+                    message.style.opacity = "0";
+                    setTimeout(() => {
+                        message.innerHTML = lines[index];
+                        message.style.opacity = "1";
+                        index++;
+                        setTimeout(showLine, 2000);
+                    }, 500);
+                }
+            }
+            
+            showLine();
+        });
+    </script>
+</body>
+</html>
