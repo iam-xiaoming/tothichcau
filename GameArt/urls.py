@@ -17,10 +17,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 import homepage.urls
+import game.urls
 import thanks.urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(homepage.urls)),
+    path('', include(game.urls)),
     path('thanks/', include(thanks.urls)),
 ]
