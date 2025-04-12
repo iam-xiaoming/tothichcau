@@ -6,11 +6,16 @@ from django.views import View
 from django.views.generic import TemplateView
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from .models import Order
 
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 # Create your views here.
+def cart_view(request):
+    orders = Order.objects.all()
+    return render(request, 'cart/cart.html', {'orders': orders})
+
 class CreateCheckoutSessionView(View):
     def post(self, request, *args, **kwargs):
         try:
