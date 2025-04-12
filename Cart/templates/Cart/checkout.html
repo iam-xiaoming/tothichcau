@@ -1,0 +1,33 @@
+<!-- products/home.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Checkout</title>
+</head>
+<body>
+    <h1>Welcome to the Checkout Page</h1>
+    <button id="checkout-button">Checkout</button>
+
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        var stripe = Stripe('{{ STRIPE_PUBLISHABLE_KEY }}');
+        document.getElementById('checkout-button').addEventListener('click', function() {
+            fetch("{% url 'create_checkout_session' %}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert('Error: ' + data.error);
+                } else {
+                    stripe.redirectToCheckout({ sessionId: data.id });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

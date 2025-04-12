@@ -20,11 +20,13 @@ import homepage.urls
 import games.urls
 import thanks.urls
 import users.urls
+import cart.urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(homepage.urls)),
     path('', include(games.urls)),
     path('thanks/', include(thanks.urls)),
-    path('', include(users.urls))
+    path('', include(users.urls)),
+    path('', include(cart.urls))
 ]
