@@ -1,0 +1,224 @@
+body {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    background-color: #121212;
+    color: white;
+  }
+  
+  a {
+    color: #aaa;
+    text-decoration: none;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+  }
+  
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #1a1a1a;
+    padding: 1rem 2rem;
+  }
+  
+  .logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  
+  .nav-links a {
+    margin: 0 1rem;
+    font-weight: 500;
+  }
+  
+  .user-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .rewards {
+    font-size: 0.9rem;
+    background: #2c2c2c;
+    padding: 0.3rem 0.6rem;
+    border-radius: 5px;
+  }
+  
+  .download-btn {
+    background-color: #0078f2;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .avatar {
+    background-color: #333;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+  }
+  
+  .cart-wrapper {
+    padding: 2rem;
+  }
+  
+  .cart-title {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .cart-content {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+  
+  .cart-left {
+    flex: 2;
+    min-width: 300px;
+  }
+  
+  .cart-item {
+    background-color: #1e1e1e;
+    border-radius: 8px;
+    display: flex;
+    padding: 1rem;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .item-image {
+    width: 120px;
+    border-radius: 6px;
+  }
+  
+  .item-details {
+    flex: 1;
+  }
+  
+  .item-header .badge {
+    display: inline-block;
+    background: #444;
+    padding: 2px 8px;
+    font-size: 0.75rem;
+    border-radius: 4px;
+    margin-right: 5px;
+  }
+  
+  .badge.purple {
+    background-color: #7a4de8;
+    color: white;
+  }
+  
+  .item-name {
+    font-size: 1.2rem;
+    margin: 0.5rem 0;
+  }
+  
+  .reward-info {
+    color: #f0c000;
+    margin: 0.25rem 0;
+  }
+  
+  .refundable {
+    font-size: 0.9rem;
+    color: #ccc;
+  }
+  
+  .item-meta {
+    margin-top: 0.5rem;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .discount {
+    color: #00ccff;
+    font-weight: bold;
+  }
+  
+  .original-price {
+    text-decoration: line-through;
+    color: #999;
+  }
+  
+  .final-price {
+    font-weight: bold;
+    color: white;
+  }
+  
+  .sale-end {
+    font-size: 0.8rem;
+    color: #aaa;
+  }
+  
+  .item-actions {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+  }
+  
+  .compatibility-warning {
+    margin-top: 0.8rem;
+    font-size: 0.85rem;
+    background-color: #2a2a2a;
+    padding: 0.5rem;
+    border-radius: 5px;
+    color: #ffcc00;
+  }
+  
+  .footer-note {
+    margin-top: 1rem;
+    font-size: 0.75rem;
+    color: #888;
+  }
+  
+  .cart-right {
+    flex: 1;
+    min-width: 250px;
+    background-color: #1e1e1e;
+    border-radius: 8px;
+    padding: 1rem;
+    height: fit-content;
+  }
+  
+  .cart-right h3 {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .summary-line {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.8rem;
+    font-size: 0.95rem;
+  }
+  
+  .summary-line.total {
+    font-weight: bold;
+    font-size: 1.1rem;
+    border-top: 1px solid #333;
+    padding-top: 0.8rem;
+  }
+  
+  .checkout-btn {
+    width: 100%;
+    padding: 0.8rem;
+    margin-top: 1rem;
+    background-color: #0078f2;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+  
