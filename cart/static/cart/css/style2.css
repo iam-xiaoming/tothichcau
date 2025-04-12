@@ -96,8 +96,9 @@ body {
   }
   
   .item-image {
-    width: 120px;
+    width: 180px;
     border-radius: 6px;
+    object-fit: cover;
   }
   
   .item-details {
@@ -106,7 +107,7 @@ body {
   
   .item-header .badge {
     display: inline-block;
-    background: #444;
+    background: #101014;
     padding: 2px 8px;
     font-size: 0.75rem;
     border-radius: 4px;
@@ -121,6 +122,7 @@ body {
   .item-name {
     font-size: 1.2rem;
     margin: 0.5rem 0;
+    color: aqua;
   }
   
   .reward-info {
@@ -193,6 +195,7 @@ body {
   .cart-right h3 {
     font-size: 1.2rem;
     margin-bottom: 1rem;
+    color:#00ccff
   }
   
   .summary-line {

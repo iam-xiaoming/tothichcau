@@ -10,8 +10,9 @@
     <section class="hero">
         <div class="container">
             <div class="hero__slider owl-carousel">
-                <div class="hero__items set-bg" data-setbg="{% static 'homepage/video/hero.mp4' %}">
-                    <div class="row">
+                <video autoplay muted loop playsinline>
+                    <source src="{% static 'homepage/video/hero.mp4' %}" type="video/mp4">
+                        <div class="row">
                         <div class="col-lg-6">
                             <div class="hero__text">
                                 <div class="label">Adventure</div>
@@ -21,8 +22,10 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="hero__items set-bg" data-setbg="{% static 'homepage/video/hero2.mp4' %}">
+                </video>
+                
+                <video autoplay muted loop playsinline>
+                    <source src="{% static 'homepage/video/hero2.mp4' %}" type="video/mp4">
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="hero__text">
@@ -33,7 +36,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </video>
                 <div class="hero__items set-bg" data-setbg="{% static 'homepage/img/game_sidebar/tlou.jpeg' %}">
                     <div class="row">
                         <div class="col-lg-6">
