@@ -76,12 +76,18 @@
 				</div>
 				<div class="col-lg-2">
 					<div class="header__right">
-						<div class="cart">
-							<i class="fa-solid fa-cart-plus"></i>
-							<span class="cart-badge">3</span>
-						</div>
+						{% if user.is_authenticated %}
+							<div class="cart">
+								<i class="fa-solid fa-cart-plus"></i>
+								<span class="cart-badge">3</span>
+							</div>
+						{% endif %}
 						<a href="#" class="search-switch"><span class="icon_search"></span></a>
-						<a href="{% url 'login' %}"><span class="icon_profile"></span></a>
+						{% if user.is_authenticated %}
+							<a href="{% url 'profile' %}"><span class="icon_profile"></span></a>
+						{% else %}
+							<a href="{% url 'login' %}"><span class="icon_profile"></span></a>
+						{% endif %}
 					</div>
 				</div>
 			</div>
