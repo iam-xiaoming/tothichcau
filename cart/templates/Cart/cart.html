@@ -1,0 +1,80 @@
+{% load static %}
+
+{% block title %}
+    <title>My Cart - GameArt</title>
+{% endblock %}
+
+{% block content %}
+    {% if orders.count > 0 %}
+        <link rel="stylesheet" href="{% static 'cart/css/style2.css' %}" />
+        <main class="cart-wrapper">
+          <h1 class="cart-title">My Cart</h1>
+          <div class="cart-content">
+            <!-- LEFT: Cart Item -->
+            <div class="cart-left">
+                {% for order in orders %}
+                    <div class="cart-item">
+                    <img src="{{ order.game.image_url }}" class="item-image" alt="Game Image" />
+                    <div class="item-details">
+                        <div class="item-header">
+                        <span class="badge">Base Game</span>
+                        <span class="badge purple">DELUXE EDITION</span>
+                        </div>
+                        <h2 class="item-name">{{ order.game.title }}</h2>
+                        <p class="reward-info">Earn 5% back in Epic Rewards</p>
+                        <p class="refundable">Self-Refundable ⓘ</p>
+                        <div class="item-meta">
+                        <span class="discount">-90%</span>
+                        <span class="original-price">₫1,650,000</span>
+                        <span class="final-price">₫165,000</span>
+                        </div>
+                        <p class="sale-end">Sale ends 4/24/2025 at 10:00 PM</p>
+                        <div class="item-actions">
+                        <a href="#">Remove</a> | <a href="#">Move to wishlist</a>
+                        </div>
+                        <div class="compatibility-warning">
+                        This product is not compatible with your current device
+                        </div>
+                    </div>
+                    </div>
+                    <p class="footer-note">* The lowest price offered on The Epic Games Store in the last 30 days before discount</p>
+                {% endfor %}
+            </div>
+            <!-- RIGHT: Summary -->
+            <div class="cart-right">
+                <h3>Games and Apps Summary</h3>
+                <div class="summary-line">
+                <span>Price</span>
+                <span>₫1,650,000</span>
+                </div>
+                <div class="summary-line">
+                <span>Sale Discount</span>
+                <span>-₫1,485,000</span>
+                </div>
+                <div class="summary-line">
+                <span>Taxes</span>
+                <span>Calculated at Checkout</span>
+                </div>
+                <div class="summary-line total">
+                <span>Subtotal</span>
+                <span>₫165,000</span>
+                </div>
+                <button class="checkout-btn">Check Out</button>
+            </div>
+          </div>
+        </main>
+    {% else %}
+        <link rel="stylesheet" href="{% static 'cart/css/style1.css' %}" />
+        <main class="cart-container">
+            <h1>My Cart</h1>
+            <div class="empty-cart">
+            <div class="empty-icon">😕</div>
+            <p class="empty-text">Your cart is empty.</p>
+            <a href="#" class="shop-btn">Shop for Games & Apps</a>
+            </div>
+        </main>
+        <footer class="footer">
+            * The lowest price offered on The Epic Games Store in the last 30 days before discount
+        </footer>
+    {% endif %}
+{% endblock %}

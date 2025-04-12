@@ -77,10 +77,10 @@
 				<div class="col-lg-2">
 					<div class="header__right">
 						{% if user.is_authenticated %}
-							<div class="cart">
+							<a class="cart" style="display: inline-block;" href="{% url 'cart' %}">
 								<i class="fa-solid fa-cart-plus"></i>
 								<span class="cart-badge">3</span>
-							</div>
+							</a>
 						{% endif %}
 						<a href="#" class="search-switch"><span class="icon_search"></span></a>
 						{% if user.is_authenticated %}
