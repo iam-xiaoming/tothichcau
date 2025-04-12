@@ -52,6 +52,13 @@ h6 {
 	font-family: "Roboto", sans-serif;
 }
 
+.line-clamp {
+	overflow: hidden;
+	display: -webkit-box;
+	-webkit-line-clamp: 1;
+	-webkit-box-orient: vertical; 
+}
+
 h1 {
 	font-size: 70px;
 }
