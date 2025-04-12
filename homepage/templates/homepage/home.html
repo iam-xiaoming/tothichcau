@@ -71,80 +71,25 @@
                         </div>
                         <div class="row">
                             <a href="">
-                                <div class="col-lg-4 col-md-6 col-sm-6">
-                                <a href="{% url 'game_details' %}">
-                                    <div class="product__item">
-                                        <div class="product__item__pic set-bg" data-setbg="{% static 'homepage/img/game/kena.png' %}">
-                                        </div>
-                                        <div class="product__item__text">
-                                            <h5>The Elder Scrolls Online</h5>
-                                        </div>
-                                        <div class="price-section">
-                                            <span class="sale">-75%</span>
-                                            <span class="origin-price">đ450,000</span>
-                                            <span class="current-price">đ20,000</span>
-                                        </div>
+                                {% for game in games %}
+                                    <div class="col-lg-4 col-md-6 col-sm-6">
+                                        <a href="{% url 'game_details' game.pk %}">
+                                            <div class="product__item">
+                                                <div class="product__item__pic set-bg" data-setbg="{{ game.image_url }}">
+                                                </div>
+                                                <div class="product__item__text line-clamp">
+                                                    <h5>{{ game.title }}</h5>
+                                                </div>
+                                                <div class="price-section">
+                                                    <span class="sale">-75%</span>
+                                                    <span class="origin-price">{{ game.price }}</span>
+                                                    <span class="current-price">{{ game.price }}</span>
+                                                </div>
+                                            </div>
+                                        </a>
                                     </div>
-                                </a>
-                            </div>
+                                {% endfor %}
                             </a>
-                            <div class="col-lg-4 col-md-6 col-sm-6">
-                                <div class="product__item">
-                                    <div class="product__item__pic set-bg" data-setbg="{% static 'homepage/img/game/kena.png' %}">
-                                    </div>
-                                    <div class="product__item__text">
-                                        <h5><a href="#">The Elder Scrolls Online</a></h5>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-6 col-sm-6">
-                                <div class="product__item">
-                                    <div class="product__item__pic set-bg" data-setbg="{% static 'homepage/img/game/ac.png' %}">
-                                    </div>
-                                    <div class="product__item__text">
-                                        <h5><a href="#">The Elder Scrolls Online</a></h5>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-6 col-sm-6">
-                                <div class="product__item">
-                                    <div class="product__item__pic set-bg" data-setbg="{% static 'homepage/img/game/ac.png' %}">
-                                    </div>
-                                    <div class="product__item__text">
-                                        <ul>
-                                            <li>Active</li>
-                                            <li>Movie</li>
-                                        </ul>
-                                        <h5><a href="#">Fullmetal Alchemist: Brotherhood</a></h5>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-6 col-sm-6">
-                                <div class="product__item">
-                                    <div class="product__item__pic set-bg" data-setbg="{% static 'homepage/img/game/ac.png' %}">
-                                    </div>
-                                    <div class="product__item__text">
-                                        <ul>
-                                            <li>Active</li>
-                                            <li>Movie</li>
-                                        </ul>
-                                        <h5><a href="#">Shiratorizawa Gakuen Koukou</a></h5>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-6 col-sm-6">
-                                <div class="product__item">
-                                    <div class="product__item__pic set-bg" data-setbg="{% static 'homepage/img/game/ac.png' %}">
-                                    </div>
-                                    <div class="product__item__text">
-                                        <ul>
-                                            <li>Active</li>
-                                            <li>Movie</li>
-                                        </ul>
-                                        <h5><a href="#">Code Geass: Hangyaku no Lelouch R2</a></h5>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                     <div class="popular__product">

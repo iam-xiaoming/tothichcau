@@ -1,5 +1,9 @@
 from django.shortcuts import render
+from .models import Game
+from django.views.generic import DetailView
 
 # Create your views here.
-def game_details(request):
-    return render(request, 'games/game_details.html')
+class GameDetailView(DetailView):
+    model = Game
+    template_name = 'games/game_details.html'
+    context_object_name = 'game'
