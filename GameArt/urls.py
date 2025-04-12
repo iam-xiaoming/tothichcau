@@ -16,6 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 import homepage.urls
 import games.urls
 import thanks.urls
@@ -30,3 +32,5 @@ urlpatterns = [
     path('', include(users.urls)),
     path('', include(cart.urls))
 ]
+
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
