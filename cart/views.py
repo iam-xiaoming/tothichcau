@@ -81,6 +81,7 @@ class CartView(LoginRequiredMixin, ListView):
         context['total_price'] = total_price
         context['total_discounted_price'] = total_discounted_price
         context['discount'] = total_price - total_discounted_price
+        context['STRIPE_PUBLISHABLE_KEY'] = settings.STRIPE_PUBLISHABLE_KEY
         return context
     
 
@@ -97,16 +98,23 @@ class CreateCheckoutSessionView(LoginRequiredMixin, View):
     login_url = '/login/'  # Redirect here if user is not logged in
     
     def post(self, request, *args, **kwargs):
+        user = self.request.user
+        orders = user.orders.all()
+        
+        line_items = []
+        
+        for order in orders:
+            line_items.append({
+                'price': order.game.stripe_price_id,
+                'quantity': 1
+            })
+            
         try:
             checkout_session = stripe.checkout.Session.create(
-                line_items=[
-                    {
-                        "price": "price_1RCuquE8Jpbq2wr1BXiCUhN9",
-                        "quantity": 1,
-                    }
-                ],
-                metadata={
-                    "product_id": 'prod_S799Z6Mxal533G'    
+                line_items=line_items,
+                metadata = {
+                    "user_id": str(request.user.id),
+                    "order_ids": ",".join(str(order.id) for order in orders)
                 },
                 mode="payment",
                 success_url=request.build_absolute_uri(reverse("success")),
@@ -115,18 +123,6 @@ class CreateCheckoutSessionView(LoginRequiredMixin, View):
             return JsonResponse({'id': checkout_session.id})
         except stripe.error.StripeError as e:
             return JsonResponse({'error': str(e)}, status=400)
-
-
-class CheckoutView(LoginRequiredMixin, TemplateView):
-    login_url = '/login/'
-    template_name = 'cart/checkout.html'
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context.update({
-            'STRIPE_PUBLISHABLE_KEY': settings.STRIPE_PUBLISHABLE_KEY
-        })
-        return context
     
 
 @login_required
