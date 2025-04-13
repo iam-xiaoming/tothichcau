@@ -9,6 +9,8 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import Order
 from games.models import Game
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import ListView
 
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -59,13 +61,31 @@ def get_cart_count(request):
     return JsonResponse({'order_count': order_count})
 
 
-@login_required
-def cart_view(request):
-    user = request.user
-    orders = user.orders.all()
-    return render(request, 'cart/cart.html', {'orders': orders})
+class CartView(LoginRequiredMixin, ListView):
+    model = Order
+    template_name = 'cart/cart.html'
+    context_object_name = 'orders'
+    login_url = '/login/'
 
-class CreateCheckoutSessionView(View):
+    def get_queryset(self):
+        # Return only the orders of the logged-in user
+        return self.request.user.orders.all()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        orders = context['orders']
+
+        total_price = sum(order.game.price for order in orders)
+        total_discounted_price = sum(order.game.discounted_price for order in orders)
+        
+        context['total_price'] = total_price
+        context['total_discounted_price'] = total_discounted_price
+        context['discount'] = total_price - total_discounted_price
+        return context
+
+class CreateCheckoutSessionView(LoginRequiredMixin, View):
+    login_url = '/login/'  # Redirect here if user is not logged in
+    
     def post(self, request, *args, **kwargs):
         try:
             checkout_session = stripe.checkout.Session.create(
@@ -87,7 +107,8 @@ class CreateCheckoutSessionView(View):
             return JsonResponse({'error': str(e)}, status=400)
 
 
-class CheckoutView(TemplateView):
+class CheckoutView(LoginRequiredMixin, TemplateView):
+    login_url = '/login/'
     template_name = 'cart/checkout.html'
     
     def get_context_data(self, **kwargs):
@@ -96,12 +117,14 @@ class CheckoutView(TemplateView):
             'STRIPE_PUBLISHABLE_KEY': settings.STRIPE_PUBLISHABLE_KEY
         })
         return context
+    
 
-
+@login_required
 def success(request):
     return render(request, "cart/success.html")
 
 
+@login_required
 def cancel(request):
     return render(request, "cart/cancel.html")
 
