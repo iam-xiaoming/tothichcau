@@ -759,22 +759,16 @@ ol {
 }
 
 .product__item__text {
-	padding-top: 20px;
+	padding-top: 10px;
 }
 
 .product__item__text ul {
 	margin-bottom: 10px;
 }
 
-.product__item__text ul li {
-	list-style: none;
-	font-size: 10px;
-	color: #ffffff;
-	font-weight: 700;
-	padding: 1px 10px;
-	background: rgba(255, 255, 255, 0.2);
-	border-radius: 50px;
-	display: inline-block;
+.product__item__text .base-game {
+	color: rgba(255, 255, 255, 0.65);
+	font-size: 13px;
 }
 
 .product__item__text h5 {
