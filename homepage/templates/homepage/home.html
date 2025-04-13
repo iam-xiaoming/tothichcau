@@ -83,11 +83,9 @@
                                                     {% if game.discount > 0 %}
                                                         <span class="sale">-{{ game.discount }}%</span>
                                                         <span class="origin-price">${{ game.price }}</span>
-                                                        <span class="current-price">${{ game.discounted_price|floatformat:2 }}</span>
-                                                    {% else %}
-                                                        <span class="current-price">${{ game.price }}</span>
+                                                        
                                                     {% endif %}
-                                                    
+                                                    <span class="current-price">${{ game.discounted_price|floatformat:2 }}</span>
                                                 </div>
                                             </div>
                                         </a>
