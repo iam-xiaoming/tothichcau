@@ -8,4 +8,8 @@ urlpatterns = [
     path("success/", views.success, name="success"),
     path("cancel/", views.cancel, name="cancel"),
     # path('webhook/stripe/', views.webhook_view, name='webhook_stripe'),
+    path('api/cart/count/', views.get_cart_count, name='cart_count'),
+    path('api/cart/add/', views.add_to_cart, name='add_to_cart'),
+    path('api/cart/game_ids/', views.get_cart_game_ids, name='get_cart_game_ids'),
+
 ]

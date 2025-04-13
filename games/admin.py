@@ -4,7 +4,7 @@ from .models import Game, Key, UserGame
 # Register your models here.
 @admin.register(Game)
 class GameAdmin(admin.ModelAdmin):
-    list_display = ('name', 'publisher', 'price', 'discount', 'category', 'release_date', 'quantity')
+    list_display = ('name', 'publisher', 'price', 'discount', 'category', 'release_date')
     list_filter = ('publisher', 'category', 'release_date')
     search_fields = ('name', 'publisher', 'category')
     ordering = ('-release_date',)
