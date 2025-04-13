@@ -7,13 +7,62 @@ from django.views.generic import TemplateView
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import Order
+from games.models import Game
+from django.contrib.auth.decorators import login_required
 
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 # Create your views here.
+def get_cart_game_ids(request):
+    if request.user.is_authenticated:
+        game_ids = list(
+            Order.objects.filter(user=request.user).values_list('game_id', flat=True)
+        )
+        return JsonResponse({'game_ids': game_ids})
+    
+    return JsonResponse({'game_ids': []})
+
+
+@csrf_exempt
+def add_to_cart(request):
+    if request.method == 'POST' and request.user.is_authenticated:
+        user = request.user
+        game_id = request.POST.get('game_id')
+
+        try:
+            game = Game.objects.get(id=game_id)
+        except Game.DoesNotExist:
+            return JsonResponse({'success': False, 'message': 'Game not found.'})
+
+        # Check if already in cart
+        if Order.objects.filter(user=user, game=game).exists():
+            return JsonResponse({
+                'success': False,
+                'already_in_cart': True,
+                'message': 'Already in cart.'
+            })
+
+        # Add to cart
+        Order.objects.create(user=user, game=game)
+        return JsonResponse({'success': True, 'message': 'Game added to cart!'})
+
+    return JsonResponse({'success': False, 'message': 'Invalid request or not authenticated.'})
+
+
+def get_cart_count(request):
+    user = request.user
+    if user.is_authenticated:
+        order_count = user.orders.count()  # Correct way to access related orders
+    else:
+        order_count = 0  # If not authenticated, set count to 0
+    return JsonResponse({'order_count': order_count})
+
+
+@login_required
 def cart_view(request):
-    orders = Order.objects.all()
+    user = request.user
+    orders = user.orders.all()
     return render(request, 'cart/cart.html', {'orders': orders})
 
 class CreateCheckoutSessionView(View):
