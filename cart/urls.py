@@ -11,5 +11,6 @@ urlpatterns = [
     path('api/cart/count/', views.get_cart_count, name='cart_count'),
     path('api/cart/add/', views.add_to_cart, name='add_to_cart'),
     path('api/cart/game_ids/', views.get_cart_game_ids, name='get_cart_game_ids'),
+    path('cart/delete/<int:pk>/', views.CartDeleteView.as_view(), name='cart-delete')
 
 ]
