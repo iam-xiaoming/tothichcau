@@ -7,6 +7,3 @@ class ListGameView(ListView):
     model = Game
     template_name = 'homepage/home.html'
     context_object_name = 'games'
-    
-    
-

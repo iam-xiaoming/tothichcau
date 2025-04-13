@@ -24,8 +24,6 @@
                 <div class="row">
                     <div class="col-lg-3">
                         <div class="anime__details__pic set-bg" data-setbg="{{ game.image.url }}">
-                            <div class="comment"><i class="fa fa-comments"></i> 11</div>
-                            <div class="view"><i class="fa fa-eye"></i> 9141</div>
                         </div>
                     </div>
                     <div class="col-lg-9">
@@ -67,14 +65,13 @@
                                 </div>
                             </div>
                             <div class="anime__details__btn">
-                                <a href="#" class="follow-btn"><i class="fa fa-heart-o"></i> Follow</a>
-                                <a href="#" class="watch-btn"><span>Watch Now</span> <i
-                                    class="fa fa-angle-right"></i></a>
+                                <a href="#" class="follow-btn"><i class="fa fa-heart-o"></i>Follow</a>
+                                <a href="#" class="watch-btn" data-game-id="{{ object.id }}"><span>Loading...</span><i class="fa fa-angle-right"></i></a>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                <div style="margin-top: 50px;" class="row">
                     <div class="col-lg-8 col-md-8">
                         <div class="anime__details__review">
                             <div class="section-title">
@@ -179,4 +176,84 @@
         </div>
     </section>
     <!-- Anime Section End -->
+
+
+    <style>
+        .watch-btn.disabled {
+            pointer-events: none;
+            opacity: 0.5;
+        }
+    </style>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            fetch("{% url 'get_cart_game_ids' %}")
+                .then(res => res.json())
+                .then(data => {
+                    const inCartIds = new Set(data.game_ids);  // faster lookup
+        
+                    document.querySelectorAll('.watch-btn').forEach(btn => {
+                        const gameId = parseInt(btn.getAttribute('data-game-id'));
+                        if (inCartIds.has(gameId)) {
+                            btn.classList.remove('loading');
+                            btn.classList.add('disabled');
+                            btn.querySelector('span').textContent = 'In Cart';
+                        } else {
+                            btn.classList.remove('loading');
+                            btn.querySelector('span').textContent = 'Add to cart';
+                        }
+                    });
+                })
+                .catch(err => {
+                    console.error('Error fetching cart game IDs:', err);
+                });
+        });
+
+        document.querySelectorAll('.watch-btn').forEach(button => {
+            button.addEventListener('click', function (e) {
+                e.preventDefault(); // Prevent link default behavior
+    
+                const gameId = this.getAttribute('data-game-id');
+                const btn = this;
+    
+                fetch("{% url 'add_to_cart' %}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    body: new URLSearchParams({
+                        'game_id': gameId
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.already_in_cart || data.success) {
+                        btn.classList.add('disabled');
+                        btn.querySelector('span').textContent = 'In Cart';
+                    }             
+                    if (data.success) {
+                        updateCartCount(); // Only update cart badge when new item added
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            });
+        });
+    
+        // CSRF token helper
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                document.cookie.split(';').forEach(cookie => {
+                    const [key, value] = cookie.trim().split('=');
+                    if (key === name) {
+                        cookieValue = decodeURIComponent(value);
+                    }
+                });
+            }
+            return cookieValue;
+        }
+    </script>    
 {% endblock %}
