@@ -1,6 +1,6 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 import stripe
 from django.views import View
 from django.views.generic import TemplateView
@@ -82,6 +82,16 @@ class CartView(LoginRequiredMixin, ListView):
         context['total_discounted_price'] = total_discounted_price
         context['discount'] = total_price - total_discounted_price
         return context
+    
+
+class CartDeleteView(LoginRequiredMixin, View):
+    login_url = '/login/'
+    
+    def post(self, request, pk, *args, **kwargs):
+        order = get_object_or_404(Order, pk=pk, user=request.user)
+        order.delete()
+        return redirect('cart')
+    
 
 class CreateCheckoutSessionView(LoginRequiredMixin, View):
     login_url = '/login/'  # Redirect here if user is not logged in
