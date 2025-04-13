@@ -147,7 +147,10 @@
                 <span>Subtotal</span>
                 <span>${{ total_discounted_price|floatformat:2 }}</span>
                 </div>
-                <button class="checkout-btn">Check Out</button>
+                <form action="" method="POST">
+					{% csrf_token %}
+					<button id="checkout-btn" class="checkout-btn">Check Out</button>
+				</form>
             </div>
           </div>
         </main>
@@ -166,6 +169,29 @@
 	<footer class="footer-note">
 		The lowest price offered on The Epic Games Store in the last 30 days before discount
 	</footer>
+
+	<script src="https://js.stripe.com/v3/"></script>
+    <script>
+        var stripe = Stripe('{{ STRIPE_PUBLISHABLE_KEY }}');
+        document.getElementById('checkout-btn').addEventListener('click', function(event) {
+			event.preventDefault();
+            fetch("{% url 'create_checkout_session' %}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert('Error: ' + data.error);
+                } else {
+                    stripe.redirectToCheckout({ sessionId: data.id });
+                }
+            });
+        });
+    </script>
 
 	<script src="{% static 'homepage/js/jquery-3.3.1.min.js' %}"></script>
 	<script src="{% static 'homepage/js/bootstrap.min.js' %}"></script>
