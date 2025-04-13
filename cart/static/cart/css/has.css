@@ -3,6 +3,7 @@ body {
     font-family: 'Roboto', sans-serif;
     background-color: #121212;
     color: white;
+    height: 100%;
   }
   
   a {
@@ -235,5 +236,6 @@ body {
     font-size: 0.75rem;
     color: #888;
     text-align: center;
-    margin-top: 50px;
+    position: absolute;
+    bottom: 20px;
   }
