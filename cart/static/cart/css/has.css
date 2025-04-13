@@ -6,13 +6,17 @@ body {
     height: 100%;
   }
   
-  a {
+  a, button {
     color: #aaa;
     text-decoration: none;
+    background: transparent;
+    border: none;
+    margin: 0;
+    padding: 0;
   }
-  
-  a:hover {
-    text-decoration: underline;
+
+  button:hover {
+    color: #fff;
   }
   
   .navbar {

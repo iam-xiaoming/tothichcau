@@ -118,7 +118,10 @@
 								<p class="sale-end">Sale ends 4/24/2025 at 10:00 PM</p>
 							{% endif %}
 							<div class="item-actions">
-								<a href="#">Remove</a>
+								<form action="{% url 'cart-delete' order.pk %}" method="POST">
+									{% csrf_token %}
+									<button type="submit">Remove</button>
+								</form>
 								<a href="#">Move to wishlist</a>
 							</div>
 						</div>
