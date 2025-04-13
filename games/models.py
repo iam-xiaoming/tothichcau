@@ -48,8 +48,14 @@ class Game(models.Model):
     def save(self, *args, **kwargs):
         is_create = Game.objects.filter(pk=self.pk).exists()
         
-        if self.image and os.path.isfile(self.image.path):
-            os.remove(self.image.path)
+        try:
+            old = Game.objects.get(pk=self.pk)
+        except Game.DoesNotExist:
+            old = None
+            
+        if old and old.image and old.image != self.image:
+            if os.path.isfile(old.image.path):
+                os.remove(old.image.path)
         
         super().save(*args, **kwargs)
         
