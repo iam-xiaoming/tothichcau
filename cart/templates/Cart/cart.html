@@ -1,5 +1,3 @@
-
-
 {% load static %}
 
 <!DOCTYPE html>
@@ -78,12 +76,6 @@
 				</div>
 				<div class="col-lg-2">
 					<div class="header__right">
-						{% if user.is_authenticated %}
-							<a class="cart" style="display: inline-block;" href="{% url 'cart' %}">
-								<i class="fa-solid fa-cart-plus"></i>
-								<span class="cart-badge">3</span>
-							</a>
-						{% endif %}
 						<a href="#" class="search-switch"><span class="icon_search"></span></a>
 						{% if user.is_authenticated %}
 							<a href="{% url 'profile' %}"><span class="icon_profile"></span></a>
@@ -98,9 +90,8 @@
 	</header>
 	<!-- Header End -->
 
-	
     {% if orders.count > 0 %}
-        <link rel="stylesheet" href="{% static 'cart/css/style2.css' %}" />
+        <link rel="stylesheet" href="{% static 'cart/css/has.css' %}" />
         <main class="cart-wrapper">
           <h1 class="cart-title">My Cart</h1>
           <div class="cart-content">
@@ -108,30 +99,33 @@
             <div class="cart-left">
                 {% for order in orders %}
                     <div class="cart-item">
-                    <img src="{{ order.game.image_url }}" class="item-image" alt="Game Image" />
-                    <div class="item-details">
-                        <div class="item-header">
-                        <span class="badge">Base Game</span>
-                        <span class="badge purple">DELUXE EDITION</span>
-                        </div>
-                        <h2 class="item-name">{{ order.game.title }}</h2>
-                        <p class="reward-info">Earn 5% back in Epic Rewards</p>
-                        <p class="refundable">Self-Refundable ⓘ</p>
-                        <div class="item-meta">
-                        <span class="discount">-90%</span>
-                        <span class="original-price">₫1,650,000</span>
-                        <span class="final-price">₫165,000</span>
-                        </div>
-                        <p class="sale-end">Sale ends 4/24/2025 at 10:00 PM</p>
-                        <div class="item-actions">
-                        <a href="#">Remove</a> | <a href="#">Move to wishlist</a>
-                        </div>
-                        <div class="compatibility-warning">
-                        This product is not compatible with your current device
-                        </div>
+						<img src="{{ order.game.image.url }}" class="item-image" alt="Game Image" />
+						<div class="item-details">
+							<div class="item-header">
+								<span class="badge">Base Game</span>
+								<!-- <span class="badge purple">DELUXE EDITION</span> -->
+							</div>
+							<h2 class="item-name">{{ order.game.name }}</h2>
+							<div class="item-meta">
+								{% if order.game.discount > 0 %}
+									<span class="discount">-{{ order.game.discount }}%</span>
+									<span class="original-price">${{ order.game.price }}</span>
+								{% endif %}
+								<span class="final-price">${{ order.game.discounted_price|floatformat:2 }}</span>
+							</div>
+							<p class="desc line-clamp">{{ order.game.description }}</p>
+							{% if order.game.discount > 0 %}
+								<p class="sale-end">Sale ends 4/24/2025 at 10:00 PM</p>
+							{% endif %}
+							<div class="item-actions">
+								<form action="{% url 'cart-delete' order.pk %}" method="POST">
+									{% csrf_token %}
+									<button type="submit">Remove</button>
+								</form>
+								<a href="#">Move to wishlist</a>
+							</div>
+						</div>
                     </div>
-                    </div>
-                    <p class="footer-note">* The lowest price offered on The Epic Games Store in the last 30 days before discount</p>
                 {% endfor %}
             </div>
             <!-- RIGHT: Summary -->
@@ -139,11 +133,11 @@
                 <h3>Games and Apps Summary</h3>
                 <div class="summary-line">
                 <span>Price</span>
-                <span>₫1,650,000</span>
+                <span>${{ total_price }}</span>
                 </div>
                 <div class="summary-line">
                 <span>Sale Discount</span>
-                <span>-₫1,485,000</span>
+                <span>-${{ discount|floatformat:2 }}</span>
                 </div>
                 <div class="summary-line">
                 <span>Taxes</span>
@@ -151,14 +145,17 @@
                 </div>
                 <div class="summary-line total">
                 <span>Subtotal</span>
-                <span>₫165,000</span>
+                <span>${{ total_discounted_price|floatformat:2 }}</span>
                 </div>
-                <button class="checkout-btn">Check Out</button>
+                <form action="" method="POST">
+					{% csrf_token %}
+					<button id="checkout-btn" class="checkout-btn">Check Out</button>
+				</form>
             </div>
           </div>
         </main>
     {% else %}
-        <link rel="stylesheet" href="{% static 'cart/css/style1.css' %}" />
+        <link rel="stylesheet" href="{% static 'cart/css/none.css' %}" />
         <main class="cart-container">
             <h1>My Cart</h1>
             <div class="empty-cart">
@@ -167,44 +164,34 @@
             <a href="#" class="shop-btn">Shop for Games & Apps</a>
             </div>
         </main>
-        <footer class="footer">
-            * The lowest price offered on The Epic Games Store in the last 30 days before discount
-        </footer>
     {% endif %}
-
-	<!-- Footer Section Begin -->
-	<footer class="footer">
-		<div class="page-up">
-			<a href="#" id="scrollToTopButton"><span class="arrow_carrot-up"></span></a>
-		</div>
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-3">
-					<div class="footer__logo">
-						<a href="./index.html"><img src="{% static 'homepage/img/logo.png' %}" alt=""></a>
-					</div>
-				</div>
-				<div class="col-lg-6">
-					<div class="footer__nav">
-						<ul>
-							<li class="active"><a href="./index.html">Homepage</a></li>
-							<li><a href="./categories.html">Categories</a></li>
-							<li><a href="./blog.html">Our Blog</a></li>
-							<li><a href="#">Contacts</a></li>
-						</ul>
-					</div>
-				</div>
-				<div class="col-lg-3">
-					<p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-						Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made by Nguyen Ultra Promax <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-						<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
-				</div>
-			</div>
-		</div>
-	</footer>
-	<!-- Footer Section End -->
-
 	
+	<footer class="footer-note">
+		The lowest price offered on The Epic Games Store in the last 30 days before discount
+	</footer>
+
+	<script src="https://js.stripe.com/v3/"></script>
+    <script>
+        var stripe = Stripe('{{ STRIPE_PUBLISHABLE_KEY }}');
+        document.getElementById('checkout-btn').addEventListener('click', function(event) {
+			event.preventDefault();
+            fetch("{% url 'create_checkout_session' %}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert('Error: ' + data.error);
+                } else {
+                    stripe.redirectToCheckout({ sessionId: data.id });
+                }
+            });
+        });
+    </script>
 
 	<script src="{% static 'homepage/js/jquery-3.3.1.min.js' %}"></script>
 	<script src="{% static 'homepage/js/bootstrap.min.js' %}"></script>

@@ -6,13 +6,10 @@ from games.models import Game
 class Order(models.Model):
     user = models.ForeignKey(MyUser, on_delete=models.CASCADE, related_name='orders')
     game = models.ForeignKey(Game, on_delete=models.CASCADE, related_name='orders')
-    quantity = models.PositiveIntegerField(default=1)
     created_at = models.DateTimeField(auto_now_add=True)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    
     
     def __str__(self):
-        return f"Order #{self.id} - {self.game.title} x{self.quantity}"
+        return f"Order #{self.id} - {self.game.name}"
     
     
 class Transaction(models.Model):

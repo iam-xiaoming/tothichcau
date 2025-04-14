@@ -10,41 +10,36 @@
     <section class="hero">
         <div class="container">
             <div class="hero__slider owl-carousel">
-                <video autoplay muted loop playsinline>
-                    <source src="{% static 'homepage/video/hero.mp4' %}" type="video/mp4">
+                <div class="hero__items set-bg" data-setbg="{% static 'homepage/img/game/eldenring_nightreign.png' %}">
                         <div class="row">
                         <div class="col-lg-6">
                             <div class="hero__text">
-                                <div class="label">Adventure</div>
                                 <h2>Fate / Stay Night: Unlimited Blade Works</h2>
                                 <p>After 30 days of travel across the world...</p>
-                                <a href="#"><span>Buy Now</span> <i class="fa fa-angle-right"></i></a>
+                                <a href="#"><span>Buy Now</span></a>
                             </div>
                         </div>
                     </div>
-                </video>
+                </div>
                 
-                <video autoplay muted loop playsinline>
-                    <source src="{% static 'homepage/video/hero2.mp4' %}" type="video/mp4">
+                <div class="hero__items set-bg" data-setbg="{% static 'homepage/img/game/ac.png' %}">
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="hero__text">
-                                <div class="label">Adventure</div>
                                 <h2>Fate / Stay Night: Unlimited Blade Works</h2>
                                 <p>After 30 days of travel across the world...</p>
-                                <a href="#"><span>Watch Now</span> <i class="fa fa-angle-right"></i></a>
+                                <a href="#"><span>Buy Now</span></a>
                             </div>
                         </div>
                     </div>
-                </video>
+                </div>
                 <div class="hero__items set-bg" data-setbg="{% static 'homepage/img/game_sidebar/tlou.jpeg' %}">
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="hero__text">
-                                <div class="label">Adventure</div>
                                 <h2>Fate / Stay Night: Unlimited Blade Works</h2>
                                 <p>After 30 days of travel across the world...</p>
-                                <a href="#"><span>Watch Now</span> <i class="fa fa-angle-right"></i></a>
+                                <a href="#"><span>Buy Now</span></a>
                             </div>
                         </div>
                     </div>
@@ -80,13 +75,17 @@
                                             <div class="product__item">
                                                 <div class="product__item__pic set-bg" data-setbg="{{ game.image.url }}">
                                                 </div>
-                                                <div class="product__item__text line-clamp">
-                                                    <h5>{{ game.name }}</h5>
+                                                <div class="product__item__text">
+                                                    <span class="base-game">Base Game</span>
+                                                    <h5 class="line-clamp">{{ game.name }}</h5>
                                                 </div>
                                                 <div class="price-section">
-                                                    <span class="sale">-75%</span>
-                                                    <span class="origin-price">{{ game.price }}</span>
-                                                    <span class="current-price">{{ game.price }}</span>
+                                                    {% if game.discount > 0 %}
+                                                        <span class="sale">-{{ game.discount }}%</span>
+                                                        <span class="origin-price">${{ game.price }}</span>
+                                                        
+                                                    {% endif %}
+                                                    <span class="current-price">${{ game.discounted_price|floatformat:2 }}</span>
                                                 </div>
                                             </div>
                                         </a>

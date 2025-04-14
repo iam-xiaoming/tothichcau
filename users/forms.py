@@ -46,15 +46,21 @@ class UserRegisterForm(UserCreationForm):
         fields = ['email', 'password1', 'password2']
         
     
+
     def save(self, commit=True):
-        user = super().save(commit=False)
-        
+
         email = self.cleaned_data['email']
+        password = self.cleaned_data['password1']
+        display_name = email.split('@')[0]  # hoặc cho người dùng nhập tên
         
-        user.username = re.split(r"@", email)[0]
-        user.email = self.cleaned_data['email']
-        
+        # 3. Lưu vào local database (Django)
+        user = super().save(commit=False)
+        user.username = display_name
+        user.email = email
+        user.set_password(password)
+
         if commit:
             user.save()
+
         return user
     
