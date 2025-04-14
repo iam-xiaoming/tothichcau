@@ -25,8 +25,8 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 # - quantity: interger
 
 class Game(models.Model):
-    stripe_product_id = models.CharField(max_length=100, blank=True, null=True, editable=False)
-    stripe_price_id = models.CharField(max_length=100, blank=True, null=True, editable=False)
+    stripe_product_id = models.CharField(max_length=100, unique=True, editable=False)
+    stripe_price_id = models.CharField(max_length=100, unique=True, editable=False)
     
     name = models.CharField(max_length=255)
     description = models.TextField()
@@ -123,4 +123,4 @@ class UserGame(models.Model):
     
     
     def __str__(self):
-        return f"{self.user.email} owns {self.game.title}"
+        return f"{self.user.email} owns {self.game.name}"
