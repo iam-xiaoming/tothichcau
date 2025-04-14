@@ -37,12 +37,19 @@ class Game(models.Model):
     ])
     publisher = models.CharField(max_length=255)
     release_date = models.DateTimeField(default=timezone.now)
-    image = models.ImageField(upload_to='game_images', default='game_images/default.png')
+    image = models.ImageField(upload_to='game_images')
     category = models.CharField(max_length=255)
 
 
     def __str__(self):
         return self.name
+    
+    
+    # def delete(self, *args, **kwargs):
+    #     if self.image and os.path.isfile(self.image.path):
+    #         print('Deleting image:', self.image.path)
+    #         os.remove(self.image.path)
+    #     super().delete(*args, **kwargs)
 
 
     def save(self, *args, **kwargs):
@@ -124,3 +131,11 @@ class UserGame(models.Model):
     
     def __str__(self):
         return f"{self.user.email} owns {self.game.name}"
+
+
+class GameHero(models.Model):
+    name = models.CharField(max_length=255)
+    image = models.ImageField(upload_to='game_hero_images')
+    
+    def __str__(self):
+        return self.name
