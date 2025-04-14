@@ -10,40 +10,19 @@
     <section class="hero">
         <div class="container">
             <div class="hero__slider owl-carousel">
-                <div class="hero__items set-bg" data-setbg="{% static 'homepage/img/game/eldenring_nightreign.png' %}">
-                        <div class="row">
-                        <div class="col-lg-6">
-                            <div class="hero__text">
-                                <h2>Fate / Stay Night: Unlimited Blade Works</h2>
-                                <p>After 30 days of travel across the world...</p>
-                                <a href="#"><span>Buy Now</span></a>
+                {% for gamehero in gameheros %}
+                    <div class="hero__items set-bg" data-setbg="{{ gamehero.image.url }}">
+                            <div class="row">
+                            <div class="col-lg-6">
+                                <div class="hero__text">
+                                    <h2>Fate / Stay Night: Unlimited Blade Works</h2>
+                                    <p>After 30 days of travel across the world...</p>
+                                    <a href="#"><span>Buy Now</span></a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                
-                <div class="hero__items set-bg" data-setbg="{% static 'homepage/img/game/ac.png' %}">
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <div class="hero__text">
-                                <h2>Fate / Stay Night: Unlimited Blade Works</h2>
-                                <p>After 30 days of travel across the world...</p>
-                                <a href="#"><span>Buy Now</span></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="hero__items set-bg" data-setbg="{% static 'homepage/img/game_sidebar/tlou.jpeg' %}">
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <div class="hero__text">
-                                <h2>Fate / Stay Night: Unlimited Blade Works</h2>
-                                <p>After 30 days of travel across the world...</p>
-                                <a href="#"><span>Buy Now</span></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                {% endfor %}
             </div>
         </div>
     </section>
@@ -53,7 +32,7 @@
     <section class="product spad">
         <div class="container">
             <div class="row">
-                <div class="col-lg-8">
+                <div class="col-12">
                     <div class="trending__product">
                         <div class="row">
                             <div class="col-lg-8 col-md-8 col-sm-8">
@@ -67,32 +46,38 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <a href="">
-                                {% for game in games %}
-                                    <div class="col-lg-4 col-md-6 col-sm-6">
-                                        <a href="{% url 'game_details' game.pk %}">
-                                            <div class="product__item">
-                                                <div class="product__item__pic set-bg" data-setbg="{{ game.image.url }}">
-                                                </div>
-                                                <div class="product__item__text">
-                                                    <span class="base-game">Base Game</span>
-                                                    <h5 class="line-clamp">{{ game.name }}</h5>
-                                                </div>
-                                                <div class="price-section">
-                                                    {% if game.discount > 0 %}
-                                                        <span class="sale">-{{ game.discount }}%</span>
-                                                        <span class="origin-price">${{ game.price }}</span>
-                                                        
-                                                    {% endif %}
-                                                    <span class="current-price">${{ game.discounted_price|floatformat:2 }}</span>
-                                                </div>
-                                            </div>
-                                        </a>
+                        <div class="scroll-wrapper">
+                            <button class="scroll-btn left-btn" onclick="customScrollLeft()">
+                                <i class="fa-solid fa-arrow-left"></i>
+                            </button>
+                            <div class="product-list">
+                              {% for game in games %}
+                                <div class="col-lg-3 col-md-4 col-sm-6 col-12 product-card">
+                                  <a href="{% url 'game_details' game.pk %}">
+                                    <div class="product__item">
+                                      <div class="product__item__pic set-bg" data-setbg="{{ game.image.url }}">
+                                      </div>
+                                      <div class="product__item__text">
+                                        <span class="base-game">Base Game</span>
+                                        <h5 class="line-clamp">{{ game.name }}</h5>
+                                      </div>
+                                      <div class="price-section">
+                                        {% if game.discount > 0 %}
+                                          <span class="sale">-{{ game.discount }}%</span>
+                                          <span class="origin-price">${{ game.price }}</span>
+                                        {% endif %}
+                                        <span class="current-price">${{ game.discounted_price|floatformat:2 }}</span>
+                                      </div>
                                     </div>
-                                {% endfor %}
-                            </a>
-                        </div>
+                                  </a>
+                                </div>
+                              {% endfor %}
+                            </div>
+                            <button class="scroll-btn right-btn" onclick="customScrollRight()">
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>  
+                    </div>
                     </div>
                     <div class="popular__product">
                         <div class="row">
@@ -422,7 +407,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4 col-md-6 col-sm-8">
+                <!-- <div class="col-lg-4 col-md-6 col-sm-8">
                     <div class="product__sidebar">
                         <div class="product__sidebar__view">
                             <div class="section-title">
@@ -520,10 +505,55 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
     </section>
-    <!-- Product Section End -->
+    <!-- Product Section End -->   
+     
+    <script>
+        let currentIndex = 0;
+        const scrollStep = 4;
+
+        const container = document.querySelector('.product-list');
+        const productCard = document.querySelector('.product-card');
+        const totalProducts = document.querySelectorAll('.product-card').length;
+        const leftBtn = document.querySelector('.left-btn');
+        const rightBtn = document.querySelector('.right-btn');
+
+        function getProductWidth(card) {
+            const style = window.getComputedStyle(card);
+            const width = card.offsetWidth;
+            const marginRight = parseFloat(style.marginRight);
+            return width + marginRight;
+        }
+
+        const productWidth = getProductWidth(productCard);
+
+        function updateButtonVisibility() {
+            leftBtn.style.display = currentIndex === 0 ? 'none' : 'block';
+            rightBtn.style.display = currentIndex >= totalProducts - scrollStep ? 'none' : 'block';
+        }
+
+        function customScrollLeft() {
+            currentIndex = Math.max(0, currentIndex - scrollStep);
+            container.style.transform = `translateX(-${currentIndex * productWidth}px)`;
+            updateButtonVisibility();
+        }
+
+        function customScrollRight() {
+            const maxIndex = totalProducts - scrollStep;
+            currentIndex = Math.min(maxIndex, currentIndex + scrollStep);
+            container.style.transform = `translateX(-${currentIndex * productWidth}px)`;
+            updateButtonVisibility();
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            updateButtonVisibility();
+            leftBtn.addEventListener('click', customScrollLeft);
+            rightBtn.addEventListener('click', customScrollRight);
+        });
+    </script>
 {% endblock %}
+
 
