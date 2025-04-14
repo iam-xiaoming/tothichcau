@@ -335,7 +335,9 @@ ol {
 -----------------------*/
 
 .header {
-	background: #101014;
+	background: rgba(16, 16, 20, 0.65);
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(15px);
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -479,7 +481,8 @@ ol {
 -----------------------*/
 
 .hero {
-	padding-top: 50px;
+	/* padding-top: 50px; */
+	margin-top: 62px;
 }
 
 .hero__items {
@@ -691,7 +694,7 @@ ol {
   .scroll-btn {
 	position: absolute;
 	top: 50%;
-	transform: translateY(-50%);
+	transform: translateY(-120%);
 	background-color: rgba(0, 0, 0, 0.3);
 	color: #fff;
 	font-size: 15px;
