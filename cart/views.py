@@ -29,19 +29,16 @@ def is_game_in_cart(request):
     if not game_id:
         return JsonResponse({'error': 'Missing game_id'}, status=400)
 
-    try:
-        in_cart = Order.objects.filter(user=request.user, game_id=game_id).exists()
-        if in_cart:
-            return JsonResponse({'in_cart': in_cart})
+
+    in_cart = Order.objects.filter(user=request.user, game_id=game_id).exists()
+    if in_cart:
+        return JsonResponse({'in_cart': in_cart})
+    in_library = UserGame.objects.filter(user=request.user,
+                                    game=Game.objects.get(id=game_id)).exists()
+    if in_library:
+        return JsonResponse({'in_library': in_library})
         
-        in_library = UserGame.objects.filter(user=request.user,
-                                        game=Game.objects.get(id=game_id)
-                    ).exists()
-        if in_library:
-            return JsonResponse({'in_library': in_library})
-        
-    except Exception as e:
-        return JsonResponse({'add_to_cart': True})
+    return JsonResponse({'add_to_cart': True})
 
 
 @csrf_exempt
@@ -241,5 +238,8 @@ def webhook_view(request):
         )
         
         UserGame.objects.create(user=user, game=game)
+        
+        order = Order.objects.get(user=user, game=game)
+        order.delete()
 
     return HttpResponse(status=200)
