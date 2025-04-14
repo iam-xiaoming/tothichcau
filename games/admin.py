@@ -1,7 +1,9 @@
 from django.contrib import admin
-from .models import Game, Key, UserGame
+from .models import Game, Key, UserGame, GameHero
 
 # Register your models here.
+admin.site.register(GameHero)
+
 @admin.register(Game)
 class GameAdmin(admin.ModelAdmin):
     list_display = ('name', 'publisher', 'price', 'discount', 'category', 'release_date')
