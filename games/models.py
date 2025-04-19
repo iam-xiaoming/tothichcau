@@ -10,20 +10,12 @@ import os
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 # Create your models here.
+class Category(models.Model):
+    name = models.CharField(max_length=255, unique=True)
 
-# Game:
-# - id: PK(stripe)
-# - price_id: string (stripe) (update)
-# - title: string
-# - desc: text
-# - price: decimal
-# - discount: decimal (optional)
-# - publisher: string
-# - release_date: datetime
-# - img_url: string
-# - category: string
-# - quantity: interger
-
+    def __str__(self):
+        return self.name
+    
 class Game(models.Model):
     stripe_product_id = models.CharField(max_length=100, unique=True, editable=False)
     stripe_price_id = models.CharField(max_length=100, unique=True, editable=False)
@@ -39,6 +31,7 @@ class Game(models.Model):
     release_date = models.DateTimeField(default=timezone.now)
     image = models.ImageField(upload_to='game_images')
     category = models.CharField(max_length=255)
+    categories = models.ManyToManyField(Category, related_name='games')
 
 
     def __str__(self):
@@ -94,15 +87,7 @@ class Game(models.Model):
     @property
     def discounted_price(self):
         return self.price * (Decimal(100 - self.discount) / 100)
-    
-    
-    
-# Key:
-# - id: PK
-# - game_id: FK (update)
-# - game_price_id: string  (stripe product price id)
-# - key: string, unique
-# - status: Enum [available, sold]
+     
 
 class Key(models.Model):
     STATUS_CHOICES = (
@@ -118,11 +103,6 @@ class Key(models.Model):
     def __str__(self):
         return f"{self.key} ({self.status})"
     
-
-# User_game:
-# - id: PF
-# - user_id: FK
-# - game_id: FK
 
 class UserGame(models.Model):
     user = models.ForeignKey(MyUser, on_delete=models.CASCADE, related_name='owned_games')
