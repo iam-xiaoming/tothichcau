@@ -3,6 +3,7 @@ from .models import Game, Key, UserGame, GameHero, Category
 from django import forms
 from django.forms import CheckboxSelectMultiple
 from django.core.exceptions import ValidationError
+from cart.models import Transaction
 
 # Register your models here.
 admin.site.register(GameHero)
@@ -48,14 +49,23 @@ class GameAdmin(admin.ModelAdmin):
     
 @admin.register(Key)
 class KeyAdmin(admin.ModelAdmin):
-    list_display = ('key', 'game', 'status', 'game_price_id')
+    list_display = ('key', 'game', 'status',)
     list_filter = ('status', 'game__name')
-    search_fields = ('key', 'game__name', 'game_price_id')
+    search_fields = ('key', 'game__name')
 
 
 @admin.register(UserGame)
 class UserGameAdmin(admin.ModelAdmin):
-    list_display = ('user', 'game')
+    list_display = ('user', 'game', 'key', 'key_status', 'created_at',)
     list_filter = ('game',)
     search_fields = ('user__email', 'user__username', 'game__name')
     autocomplete_fields = ('user', 'game')
+    
+    def key_status(self, obj):
+        return obj.key.status
+    
+    def created_at(self, obj):
+        return Transaction.objects.get(user=obj.user, game=obj.game).created_at
+    
+    key_status.short_description = 'key status'
+    created_at.short_description = 'created at'
