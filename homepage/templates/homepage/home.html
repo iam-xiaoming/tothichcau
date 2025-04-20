@@ -7,18 +7,18 @@
 
 {% block extra_css %}
     <style>
-        .product__item__pic {
+        .sold-out {
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: default;
         }
 
-        .product__item__pic:hover {
+        .sold-out:hover {
             transform: none;
         }
 
-        .sold-out {
+        .sold-out-img {
             z-index: 1;
             filter: brightness(1.2);
         }
@@ -31,7 +31,6 @@
             top: 0;
             left: 0;
         }
-        
     </style>
 {% endblock %}
 
@@ -42,7 +41,7 @@
             <div class="hero__slider owl-carousel">
                 {% for gamehero in gameheros %}
                     <div class="hero__items set-bg" data-setbg="{{ gamehero.image.url }}">
-                            <div class="row">
+                        <div class="row">
                             <div class="col-lg-6">
                                 <div class="hero__text">
                                     <h2>Fate / Stay Night: Unlimited Blade Works</h2>
@@ -76,46 +75,51 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="scroll-wrapper">
-                            <button class="scroll-btn left-btn" onclick="customScrollLeft()">
+                        <div class="scroll-wrapper" id="trending-wrapper">
+                            <button class="scroll-btn left-btn" onclick="customScrollLeft('trending')">
                                 <i class="fa-solid fa-arrow-left"></i>
                             </button>
-                            <div class="product-list">
-                              {% for game in games %}
-                                <div class="col-lg-3 col-md-4 col-sm-6 col-12 product-card">
-                                  <a href="{% url 'game_details' game.pk %}">
-                                    <div class="product__item">
-                                      <div class="product__item__pic set-bg" data-setbg="{{ game.image.url }}">
-                                        <div class="overplay"></div>
-                                        <img class="sold-out" src="{% static 'games/images/sold_out.png' %}" alt="">
-                                      </div>
-                                      <div class="product__item__text">
-                                        <span class="base-game">Base Game</span>
-                                        <h5 class="line-clamp">{{ game.name }}</h5>
-                                      </div>
-                                      <div class="price-section">
-                                        {% if game.discount > 0 %}
-                                          <span class="sale">-{{ game.discount }}%</span>
-                                          <span class="origin-price">${{ game.price }}</span>
-                                        {% endif %}
-                                        <span class="current-price">${{ game.discounted_price|floatformat:2 }}</span>
-                                      </div>
+                            <div class="product-list" id="trending-product-list">
+                                {% for game in games %}
+                                    <div class="col-lg-3 col-md-4 col-sm-6 col-12 product-card">
+                                        <a href="{% url 'game_details' game.pk %}">
+                                            <div class="product__item">
+                                                {% if game.quantity > 0 %}
+                                                    <div class="product__item__pic set-bg" data-setbg="{{ game.image.url }}"></div>
+                                                {% else %}
+                                                    <div class="product__item__pic set-bg sold-out" data-setbg="{{ game.image.url }}">
+                                                        <div class="overplay"></div>
+                                                        <img class="sold-out-img" src="{% static 'games/images/sold_out.png' %}" alt="">
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                            <div class="product__item__text">
+                                                <span class="base-game">Base Game</span>
+                                                <h5 class="line-clamp">{{ game.name }}</h5>
+                                            </div>
+                                            <div class="price-section">
+                                                {% if game.discount > 0 %}
+                                                    <span class="sale">-{{ game.discount }}%</span>
+                                                    <span class="origin-price">${{ game.price }}</span>
+                                                {% endif %}
+                                                <span class="current-price">${{ game.discounted_price|floatformat:2 }}</span>
+                                            </div>
+                                        </a>
                                     </div>
-                                  </a>
-                                </div>
-                              {% endfor %}
+                                {% endfor %}
                             </div>
-                            <button class="scroll-btn right-btn" onclick="customScrollRight()">
+                            <button class="scroll-btn right-btn" onclick="customScrollRight('trending')">
                                 <i class="fa-solid fa-arrow-right"></i>
                             </button>
-                        </div>  
+                        </div>
                     </div>
-                    </div>
-                    <div class="popular__product">
+
+                     <!-- Sale Section Begin -->
+                    <div class="sale__product mt-5">
                         <div class="row">
                             <div class="col-lg-8 col-md-8 col-sm-8">
                                 <div class="section-title">
-                                    <h4>Popular Shows</h4>
+                                    <h4>Sale</h4>
                                 </div>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4">
@@ -124,468 +128,105 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-lg-4 col-md-6 col-sm-6">
-                                <div class="product__item">
-                                    <div class="product__item__pic set-bg" data-setbg="{% static 'homepage/img/game/ac.png' %}">
+                        <div class="scroll-wrapper" id="sale-wrapper">
+                            <button class="scroll-btn left-btn" onclick="customScrollLeft('sale')">
+                                <i class="fa-solid fa-arrow-left"></i>
+                            </button>
+                            <div class="product-list" id="sale-product-list">
+                                {% for game in games %}
+                                    <div class="col-lg-3 col-md-4 col-sm-6 col-12 product-card">
+                                        <a href="{% url 'game_details' game.pk %}">
+                                            <div class="product__item">
+                                                {% if game.quantity > 0 %}
+                                                    <div class="product__item__pic set-bg" data-setbg="{{ game.image.url }}"></div>
+                                                {% else %}
+                                                    <div class="product__item__pic set-bg sold-out" data-setbg="{{ game.image.url }}">
+                                                        <div class="overplay"></div>
+                                                        <img class="sold-out-img" src="{% static 'games/images/sold_out.png' %}" alt="">
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                            <div class="product__item__text">
+                                                <span class="base-game">Base Game</span>
+                                                <h5 class="line-clamp">{{ game.name }}</h5>
+                                            </div>
+                                            <div class="price-section">
+                                                <span class="sale">-{{ game.discount }}%</span>
+                                                <span class="origin-price">${{ game.price }}</span>
+                                                <span class="current-price">${{ game.discounted_price|floatformat:2 }}</span>
+                                            </div>
+                                        </a>
                                     </div>
-                                    <div class="product__item__text">
-                                        <ul>
-                                            <li>Active</li>
-                                            <li>Movie</li>
-                                        </ul>
-                                        <h5><a href="#">Sen to Chihiro no Kamikakushi</a></h5>
-                                    </div>
-                                </div>
+                                {% endfor %}
                             </div>
-                            <div class="col-lg-4 col-md-6 col-sm-6">
-                                <div class="product__item">
-                                    <div class="product__item__pic set-bg" data-setbg="{% static 'homepage/img/popular/popular-2.jpg' %}">
-                                    </div>
-                                    <div class="product__item__text">
-                                        <ul>
-                                            <li>Active</li>
-                                            <li>Movie</li>
-                                        </ul>
-                                        <h5><a href="#">Kizumonogatari III: Reiket su-hen</a></h5>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-6 col-sm-6">
-                                <div class="product__item">
-                                    <div class="product__item__pic set-bg" data-setbg="{% static 'homepage/img/popular/popular-3.jpg' %}">
-                                    </div>
-                                    <div class="product__item__text">
-                                        <ul>
-                                            <li>Active</li>
-                                            <li>Movie</li>
-                                        </ul>
-                                        <h5><a href="#">Shirogane Tamashii hen Kouhan sen</a></h5>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-6 col-sm-6">
-                                <div class="product__item">
-                                    <div class="product__item__pic set-bg" data-setbg="{% static 'homepage/img/popular/popular-4.jpg' %}">
-                                        <div class="ep">18 / 18</div>
-                                        <div class="comment"><i class="fa fa-comments"></i> 11</div>
-                                        <div class="view"><i class="fa fa-eye"></i> 9141</div>
-                                    </div>
-                                    <div class="product__item__text">
-                                        <ul>
-                                            <li>Active</li>
-                                            <li>Movie</li>
-                                        </ul>
-                                        <h5><a href="#">Rurouni Kenshin: Meiji Kenkaku Romantan</a></h5>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-6 col-sm-6">
-                                <div class="product__item">
-                                    <div class="product__item__pic set-bg" data-setbg="{% static 'homepage/img/popular/popular-5.jpg' %}">
-                                        <div class="ep">18 / 18</div>
-                                        <div class="comment"><i class="fa fa-comments"></i> 11</div>
-                                        <div class="view"><i class="fa fa-eye"></i> 9141</div>
-                                    </div>
-                                    <div class="product__item__text">
-                                        <ul>
-                                            <li>Active</li>
-                                            <li>Movie</li>
-                                        </ul>
-                                        <h5><a href="#">Mushishi Zoku Shou 2nd Season</a></h5>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-6 col-sm-6">
-                                <div class="product__item">
-                                    <div class="product__item__pic set-bg" data-setbg="{% static 'homepage/img/popular/popular-6.jpg' %}">
-                                        <div class="ep">18 / 18</div>
-                                        <div class="comment"><i class="fa fa-comments"></i> 11</div>
-                                        <div class="view"><i class="fa fa-eye"></i> 9141</div>
-                                    </div>
-                                    <div class="product__item__text">
-                                        <ul>
-                                            <li>Active</li>
-                                            <li>Movie</li>
-                                        </ul>
-                                        <h5><a href="#">Monogatari Series: Second Season</a></h5>
-                                    </div>
-                                </div>
-                            </div>
+                            <button class="scroll-btn right-btn" onclick="customScrollRight('sale')">
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </button>
                         </div>
                     </div>
-                    <div class="recent__product">
-                        <div class="row">
-                            <div class="col-lg-8 col-md-8 col-sm-8">
-                                <div class="section-title">
-                                    <h4>Recently Added Shows</h4>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4">
-                                <div class="btn__all">
-                                    <a href="#" class="primary-btn">View All <span class="arrow_right"></span></a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-4 col-md-6 col-sm-6">
-                                <div class="product__item">
-                                    <div class="product__item__pic set-bg" data-setbg="{% static 'homepage/img/recent/recent-1.jpg' %}">
-                                        <div class="ep">18 / 18</div>
-                                        <div class="comment"><i class="fa fa-comments"></i> 11</div>
-                                        <div class="view"><i class="fa fa-eye"></i> 9141</div>
-                                    </div>
-                                    <div class="product__item__text">
-                                        <ul>
-                                            <li>Active</li>
-                                            <li>Movie</li>
-                                        </ul>
-                                        <h5><a href="#">Great Teacher Onizuka</a></h5>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-6 col-sm-6">
-                                <div class="product__item">
-                                    <div class="product__item__pic set-bg" data-setbg="{% static 'homepage/img/recent/recent-2.jpg' %}">
-                                        <div class="ep">18 / 18</div>
-                                        <div class="comment"><i class="fa fa-comments"></i> 11</div>
-                                        <div class="view"><i class="fa fa-eye"></i> 9141</div>
-                                    </div>
-                                    <div class="product__item__text">
-                                        <ul>
-                                            <li>Active</li>
-                                            <li>Movie</li>
-                                        </ul>
-                                        <h5><a href="#">Fate/stay night Movie: Heaven's Feel - II. Lost</a></h5>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-6 col-sm-6">
-                                <div class="product__item">
-                                    <div class="product__item__pic set-bg" data-setbg="{% static 'homepage/img/recent/recent-3.jpg' %}">
-                                        <div class="ep">18 / 18</div>
-                                        <div class="comment"><i class="fa fa-comments"></i> 11</div>
-                                        <div class="view"><i class="fa fa-eye"></i> 9141</div>
-                                    </div>
-                                    <div class="product__item__text">
-                                        <ul>
-                                            <li>Active</li>
-                                            <li>Movie</li>
-                                        </ul>
-                                        <h5><a href="#">Mushishi Zoku Shou: Suzu no Shizuku</a></h5>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-6 col-sm-6">
-                                <div class="product__item">
-                                    <div class="product__item__pic set-bg" data-setbg="{% static 'homepage/img/recent/recent-4.jpg' %}">
-                                        <div class="ep">18 / 18</div>
-                                        <div class="comment"><i class="fa fa-comments"></i> 11</div>
-                                        <div class="view"><i class="fa fa-eye"></i> 9141</div>
-                                    </div>
-                                    <div class="product__item__text">
-                                        <ul>
-                                            <li>Active</li>
-                                            <li>Movie</li>
-                                        </ul>
-                                        <h5><a href="#">Fate/Zero 2nd Season</a></h5>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-6 col-sm-6">
-                                <div class="product__item">
-                                    <div class="product__item__pic set-bg" data-setbg="{% static 'homepage/img/recent/recent-5.jpg' %}">
-                                        <div class="ep">18 / 18</div>
-                                        <div class="comment"><i class="fa fa-comments"></i> 11</div>
-                                        <div class="view"><i class="fa fa-eye"></i> 9141</div>
-                                    </div>
-                                    <div class="product__item__text">
-                                        <ul>
-                                            <li>Active</li>
-                                            <li>Movie</li>
-                                        </ul>
-                                        <h5><a href="#">Kizumonogatari II: Nekket su-hen</a></h5>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-6 col-sm-6">
-                                <div class="product__item">
-                                    <div class="product__item__pic set-bg" data-setbg="{% static 'homepage/img/recent/recent-6.jpg' %}">
-                                        <div class="ep">18 / 18</div>
-                                        <div class="comment"><i class="fa fa-comments"></i> 11</div>
-                                        <div class="view"><i class="fa fa-eye"></i> 9141</div>
-                                    </div>
-                                    <div class="product__item__text">
-                                        <ul>
-                                            <li>Active</li>
-                                            <li>Movie</li>
-                                        </ul>
-                                        <h5><a href="#">The Seven Deadly Sins: Wrath of the Gods</a></h5>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="live__product">
-                        <div class="row">
-                            <div class="col-lg-8 col-md-8 col-sm-8">
-                                <div class="section-title">
-                                    <h4>Live Action</h4>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4">
-                                <div class="btn__all">
-                                    <a href="#" class="primary-btn">View All <span class="arrow_right"></span></a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-4 col-md-6 col-sm-6">
-                                <div class="product__item">
-                                    <div class="product__item__pic set-bg" data-setbg="{% static 'homepage/img/live/live-1.jpg' %}">
-                                        <div class="ep">18 / 18</div>
-                                        <div class="comment"><i class="fa fa-comments"></i> 11</div>
-                                        <div class="view"><i class="fa fa-eye"></i> 9141</div>
-                                    </div>
-                                    <div class="product__item__text">
-                                        <ul>
-                                            <li>Active</li>
-                                            <li>Movie</li>
-                                        </ul>
-                                        <h5><a href="#">Shouwa Genroku Rakugo Shinjuu</a></h5>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-6 col-sm-6">
-                                <div class="product__item">
-                                    <div class="product__item__pic set-bg" data-setbg="{% static 'homepage/img/live/live-2.jpg' %}">
-                                        <div class="ep">18 / 18</div>
-                                        <div class="comment"><i class="fa fa-comments"></i> 11</div>
-                                        <div class="view"><i class="fa fa-eye"></i> 9141</div>
-                                    </div>
-                                    <div class="product__item__text">
-                                        <ul>
-                                            <li>Active</li>
-                                            <li>Movie</li>
-                                        </ul>
-                                        <h5><a href="#">Mushishi Zoku Shou 2nd Season</a></h5>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-6 col-sm-6">
-                                <div class="product__item">
-                                    <div class="product__item__pic set-bg" data-setbg="{% static 'homepage/img/live/live-3.jpg' %}">
-                                        <div class="ep">18 / 18</div>
-                                        <div class="comment"><i class="fa fa-comments"></i> 11</div>
-                                        <div class="view"><i class="fa fa-eye"></i> 9141</div>
-                                    </div>
-                                    <div class="product__item__text">
-                                        <ul>
-                                            <li>Active</li>
-                                            <li>Movie</li>
-                                        </ul>
-                                        <h5><a href="#">Mushishi Zoku Shou: Suzu no Shizuku</a></h5>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-6 col-sm-6">
-                                <div class="product__item">
-                                    <div class="product__item__pic set-bg" data-setbg="{% static 'homepage/img/live/live-4.jpg' %}">
-                                        <div class="ep">18 / 18</div>
-                                        <div class="comment"><i class="fa fa-comments"></i> 11</div>
-                                        <div class="view"><i class="fa fa-eye"></i> 9141</div>
-                                    </div>
-                                    <div class="product__item__text">
-                                        <ul>
-                                            <li>Active</li>
-                                            <li>Movie</li>
-                                        </ul>
-                                        <h5><a href="#">The Seven Deadly Sins: Wrath of the Gods</a></h5>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-6 col-sm-6">
-                                <div class="product__item">
-                                    <div class="product__item__pic set-bg" data-setbg="{% static 'homepage/img/live/live-5.jpg' %}">
-                                        <div class="ep">18 / 18</div>
-                                        <div class="comment"><i class="fa fa-comments"></i> 11</div>
-                                        <div class="view"><i class="fa fa-eye"></i> 9141</div>
-                                    </div>
-                                    <div class="product__item__text">
-                                        <ul>
-                                            <li>Active</li>
-                                            <li>Movie</li>
-                                        </ul>
-                                        <h5><a href="#">Fate/stay night Movie: Heaven's Feel - II. Lost</a></h5>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-6 col-sm-6">
-                                <div class="product__item">
-                                    <div class="product__item__pic set-bg" data-setbg="{% static 'homepage/img/live/live-6.jpg' %}">
-                                        <div class="ep">18 / 18</div>
-                                        <div class="comment"><i class="fa fa-comments"></i> 11</div>
-                                        <div class="view"><i class="fa fa-eye"></i> 9141</div>
-                                    </div>
-                                    <div class="product__item__text">
-                                        <ul>
-                                            <li>Active</li>
-                                            <li>Movie</li>
-                                        </ul>
-                                        <h5><a href="#">Kizumonogatari II: Nekketsu-hen</a></h5>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <!-- Sale Section End -->
                 </div>
-                <!-- <div class="col-lg-4 col-md-6 col-sm-8">
-                    <div class="product__sidebar">
-                        <div class="product__sidebar__view">
-                            <div class="section-title">
-                                <h5>Top Views</h5>
-                            </div>
-                            <ul class="filter__controls">
-                                <li class="active" data-filter="*">Day</li>
-                                <li data-filter=".week">Week</li>
-                                <li data-filter=".month">Month</li>
-                                <li data-filter=".years">Years</li>
-                            </ul>
-                            <div class="filter__gallery">
-                                <div class="product__sidebar__view__item set-bg mix day years" data-setbg="{% static 'homepage/img/game_sidebar/miside.png' %}">
-                                    <div class="ep">18 / ?</div>
-                                    <div class="view"><i class="fa fa-eye"></i> 9141</div>
-                                    <h5><a href="#">Boruto: Naruto next generations</a></h5>
-                                </div>
-                                <div class="product__sidebar__view__item set-bg mix month week" data-setbg="{% static 'homepage/img/game_sidebar/miside.png' %}">
-                                    <div class="ep">18 / ?</div>
-                                    <div class="view"><i class="fa fa-eye"></i> 9141</div>
-                                    <h5><a href="#">The Seven Deadly Sins: Wrath of the Gods</a></h5>
-                                </div>
-                                <div class="product__sidebar__view__item set-bg mix week years" data-setbg="{% static 'homepage/img/game_sidebar/miside.png' %}">
-                                    <div class="ep">18 / ?</div>
-                                    <div class="view"><i class="fa fa-eye"></i> 9141</div>
-                                    <h5><a href="#">Sword art online alicization war of underworld</a></h5>
-                                </div>
-                                <div class="product__sidebar__view__item set-bg mix years month" data-setbg="{% static 'homepage/img/game_sidebar/miside.png' %}">
-                                    <div class="ep">18 / ?</div>
-                                    <div class="view"><i class="fa fa-eye"></i> 9141</div>
-                                    <h5><a href="#">Fate/stay night: Heaven's Feel I. presage flower</a></h5>
-                                </div>
-                                <div class="product__sidebar__view__item set-bg mix day" data-setbg="{% static 'homepage/img/game_sidebar/miside.png' %}">
-                                    <div class="ep">18 / ?</div>
-                                    <div class="view"><i class="fa fa-eye"></i> 9141</div>
-                                    <h5><a href="#">Fate stay night unlimited blade works</a></h5>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="product__sidebar__comment">
-                            <div class="section-title">
-                                <h5>New Comment</h5>
-                            </div>
-                            <div class="product__sidebar__comment__item">
-                                <div class="product__sidebar__comment__item__pic">
-                                    <img src="{% static 'homepage/img/game_sidebar/miside.png' %}" alt="">
-                                </div>
-                                <div class="product__sidebar__comment__item__text">
-                                    <ul>
-                                        <li>Active</li>
-                                        <li>Movie</li>
-                                    </ul>
-                                    <h5><a href="#">The Seven Deadly Sins: Wrath of the Gods</a></h5>
-                                    <span><i class="fa fa-eye"></i> 19.141 Viewes</span>
-                                </div>
-                            </div>
-                            <div class="product__sidebar__comment__item">
-                                <div class="product__sidebar__comment__item__pic">
-                                    <img src="{% static 'homepage/img/game_sidebar/miside.png' %}" alt="">
-                                </div>
-                                <div class="product__sidebar__comment__item__text">
-                                    <ul>
-                                        <li>Active</li>
-                                        <li>Movie</li>
-                                    </ul>
-                                    <h5><a href="#">Shirogane Tamashii hen Kouhan sen</a></h5>
-                                    <span><i class="fa fa-eye"></i> 19.141 Viewes</span>
-                                </div>
-                            </div>
-                            <div class="product__sidebar__comment__item">
-                                <div class="product__sidebar__comment__item__pic">
-                                    <img src="{% static 'homepage/img/sidebar/comment-3.jpg' %}" alt="">
-                                </div>
-                                <div class="product__sidebar__comment__item__text">
-                                    <ul>
-                                        <li>Active</li>
-                                        <li>Movie</li>
-                                    </ul>
-                                    <h5><a href="#">Kizumonogatari III: Reiket su-hen</a></h5>
-                                    <span><i class="fa fa-eye"></i> 19.141 Viewes</span>
-                                </div>
-                            </div>
-                            <div class="product__sidebar__comment__item">
-                                <div class="product__sidebar__comment__item__pic">
-                                    <img src="{% static 'homepage/img/sidebar/comment-4.jpg' %}" alt="">
-                                </div>
-                                <div class="product__sidebar__comment__item__text">
-                                    <ul>
-                                        <li>Active</li>
-                                        <li>Movie</li>
-                                    </ul>
-                                    <h5><a href="#">Monogatari Series: Second Season</a></h5>
-                                    <span><i class="fa fa-eye"></i> 19.141 Viewes</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
             </div>
         </div>
     </section>
-    <!-- Product Section End -->   
-     
+    <!-- Product Section End -->
+
     <script>
-        let currentIndex = 0;
-        const scrollStep = 1;
-
-        const container = document.querySelector('.product-list');
-        const productCard = document.querySelector('.product-card');
-        const totalProducts = document.querySelectorAll('.product-card').length;
-        const leftBtn = document.querySelector('.left-btn');
-        const rightBtn = document.querySelector('.right-btn');
-
         function getProductWidth(card) {
             const style = window.getComputedStyle(card);
             const width = card.offsetWidth;
             const marginRight = parseFloat(style.marginRight);
             return width + marginRight;
         }
-
-        const productWidth = getProductWidth(productCard);
-
-        function updateButtonVisibility() {
+        
+        const scrollStep = 4;
+        const state = {
+            trending: 0,
+            sale: 0
+        };
+        
+        function updateButtonVisibility(prefix, totalProducts, productWidth) {
+            const leftBtn = document.querySelector(`#${prefix}-wrapper .left-btn`);
+            const rightBtn = document.querySelector(`#${prefix}-wrapper .right-btn`);
+            const currentIndex = state[prefix];
+        
             leftBtn.style.display = currentIndex === 0 ? 'none' : 'block';
             rightBtn.style.display = currentIndex >= totalProducts - scrollStep ? 'none' : 'block';
         }
-
-        function customScrollLeft() {
-            currentIndex = Math.max(0, currentIndex - scrollStep);
-            container.style.transform = `translateX(-${currentIndex * productWidth}px)`;
-            updateButtonVisibility();
+        
+        function customScrollLeft(prefix) {
+            const container = document.getElementById(`${prefix}-product-list`);
+            const card = container.querySelector('.product-card');
+            const totalProducts = container.querySelectorAll('.product-card').length;
+            const productWidth = getProductWidth(card);
+        
+            state[prefix] = Math.max(0, state[prefix] - scrollStep);
+            container.style.transform = `translateX(-${state[prefix] * productWidth}px)`;
+            updateButtonVisibility(prefix, totalProducts, productWidth);
         }
-
-        function customScrollRight() {
+        
+        function customScrollRight(prefix) {
+            const container = document.getElementById(`${prefix}-product-list`);
+            const card = container.querySelector('.product-card');
+            const totalProducts = container.querySelectorAll('.product-card').length;
+            const productWidth = getProductWidth(card);
+        
             const maxIndex = totalProducts - scrollStep;
-            currentIndex = Math.min(maxIndex, currentIndex + scrollStep);
-            container.style.transform = `translateX(-${currentIndex * productWidth}px)`;
-            updateButtonVisibility();
+            state[prefix] = Math.min(maxIndex, state[prefix] + scrollStep);
+            container.style.transform = `translateX(-${state[prefix] * productWidth}px)`;
+            updateButtonVisibility(prefix, totalProducts, productWidth);
         }
-
+        
         document.addEventListener('DOMContentLoaded', function () {
-            updateButtonVisibility();
-            leftBtn.addEventListener('click', customScrollLeft);
-            rightBtn.addEventListener('click', customScrollRight);
-        });
+            ['trending', 'sale'].forEach(prefix => {
+                const container = document.getElementById(`${prefix}-product-list`);
+                const card = container?.querySelector('.product-card');
+                if (container && card) {
+                    const totalProducts = container.querySelectorAll('.product-card').length;
+                    const productWidth = getProductWidth(card);
+                    updateButtonVisibility(prefix, totalProducts, productWidth);
+                }
+            });
+        });        
     </script>
 {% endblock %}
-
-

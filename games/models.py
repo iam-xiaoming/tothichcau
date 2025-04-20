@@ -19,7 +19,7 @@ class Category(models.Model):
 class Game(models.Model):
     stripe_product_id = models.CharField(max_length=100, unique=True, editable=False)
     stripe_price_id = models.CharField(max_length=100, unique=True, editable=False)
-    
+    quantity = models.PositiveIntegerField(default=0)
     name = models.CharField(max_length=255)
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
@@ -32,6 +32,7 @@ class Game(models.Model):
     image = models.ImageField(upload_to='game_images')
     category = models.CharField(max_length=255)
     categories = models.ManyToManyField(Category, related_name='games')
+    
 
 
     def __str__(self):
