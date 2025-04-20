@@ -96,23 +96,24 @@ class Key(models.Model):
     )
     
     game = models.ForeignKey(Game, on_delete=models.CASCADE, related_name='keys')
-    game_price_id = models.CharField(max_length=255, unique=True)
     key = models.CharField(max_length=255, unique=True)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='available')
     
     def __str__(self):
-        return f"{self.key} ({self.status})"
+        return self.key
     
 
 class UserGame(models.Model):
     user = models.ForeignKey(MyUser, on_delete=models.CASCADE, related_name='owned_games')
     game = models.ForeignKey(Game, on_delete=models.CASCADE, related_name='owned_by_users')
+    key = models.ForeignKey(Key, on_delete=models.CASCADE, related_name='user_game')
     
     
     def __str__(self):
         return f"{self.user.email} owns {self.game.name}"
 
 
+# custom hero page
 class GameHero(models.Model):
     name = models.CharField(max_length=255)
     image = models.ImageField(upload_to='game_hero_images')
