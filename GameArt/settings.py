@@ -99,6 +99,17 @@ DATABASES = {
     }
 }
 
+# Firebase
+FIREBASE_CONFIG = {
+    'apiKey': config('FIREBASE_APIKEY'),
+    'authDomain': config('FIREBASE_AUTHDOMAIN'),
+    'databaseURL': config('FIREBASE_DATABASEURL'),
+    'projectId': config('FIREBASE_PROJECTID'),
+    'storageBucket': config('FIREBASE_STORAGEBUCKET'),
+    'messagingSenderId': config('FIREBASE_MESSAGINGSENDERID'),
+    'appId': config('FIREBASE_APPID'),
+    'measurementId': config('FIREBASE_MEASUREMENTID')
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
