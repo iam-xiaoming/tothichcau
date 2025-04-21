@@ -4,6 +4,7 @@ from django import forms
 from django.forms import CheckboxSelectMultiple
 from django.core.exceptions import ValidationError
 from cart.models import Transaction
+from django.db.models import Q
 
 # Register your models here.
 admin.site.register(GameHero)
@@ -27,6 +28,7 @@ class GameAdminForm(forms.ModelForm):
             raise ValidationError({'categories': "Cannot select more than 4 categories."})
         return cleaned_data
     
+    
 @admin.register(Game)
 class GameAdmin(admin.ModelAdmin):
     list_display = ('name', 'publisher', 'price', 'discount', 'quantity', 'category_list', 'release_date')
@@ -49,6 +51,7 @@ class GameAdmin(admin.ModelAdmin):
     
 @admin.register(Key)
 class KeyAdmin(admin.ModelAdmin):
+    autocomplete_fields = ['game']
     list_display = ('key', 'game', 'status',)
     list_filter = ('status', 'game__name')
     search_fields = ('key', 'game__name')
