@@ -13,10 +13,9 @@ def delete_game_image(sender, instance, **kwargs):
 
 @receiver(post_save, sender=Key)
 def update_game_quantity_on_add(sender, instance, created, **kwargs):
-    if created:
-        game = instance.game
-        game.quantity = game.keys.filter(status='available').count()
-        game.save()
+    game = instance.game
+    game.quantity = game.keys.filter(status='available').count()
+    game.save()
         
 
 @receiver(post_delete, sender=Key)
