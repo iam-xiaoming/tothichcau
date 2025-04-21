@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environments
+venv/
+*.venv
+
+# Django
+*.sqlite3
+*.db
+db.sqlite3
+*.log
+*.env
+.env
+
+# macOS
+.DS_Store
+
+# Migrations (optional – nếu bạn không muốn version control migrations)
+**/migrations/
