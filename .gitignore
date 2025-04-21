@@ -1,14 +1,28 @@
-/db.sqlite3
-/.env
-.DS_Store
-venv
+# Python bytecode
 __pycache__/
-*.pyc
+*.py[cod]
 *.pyo
 *.pyd
-*.db
-*.sqlite3
-*.log
-*.env
+
+# Virtual environment
+venv/
+.venv/
 *.venv
+
+# Django
+*.sqlite3
+*.db
+*.log
+
+# Environment files
+.env
+*.env
+
+# macOS
+.DS_Store
+
+# Git
 *.gitignore
+
+**/migrations/*.py
+!**/migrations/__init__.py
