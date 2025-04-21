@@ -62,7 +62,7 @@
 					<div class="header__nav">
 						<nav class="header__menu mobile-menu">
 							<ul>
-								<li class="active"><a href="./index.html">Homepage</a></li>
+								<!-- <li class="active"><a href="./index.html">Homepage</a></li> -->
 								<li><a href="./categories.html">Categories <span class="arrow_carrot-down"></span></a>
 									<ul class="dropdown">
 										<li><a href="./anime-details.html">Game Details</a></li>
@@ -72,6 +72,9 @@
 								</li>
 								<li><a href="./blog.html">Our Blog</a></li>
 								<li><a href="#">Contacts</a></li>
+							{% if request.session.uid %}
+								<li><a href="{% url 'profile' %}">Profile</a></li>
+							{% endif %}
 							</ul>
 						</nav>
 					</div>
@@ -86,7 +89,7 @@
 						{% endif %}
 						<a href="#" class="search-switch"><span class="icon_search"></span></a>
 						{% if request.session.uid %}
-							<a href="{% url 'profile' %}"><span class="icon_profile"></span></a>
+							<a href="{% url 'logout' %}"><i class="fa-solid fa-right-from-bracket"></i></a>
 						{% else %}
 							<a href="{% url 'login' %}"><span class="icon_profile"></span></a>
 						{% endif %}
@@ -115,17 +118,12 @@
 				<div class="col-lg-6">
 					<div class="footer__nav">
 						<ul>
-							<li class="active"><a href="./index.html">Homepage</a></li>
+							<!-- <li class="active"><a href="./index.html">Homepage</a></li> -->
 							<li><a href="./categories.html">Categories</a></li>
 							<li><a href="./blog.html">Our Blog</a></li>
 							<li><a href="#">Contacts</a></li>
 						</ul>
 					</div>
-				</div>
-				<div class="col-lg-3">
-					<p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-						Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-						<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
 				</div>
 			</div>
 		</div>
