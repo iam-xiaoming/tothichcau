@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Game, Key, UserGame, GameHero, Category
+from .models import Game, Key, UserGame, GameHero, Category, Comment
 from django import forms
 from django.forms import CheckboxSelectMultiple
 from django.core.exceptions import ValidationError
@@ -70,3 +70,11 @@ class UserGameAdmin(admin.ModelAdmin):
     
     key_status.short_description = 'key status'
     created_at.short_description = 'created at'
+    
+    
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ('user', 'game', 'title', 'created_at',)
+    list_filter = ('user', 'game',)
+    search_fields = ('user', 'game',)
+    autocomplete_fields = ('user', 'game',)

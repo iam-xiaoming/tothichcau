@@ -5,6 +5,10 @@
     <title>Game Detail</title>
 {% endblock %}
 
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'games/css/sidebar.css' %}">
+{% endblock %}
+
 {% block content %}
     <!-- Breadcrumb Begin -->
     <div class="breadcrumb-option">
@@ -17,7 +21,7 @@
     </div>
     <!-- Breadcrumb End -->
 
-    <!-- Anime Section Begin -->g
+    <!-- Anime Section Begin -->
     <section class="anime-details spad">
         <div class="container">
             <div class="anime__details__content">
@@ -31,16 +35,6 @@
                             <div class="anime__details__title">
                                 <h3>{{ game.name }}</span>
                             </div>
-                            <div class="anime__details__rating">
-                                <div class="rating">
-                                    <a href="#"><i class="fa fa-star"></i></a>
-                                    <a href="#"><i class="fa fa-star"></i></a>
-                                    <a href="#"><i class="fa fa-star"></i></a>
-                                    <a href="#"><i class="fa fa-star"></i></a>
-                                    <a href="#"><i class="fa fa-star-half-o"></i></a>
-                                </div>
-                                <span>1.029 Votes</span>
-                            </div>
                             <p>{{ game.description }}</p>
                             <div class="anime__details__widget">
                                 <div class="row">
@@ -52,13 +46,6 @@
                                             <li><span>Genre:</span>{% for category in game.categories.all %}{{category.name }}{% if not forloop.last %}, {% endif %}
                                               {% endfor %}
                                             </li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-lg-6 col-md-6">
-                                        <ul>
-                                            <li><span>Scores:</span> 7.31 / 1,515</li>
-                                            <li><span>Rating:</span> 8.5 / 161 times</li>
-                                            <li><span>Views:</span> 131,541</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -78,62 +65,20 @@
                             <div class="section-title">
                                 <h5>Reviews</h5>
                             </div>
-                            <div class="anime__review__item">
-                                <div class="anime__review__item__pic">
-                                    <img src="{% static 'homepage/img/anime/review-1.jpg' %}" alt="">
+                            {% for comment in game.comment.all %}
+                                <div class="anime__review__item">
+                                    <div class="anime__review__item__pic">
+                                        <img src="{{ comment.user.image.url }}" alt="">
+                                    </div>
+                                    <div class="anime__review__item__text">
+                                        <div style="display: flex;align-items:center; gap: 10px;" class="comment-info">
+                                            <h6>{{ comment.user }}</h6>
+                                            <span style="color: #b7b7b7; margin-bottom: 10px; font-size: 14px;">{{ comment.created_at|date:"d/m/Y" }}</span>
+                                        </div>
+                                        <p>{{ comment.content }}</p>
+                                    </div>
                                 </div>
-                                <div class="anime__review__item__text">
-                                    <h6>Chris Curry - <span>1 Hour ago</span></h6>
-                                    <p>whachikan Just noticed that someone categorized this as belonging to the genre
-                                        "demons" LOL</p>
-                                </div>
-                            </div>
-                            <div class="anime__review__item">
-                                <div class="anime__review__item__pic">
-                                    <img src="{% static 'homepage/img/anime/review-2.jpg' %}" alt="">
-                                </div>
-                                <div class="anime__review__item__text">
-                                    <h6>Lewis Mann - <span>5 Hour ago</span></h6>
-                                    <p>Finally it came out ages ago</p>
-                                </div>
-                            </div>
-                            <div class="anime__review__item">
-                                <div class="anime__review__item__pic">
-                                    <img src="{% static 'homepage/img/anime/review-3.jpg' %}" alt="">
-                                </div>
-                                <div class="anime__review__item__text">
-                                    <h6>Louis Tyler - <span>20 Hour ago</span></h6>
-                                    <p>Where is the episode 15 ? Slow update! Tch</p>
-                                </div>
-                            </div>
-                            <div class="anime__review__item">
-                                <div class="anime__review__item__pic">
-                                    <img src="{% static 'homepage/img/anime/review-4.jpg' %}" alt="">
-                                </div>
-                                <div class="anime__review__item__text">
-                                    <h6>Chris Curry - <span>1 Hour ago</span></h6>
-                                    <p>whachikan Just noticed that someone categorized this as belonging to the genre
-                                        "demons" LOL</p>
-                                </div>
-                            </div>
-                            <div class="anime__review__item">
-                                <div class="anime__review__item__pic">
-                                    <img src="{% static 'homepage/img/anime/review-5.jpg' %}" alt="">
-                                </div>
-                                <div class="anime__review__item__text">
-                                    <h6>Lewis Mann - <span>5 Hour ago</span></h6>
-                                    <p>Finally it came out ages ago</p>
-                                </div>
-                            </div>
-                            <div class="anime__review__item">
-                                <div class="anime__review__item__pic">
-                                    <img src="{% static 'homepage/img/anime/review-6.jpg' %}" alt="">
-                                </div>
-                                <div class="anime__review__item__text">
-                                    <h6>Louis Tyler - <span>20 Hour ago</span></h6>
-                                    <p>Where is the episode 15 ? Slow update! Tch</p>
-                                </div>
-                            </div>
+                            {% endfor %}
                         </div>
                         <div class="anime__details__form">
                             <div class="section-title">
@@ -150,25 +95,13 @@
                             <div class="section-title">
                                 <h5>you might like...</h5>
                             </div>
-                            <div class="product__sidebar__view__item set-bg" data-setbg="{% static 'homepage/img/sidebar/tv-1.jpg' %}">
-                                <div class="ep">18 / ?</div>
-                                <div class="view"><i class="fa fa-eye"></i> 9141</div>
-                                <h5><a href="#">Boruto: Naruto next generations</a></h5>
-                            </div>
-                            <div class="product__sidebar__view__item set-bg" data-setbg="{% static 'homepage/img/sidebar/tv-2.jpg' %}">
-                                <div class="ep">18 / ?</div>
-                                <div class="view"><i class="fa fa-eye"></i> 9141</div>
-                                <h5><a href="#">The Seven Deadly Sins: Wrath of the Gods</a></h5>
-                            </div>
-                            <div class="product__sidebar__view__item set-bg" data-setbg="{% static 'homepage/img/sidebar/tv-3.jpg' %}">
-                                <div class="ep">18 / ?</div>
-                                <div class="view"><i class="fa fa-eye"></i> 9141</div>
-                                <h5><a href="#">Sword art online alicization war of underworld</a></h5>
-                            </div>
-                            <div class="product__sidebar__view__item set-bg" data-setbg="{% static 'homepage/img/sidebar/tv-4.jpg' %}">
-                                <div class="ep">18 / ?</div>
-                                <div class="view"><i class="fa fa-eye"></i> 9141</div>
-                                <h5><a href="#">Fate/stay night: Heaven's Feel I. presage flower</a></h5>
+                            <div class="suggest">
+                                {% for game_suggest in games_suggest %}
+                                    <a href="#!">
+                                        <div style="height: 150px;" class="product__sidebar__view__item set-bg" data-setbg="{{ game_suggest.image.url }}"></div>
+                                        <h5 class="suggest-name">{{ game_suggest.name }}</h5>
+                                    </a>
+                                {% endfor %}
                             </div>
                         </div>
                     </div>
