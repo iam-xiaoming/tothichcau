@@ -18,11 +18,6 @@
             transform: none;
         }
 
-        .sold-out-img {
-            z-index: 1;
-            filter: brightness(1.2);
-        }
-
         .overplay {
             position: absolute;
             width: 100%;
@@ -89,7 +84,6 @@
                                                 {% else %}
                                                     <div class="product__item__pic set-bg sold-out" data-setbg="{{ game.image.url }}">
                                                         <div class="overplay"></div>
-                                                        <img class="sold-out-img" src="{% static 'games/images/sold_out.png' %}" alt="">
                                                     </div>
                                                 {% endif %}
                                             </div>
