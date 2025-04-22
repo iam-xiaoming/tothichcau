@@ -51,7 +51,8 @@ INSTALLED_APPS = [
     'cart.apps.CartConfig',
     'rest_framework',
     'django_elasticsearch_dsl',
-    'search.apps.SearchConfig'
+    'search.apps.SearchConfig',
+    'transactions.apps.TransactionsConfig'
 ]
 
 MIDDLEWARE = [

@@ -48,12 +48,6 @@ def register(request):
     return render(request, 'users/signup.html', {'form': form, 'errors': form.errors})
 
 
-# def profile(request):
-#     context = {
-#         'user_games': UserGame.objects.all()
-#     }
-#     return render(request, 'users/profile.html', context)
-
 class ProfileView(LoginRequiredMixin, ListView):
     model = UserGame
     template_name = 'users/profile.html'
