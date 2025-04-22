@@ -48,7 +48,10 @@ INSTALLED_APPS = [
     'homepage.apps.HomepageConfig',
     'games.apps.GameConfig',
     'users.apps.UsersConfig',
-    'cart.apps.CartConfig'
+    'cart.apps.CartConfig',
+    'rest_framework',
+    'django_elasticsearch_dsl',
+    'search.apps.SearchConfig'
 ]
 
 MIDDLEWARE = [
@@ -96,6 +99,12 @@ DATABASES = {
         'OPTIONS': {
             'sslmode': config('DB_SSL_MODE'),
         },
+    }
+}
+
+ELASTICSEARCH_DSL = {
+    'default': {
+        'hosts': 'http://localhost:9200'
     }
 }
 

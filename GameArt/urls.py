@@ -23,6 +23,7 @@ import games.urls
 import thanks.urls
 import users.urls
 import cart.urls
+import search.urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -30,7 +31,8 @@ urlpatterns = [
     path('', include(games.urls)),
     path('thanks/', include(thanks.urls)),
     path('', include(users.urls)),
-    path('', include(cart.urls))
+    path('', include(cart.urls)),
+    path('', include(search.urls))
 ]
 
 

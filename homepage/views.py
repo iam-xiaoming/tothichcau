@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from games.models import Game, GameHero
+from games.models import Game, GameHero, Category
 from django.views.generic import ListView
 
 # Create your views here.
@@ -11,4 +11,5 @@ class ListGameView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['gameheros'] = GameHero.objects.all()
+        context['categories'] = Category.objects.all()
         return context

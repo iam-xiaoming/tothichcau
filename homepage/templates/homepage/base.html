@@ -26,6 +26,7 @@
     <link rel="stylesheet" href="{% static 'homepage/css/owl.carousel.min.css' %}" type="text/css">
     <link rel="stylesheet" href="{% static 'homepage/css/slicknav.min.css' %}" type="text/css">
     <link rel="stylesheet" href="{% static 'homepage/css/style.css' %}" type="text/css">
+	<link rel="stylesheet" href="{% static 'homepage/css/search.css' %}">
 
 	{% block extra_css %}{% endblock %}
 </head>
@@ -38,13 +39,14 @@
 
 	<!-- Search model Begin -->
 	<div class="search-model">
-		<div class="h-100 d-flex align-items-center justify-content-center">
-			<div class="search-close-switch"><i class="icon_close"></i></div>
-			<form class="search-model-form">
+		<div style="margin-top: 100px; display:flex; flex-direction: column;" class="h-100 d-flex align-items-center">
+			<button type="button" class="search-close-switch"><i class="icon_close"></i></button>
+			<form action="" class="search-model-form">
 				<input type="text" id="search-input" placeholder="Search here.....">
 			</form>
+			<div class="search-list-section d-flex justify-content-center"></div>
 		</div>
-	</div>
+	</div>	
 	<!-- Search model end -->
 
 	<!-- Header Section Begin -->
@@ -63,11 +65,11 @@
 						<nav class="header__menu mobile-menu">
 							<ul>
 								<!-- <li class="active"><a href="./index.html">Homepage</a></li> -->
-								<li><a href="./categories.html">Categories <span class="arrow_carrot-down"></span></a>
+								<li><a href="#!">Categories <span class="arrow_carrot-down"></span></a>
 									<ul class="dropdown">
-										<li><a href="./anime-details.html">Game Details</a></li>
-										<li><a href="./anime-watching.html">Anime Watching</a></li>
-										<li><a href="./blog-details.html">Blog Details</a></li>
+										{% for category in categories %}
+											<li><a href="#!">{{ category }}</a></li>
+										{% endfor %}
 									</ul>
 								</li>
 								<li><a href="./blog.html">Our Blog</a></li>
@@ -81,13 +83,13 @@
 				</div>
 				<div class="col-lg-2">
 					<div class="header__right">
+						<a href="#" class="search-switch"><span class="icon_search"></span></a>
 						{% if request.session.uid %}
 							<a class="cart" style="display: inline-block;" href="{% url 'cart' %}">
 								<i class="fa-solid fa-cart-plus"></i>
 								<span class="cart-badge">0</span>
 							</a>
 						{% endif %}
-						<a href="#" class="search-switch"><span class="icon_search"></span></a>
 						{% if request.session.uid %}
 							<a href="{% url 'logout' %}"><i class="fa-solid fa-right-from-bracket"></i></a>
 						{% else %}
@@ -155,6 +157,75 @@
 				});
 		}
 		window.addEventListener('DOMContentLoaded', updateCartCount);
-	</script>	
+	</script>
+
+	<!-- search engine  -->
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			const input = document.getElementById('search-input');
+			const resultSection = document.querySelector('.search-list-section');
+			const closeButton = document.querySelector('.search-close-switch');
+		
+			let debounceTimeout = null;
+		
+			input.addEventListener('input', function () {
+				const query = input.value.trim();
+		
+				clearTimeout(debounceTimeout);
+		
+				if (query.length === 0) {
+					resultSection.innerHTML = '';
+					return;
+				}
+		
+				debounceTimeout = setTimeout(() => {
+					fetch(`api/search/games/?query=${encodeURIComponent(query)}`)
+						.then(res => res.json())
+						.then(data => {
+							if (data.length === 0) {
+								resultSection.innerHTML = `
+									<div class="no-result search-list">
+										<p>No results found.</p>
+									</div>
+								`;
+								return;
+							}
+		
+							const itemsHTML = `
+								<div class="search-list">
+									${data.map(game => `
+										<a href="/game-details/${game.id}" class="search-item">
+											<img src="${game.image}" alt="${game.name}" class="item-img">
+											<div class="item-info">
+												<p class="item-name line-clamp">${game.name}</p>
+												<small class="text-muted d-block">${game.categories.map(c => c.name).join(', ')}</small>
+												<span class="item-price">$${game.discounted_price}</span>
+											</div>
+										</a>
+									`).join('')}
+								</div>
+							`;
+		
+							resultSection.innerHTML = itemsHTML;
+						})
+						.catch(err => {
+							console.error('Search error:', err);
+							resultSection.innerHTML = `
+								<div class="search-list text-center">
+									<p>Error loading results.</p>
+								</div>
+							`;
+						});
+				}, 300);
+			});
+		
+			closeButton.addEventListener('click', function () {
+				clearTimeout(debounceTimeout);
+				input.value = '';
+				resultSection.innerHTML = '';
+			});
+		});
+		
+	</script>			
 </body>	
 </html>

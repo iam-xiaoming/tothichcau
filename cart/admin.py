@@ -11,6 +11,6 @@ class TransactionAdmin(admin.ModelAdmin):
     list_display = ('user', 'game', 'get_user_key_game', 'status', 'total_amount', 'created_at')
     
     def get_user_key_game(self, obj):
-        return Key.objects.get(game=obj.game)
+        return obj.key
     
     get_user_key_game.short_description = 'key'

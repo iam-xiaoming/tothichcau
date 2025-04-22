@@ -1,9 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
-from django.urls import reverse, reverse_lazy
 import stripe
 from django.views import View
-from django.views.generic import TemplateView
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import Order
@@ -15,6 +13,8 @@ from users.models import MyUser
 from .models import Transaction
 import logging
 from django.views.decorators.http import require_GET
+from django.db import transaction
+from django.urls import reverse
 
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -222,31 +222,36 @@ def webhook_view(request):
         except Game.DoesNotExist:
             logger.warning(f"[Webhook] Game with product ID {product_id} not found.")
             continue
-
-        Transaction.objects.create(
-            user=user,
-            game=game,
-            status=status,
-            session_id=session_id,
-            total_amount=total_amount,
-            customer_email=customer_email,
-            brand=brand,
-            last4=last4,
-            phone=phone,
-            exp_month=exp_month,
-            exp_year=exp_year
-        )
         
-        key = Key.objects.filter(game=game, status='available').first()
-        UserGame.objects.create(user=user, game=game, key=key)
-        
-        order = Order.objects.get(user=user, game=game)
-        
-        # update key status
-        key.status = 'sold'
-        key.save()
-        
-        # delete order item
-        order.delete()
+        try:
+            with transaction.atomic():
+                key = Key.objects.select_for_update().filter(game=game, status='available').first()
+                if not key:
+                    return JsonResponse({'error': 'Out of stock. No available key for this game.'}, status=400)
+            
+            UserGame.objects.create(user=user, game=game, key=key)
+            
+            key.status = 'sold'
+            key.save()
+            
+            Transaction.objects.create(
+                user=user,
+                game=game,
+                key=key,
+                status=status,
+                session_id=session_id,
+                total_amount=total_amount,
+                customer_email=customer_email,
+                brand=brand,
+                last4=last4,
+                phone=phone,
+                exp_month=exp_month,
+                exp_year=exp_year
+            )
+            
+            Order.objects.filter(user=user, game=game).delete()
+            
+        except Exception as e:
+            raise JsonResponse({'error': str(e)}, status=500)
 
     return HttpResponse(status=200)
