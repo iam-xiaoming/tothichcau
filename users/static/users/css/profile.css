@@ -164,6 +164,9 @@
 .profile-card__header {
     padding: 20px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .profile-card__header h3 {
@@ -704,4 +707,14 @@
     .stat-label {
         font-size: 12px;
     }
+}
+
+
+
+.search-bar input {
+    width: 100%;
+    padding: 8px 12px;
+    font-size: 15px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
 }

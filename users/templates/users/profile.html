@@ -2,8 +2,9 @@
 {% load static %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'users/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'users/css/profile.css' %}">
 {% endblock %}
+
 
 {% block content %}
     <!-- Profile Header Begin -->
@@ -129,6 +130,9 @@
                     <div class="profile-card">
                         <div class="profile-card__header">
                             <h3>Purchase History</h3>
+                            <div class="search-bar mb-3">
+                                <input type="text" id="searchInput" class="form-control" placeholder="Search your games...">
+                            </div>
                         </div>
                         <div class="profile-card__body">
                             {% if user.owned_games.exists %}
@@ -139,7 +143,7 @@
                                                 <img src="{{ user_game.game.image.url }}" alt="{{ user_game.game.name }}">
                                             </div>
                                             <div class="product-info">
-                                                <h5>{{ user_game.game.name }}</h5>
+                                                <a style="display: block;" href="{% url 'transaction-detail' user_game.transaction.pk %}"><h5>{{ user_game.game.name }}</h5></a>
                                                 <div class="product-key">
                                                     <span class="key-label">Game Key:</span>
                                                     <span class="key-value">{{ user_game.key }}</span>

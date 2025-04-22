@@ -104,9 +104,12 @@ class Key(models.Model):
     
 
 class UserGame(models.Model):
+    from cart.models import Transaction
+    
     user = models.ForeignKey(MyUser, on_delete=models.CASCADE, related_name='owned_games')
     game = models.ForeignKey(Game, on_delete=models.CASCADE, related_name='owned_by_users')
     key = models.ForeignKey(Key, on_delete=models.CASCADE, related_name='user_game')
+    transaction = models.ForeignKey(Transaction, on_delete=models.CASCADE, related_name='user_game')
     
     
     def __str__(self):
