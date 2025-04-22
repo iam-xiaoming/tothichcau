@@ -134,29 +134,31 @@
                             </button>
                             <div class="product-list" id="sale-product-list">
                                 {% for game in games %}
-                                    <div class="col-lg-3 col-md-4 col-sm-6 col-12 product-card">
-                                        <a href="{% url 'game_details' game.pk %}">
-                                            <div class="product__item">
-                                                {% if game.quantity > 0 %}
-                                                    <div class="product__item__pic set-bg" data-setbg="{{ game.image.url }}"></div>
-                                                {% else %}
-                                                    <div class="product__item__pic set-bg sold-out" data-setbg="{{ game.image.url }}">
-                                                        <div class="overplay"></div>
-                                                        <img class="sold-out-img" src="{% static 'games/images/sold_out.png' %}" alt="">
-                                                    </div>
-                                                {% endif %}
-                                            </div>
-                                            <div class="product__item__text">
-                                                <span class="base-game">Base Game</span>
-                                                <h5 class="line-clamp">{{ game.name }}</h5>
-                                            </div>
-                                            <div class="price-section">
-                                                <span class="sale">-{{ game.discount }}%</span>
-                                                <span class="origin-price">${{ game.price }}</span>
-                                                <span class="current-price">${{ game.discounted_price|floatformat:2 }}</span>
-                                            </div>
-                                        </a>
-                                    </div>
+                                    {% if game.discount > 0 %}
+                                        <div class="col-lg-3 col-md-4 col-sm-6 col-12 product-card">
+                                            <a href="{% url 'game_details' game.pk %}">
+                                                <div class="product__item">
+                                                    {% if game.quantity > 0 %}
+                                                        <div class="product__item__pic set-bg" data-setbg="{{ game.image.url }}"></div>
+                                                    {% else %}
+                                                        <div class="product__item__pic set-bg sold-out" data-setbg="{{ game.image.url }}">
+                                                            <div class="overplay"></div>
+                                                            <img class="sold-out-img" src="{% static 'games/images/sold_out.png' %}" alt="">
+                                                        </div>
+                                                    {% endif %}
+                                                </div>
+                                                <div class="product__item__text">
+                                                    <span class="base-game">Base Game</span>
+                                                    <h5 class="line-clamp">{{ game.name }}</h5>
+                                                </div>
+                                                <div class="price-section">
+                                                    <span class="sale">-{{ game.discount }}%</span>
+                                                    <span class="origin-price">${{ game.price }}</span>
+                                                    <span class="current-price">${{ game.discounted_price|floatformat:2 }}</span>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    {% endif %}
                                 {% endfor %}
                             </div>
                             <button class="scroll-btn right-btn" onclick="customScrollRight('sale')">

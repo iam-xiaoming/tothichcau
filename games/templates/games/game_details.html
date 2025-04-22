@@ -50,7 +50,7 @@
                                     </div>
                                 </div>
                             </div>
-                            {% if user.is_authenticated %}
+                            {% if request.session.uid %}
                                 <div class="anime__details__btn">
                                     <a href="#" class="follow-btn">Follow</a>
                                     <a href="#" class="watch-btn" data-game-id="{{ object.id }}"><span>Loading...</span><i class="fa fa-angle-right"></i></a>
@@ -80,7 +80,7 @@
                                 </div>
                             {% endfor %}
                         </div>
-                        {% if user.is_authenticated %}
+                        {% if request.session.uid %}
                             <div class="anime__details__form">
                                 <div class="section-title">
                                     <h5>Your Comment</h5>

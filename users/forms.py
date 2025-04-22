@@ -6,6 +6,9 @@ from users.models import MyUser
 from django.utils import timezone
 import traceback
 import time
+from django.shortcuts import get_object_or_404
+
+
 User = get_user_model()
 
 class UserLoginForm(forms.Form):
@@ -28,15 +31,20 @@ class UserLoginForm(forms.Form):
         
         try:
             user = auth.sign_in_with_email_and_password(email, password)
+            user_instance = get_object_or_404(MyUser, email=email)
         except Exception as e:
             print(f"Firebase auth error: {str(e)}")
             raise forms.ValidationError("Invalid email or password.")
         
         self.user = user
+        self.user_instance = user_instance
         return self.cleaned_data
     
     def get_user(self):
         return self.user
+    
+    def get_user_instance(self):
+        return self.user_instance
     
 class UserRegisterForm(UserCreationForm):
     email = forms.EmailField(widget=forms.EmailInput({
