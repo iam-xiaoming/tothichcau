@@ -6,6 +6,7 @@ from games.models import UserGame
 # from users.firebase_helpers import firebase_config
 from django.views.generic import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth import logout, login
 
 # Create your views here.
 def login_view(request):
@@ -13,6 +14,10 @@ def login_view(request):
         form = UserLoginForm(request.POST)
         if form.is_valid():
             user = form.get_user()
+            user_instance = form.get_user_instance()
+            
+            login(request, user_instance)
+            
             request.session['uid'] = str(user['idToken'])
             return redirect('home')
         else:
@@ -60,10 +65,7 @@ class ProfileView(LoginRequiredMixin, ListView):
 
 
 def logout_view(request):
-    try:
-        del request.session['uid']
-    except KeyError:
-        pass
+    logout(request)
     return redirect('login')
 
 

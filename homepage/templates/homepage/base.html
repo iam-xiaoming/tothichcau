@@ -29,6 +29,16 @@
 	<link rel="stylesheet" href="{% static 'homepage/css/search.css' %}">
 
 	{% block extra_css %}{% endblock %}
+
+	<style>
+		.header__logo {
+			padding: 0;
+		}
+
+		.header__logo img {
+			height: 50px;
+		}
+	</style>
 </head>
 <body>
 	
@@ -53,7 +63,7 @@
 	<header class="header">
 		<div class="container">
 			<div class="row">
-				<div class="col-lg-2">
+				<div style="display: flex; align-items: center;" class="col-lg-2">
 					<div class="header__logo">
 						<a href="{% url 'home' %}">
 							<img src="{% static 'homepage/img/logo.png' %}" alt="">
@@ -64,7 +74,6 @@
 					<div class="header__nav">
 						<nav class="header__menu mobile-menu">
 							<ul>
-								<!-- <li class="active"><a href="./index.html">Homepage</a></li> -->
 								<li><a href="#!">Categories <span class="arrow_carrot-down"></span></a>
 									<ul class="dropdown">
 										{% for category in categories %}
