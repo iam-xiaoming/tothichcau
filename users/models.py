@@ -3,6 +3,7 @@ from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, Permis
 from django.utils import timezone
 from users.firebase_helpers import firebase_config
 import time
+
 # Create your models here.
 class CustomUserManager(BaseUserManager):
     def create_user(self, username, email, password, role='user', **extra_fields):
@@ -83,15 +84,6 @@ class CustomUserManager(BaseUserManager):
         user.set_password(password)
         user.save(using=self._db)
         return user
-        
-   
-# User
-# - id: firebase, PK (token) -> dùng token của firebase (update)
-# - username: string, unique
-# - email: string, unique
-# - password: string, hashed
-# - role: string, [admin, user]
-# - create_at:  datetime
         
 class MyUser(AbstractBaseUser, PermissionsMixin):
     ROLE_CHOICES = (

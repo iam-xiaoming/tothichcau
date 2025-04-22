@@ -120,3 +120,15 @@ class GameHero(models.Model):
     
     def __str__(self):
         return self.name
+
+
+# comment
+class Comment(models.Model):
+    title = models.CharField(max_length=255)
+    content = models.TextField(max_length=1000)
+    game = models.ForeignKey(Game, on_delete=models.CASCADE, related_name='comment')
+    user = models.ForeignKey(MyUser, on_delete=models.CASCADE, related_name='comment')
+    created_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return self.title
