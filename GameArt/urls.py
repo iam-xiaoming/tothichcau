@@ -24,6 +24,7 @@ import thanks.urls
 import users.urls
 import cart.urls
 import search.urls
+import transactions.urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -32,7 +33,8 @@ urlpatterns = [
     path('thanks/', include(thanks.urls)),
     path('', include(users.urls)),
     path('', include(cart.urls)),
-    path('', include(search.urls))
+    path('', include(search.urls)),
+    path('', include(transactions.urls))
 ]
 
 
