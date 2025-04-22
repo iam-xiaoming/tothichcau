@@ -1,5 +1,6 @@
 /* Profile Page Styles */
 
+
 /* Profile Header */
 .profile-header {
     padding: 80px 0 40px;
@@ -444,6 +445,7 @@
     align-items: center;
     padding: 10px 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    height: 100px;
 }
 
 .purchase-product:last-child {
@@ -452,7 +454,8 @@
 
 .product-image {
     width: 60px;
-    height: 60px;
+    height: 100%;
+    object-fit: cover;
     border-radius: 5px;
     overflow: hidden;
     margin-right: 15px;
@@ -484,7 +487,7 @@
     display: flex;
     align-items: center;
     background-color: rgba(0, 0, 0, 0.2);
-    padding: 5px 10px;
+    padding: 5px;
     border-radius: 4px;
 }
 

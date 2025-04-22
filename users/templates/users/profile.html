@@ -1,10 +1,11 @@
 {% extends "homepage/base.html" %}
 {% load static %}
 
-{% block content %}
-  
-    <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css">
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'users/css/style.css' %}">
+{% endblock %}
 
+{% block content %}
     <!-- Profile Header Begin -->
     <section class="profile-header set-bg" data-setbg="{% static 'homepage/img/normal-breadcrumb.jpg' %}">
         <div class="container">
@@ -25,12 +26,12 @@
                             <p>{{ user.email }}</p>
                             <div class="profile-stats">
                                 <div class="stat">
-                                    <span class="stat-value">{{ user.orders.count|default:"0" }}</span>
                                     <span class="stat-label">Purchases</span>
+                                    <span class="stat-value">{{ user.owned_games.count }}</span>
                                 </div>
                                 <div class="stat">
-                                    <span class="stat-value">{{ user.date_joined|date:"M Y" }}</span>
                                     <span class="stat-label">Member Since</span>
+                                    <span class="stat-value">{{ user.created_at|date:"M Y" }}</span>
                                 </div>
                             </div>
                         </div>
@@ -47,16 +48,13 @@
             <div class="profile-tabs">
                 <ul class="nav-tabs">
                     <li class="tab-item active" data-tab="account">
-                        <i class="fa fa-user"></i> Account
-                    </li>
-                    <li class="tab-item" data-tab="security">
-                        <i class="fa fa-lock"></i> Security
+                        <i class="fa fa-user"></i>Account
                     </li>
                     <li class="tab-item" data-tab="purchases">
-                        <i class="fa fa-shopping-cart"></i> Purchases
+                        <i class="fa fa-shopping-cart"></i>Library
                     </li>
                     <li class="tab-item" data-tab="wishlist">
-                        <i class="fa fa-heart"></i> Wishlist
+                        <i class="fa fa-heart"></i>Wishlist
                     </li>
                 </ul>
             </div>
@@ -83,8 +81,8 @@
                                         <div class="form-group">
                                             <label>Email Address</label>
                                             <div class="input__item">
-                                                {{ form.email }}
-                                                <span class="fa fa-envelope"></span>
+                                                <input type="text" value="{{ user.email }}" readonly>
+                                                <span class="fa fa-user"></span>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -126,89 +124,6 @@
                     </div>
                 </div>
                 
-                <!-- Security Tab -->
-                <div class="tab-pane" id="security">
-                    <div class="row">
-                        <div class="col-lg-8">
-                            <div class="profile-card">
-                                <div class="profile-card__header">
-                                    <h3>Change Password</h3>
-                                </div>
-                                <div class="profile-card__body">
-                                    <form action="" method="POST">
-                                        {% csrf_token %}
-                                        <div class="form-group">
-                                            <label>Current Password</label>
-                                            <div class="input__item">
-                                                <input type="password" name="current_password" required>
-                                                <span class="fa fa-lock"></span>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>New Password</label>
-                                            <div class="input__item">
-                                                <input type="password" name="new_password" required>
-                                                <span class="fa fa-lock"></span>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Confirm New Password</label>
-                                            <div class="input__item">
-                                                <input type="password" name="confirm_password" required>
-                                                <span class="fa fa-lock"></span>
-                                            </div>
-                                        </div>
-                                        <button type="submit" class="site-btn">Change Password</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="profile-card">
-                                <div class="profile-card__header">
-                                    <h3>Connected Accounts</h3>
-                                </div>
-                                <div class="profile-card__body">
-                                    <div class="connected-accounts">
-                                        <div class="connected-account">
-                                            <div class="account-info">
-                                                <i class="fa fa-facebook"></i>
-                                                <span>Facebook</span>
-                                            </div>
-                                            <div class="account-status">
-                                                {% if user.facebook_connected %}
-                                                    <span class="status-connected">Connected</span>
-                                                    <a href="#" class="disconnect-link">Disconnect</a>
-                                                {% else %}
-                                                    <a href="#" class="connect-btn facebook">
-                                                        <i class="fa fa-facebook"></i> Connect
-                                                    </a>
-                                                {% endif %}
-                                            </div>
-                                        </div>
-                                        <div class="connected-account">
-                                            <div class="account-info">
-                                                <i class="fa fa-google"></i>
-                                                <span>Google</span>
-                                            </div>
-                                            <div class="account-status">
-                                                {% if user.google_connected %}
-                                                    <span class="status-connected">Connected</span>
-                                                    <a href="#" class="disconnect-link">Disconnect</a>
-                                                {% else %}
-                                                    <a href="#" class="connect-btn google">
-                                                        <i class="fa fa-google"></i> Connect
-                                                    </a>
-                                                {% endif %}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
                 <!-- Purchases Tab -->
                 <div class="tab-pane" id="purchases">
                     <div class="profile-card">
@@ -216,40 +131,22 @@
                             <h3>Purchase History</h3>
                         </div>
                         <div class="profile-card__body">
-                            {% if user.orders.exists %}
+                            {% if user.owned_games.exists %}
                                 <div class="purchase-history">
-                                    {% for order in user.orders.all %}
-                                        <div class="purchase-item">
-                                            <div class="purchase-header">
-                                                <div class="purchase-info">
-                                                    <h4>Order #{{ order.order_number }}</h4>
-                                                    <span class="purchase-date">{{ order.created_at|date:"F d, Y" }}</span>
-                                                </div>
-                                                <div class="purchase-status">
-                                                    <span class="status-badge status-{{ order.status|lower }}">{{ order.status }}</span>
-                                                    <span class="purchase-total">${{ order.total_price }}</span>
-                                                </div>
+                                    {% for user_game in user_games %}
+                                        <div class="purchase-product">
+                                            <div class="product-image">
+                                                <img src="{{ user_game.game.image.url }}" alt="{{ user_game.game.name }}">
                                             </div>
-                                            <div class="purchase-details">
-                                                {% for item in order.items.all %}
-                                                    <div class="purchase-product">
-                                                        <div class="product-image">
-                                                            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
-                                                        </div>
-                                                        <div class="product-info">
-                                                            <h5>{{ item.product.name }}</h5>
-                                                            <p>{{ item.product.platform }}</p>
-                                                            <div class="product-key">
-                                                                <span class="key-label">Game Key:</span>
-                                                                <span class="key-value">{{ item.game_key }}</span>
-                                                                <button class="copy-key" data-key="{{ item.game_key }}">
-                                                                    <i class="fa fa-copy"></i>
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                        <div class="product-price">${{ item.price }}</div>
-                                                    </div>
-                                                {% endfor %}
+                                            <div class="product-info">
+                                                <h5>{{ user_game.game.name }}</h5>
+                                                <div class="product-key">
+                                                    <span class="key-label">Game Key:</span>
+                                                    <span class="key-value">{{ user_game.key }}</span>
+                                                    <button class="copy-key" data-key="{{ user_game.key }}">
+                                                        <i class="fa fa-copy"></i>
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     {% endfor %}
@@ -261,7 +158,7 @@
                                     </div>
                                     <h4>No purchases yet</h4>
                                     <p>Your purchase history will appear here once you buy something.</p>
-                                    <a href="" class="site-btn">Browse Store</a>
+                                    <a href="{% url 'home' %}" class="site-btn">Browse Store</a>
                                 </div>
                             {% endif %}
                         </div>
@@ -305,7 +202,7 @@
                                     </div>
                                     <h4>Your wishlist is empty</h4>
                                     <p>Save games you're interested in to your wishlist.</p>
-                                    <a href="" class="site-btn">Browse Store</a>
+                                    <a href="{% url 'home' %}" class="site-btn">Browse Store</a>
                                 </div>
                             {% endif %}
                         </div>
@@ -315,4 +212,5 @@
         </div>
     </section>
     <!-- Profile Content End -->
+    <script src="{% static 'users/js/main.js' %}"></script>
 {% endblock %}

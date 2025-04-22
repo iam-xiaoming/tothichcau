@@ -2,7 +2,10 @@ from django.shortcuts import render, redirect
 from .forms import UserLoginForm, UserRegisterForm, ForgotPasswordForm
 from users.firebase_helpers import firebase_config
 from django.contrib import messages
+from games.models import UserGame
 # from users.firebase_helpers import firebase_config
+from django.views.generic import ListView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
 def login_view(request):
@@ -40,8 +43,20 @@ def register(request):
     return render(request, 'users/signup.html', {'form': form, 'errors': form.errors})
 
 
-def profile(request):
-    return render(request, 'users/profile.html')
+# def profile(request):
+#     context = {
+#         'user_games': UserGame.objects.all()
+#     }
+#     return render(request, 'users/profile.html', context)
+
+class ProfileView(LoginRequiredMixin, ListView):
+    model = UserGame
+    template_name = 'users/profile.html'
+    context_object_name = 'user_games'
+    login_url = 'login'
+    
+    def get_queryset(self):
+        return UserGame.objects.filter(user=self.request.user)
 
 
 def logout_view(request):
@@ -50,6 +65,7 @@ def logout_view(request):
     except KeyError:
         pass
     return redirect('login')
+
 
 def home_view(request):
     return render(request, 'users/home.html')
