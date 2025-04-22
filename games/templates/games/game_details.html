@@ -52,7 +52,7 @@
                             </div>
                             {% if user.is_authenticated %}
                                 <div class="anime__details__btn">
-                                    <a href="#" class="follow-btn"><i class="fa fa-heart-o"></i>Follow</a>
+                                    <a href="#" class="follow-btn">Follow</a>
                                     <a href="#" class="watch-btn" data-game-id="{{ object.id }}"><span>Loading...</span><i class="fa fa-angle-right"></i></a>
                                 </div>
                             {% endif %}
@@ -80,15 +80,24 @@
                                 </div>
                             {% endfor %}
                         </div>
-                        <div class="anime__details__form">
-                            <div class="section-title">
-                                <h5>Your Comment</h5>
+                        {% if user.is_authenticated %}
+                            <div class="anime__details__form">
+                                <div class="section-title">
+                                    <h5>Your Comment</h5>
+                                </div>
+                                <form action="" method="POST">
+                                    {% csrf_token %}
+                                    
+                                    <input type="hidden" name="game_id" value="{{ game.id }}">
+                                    
+                                    <label style="color: #fff;" for="title">Title</label>
+                                    <textarea maxlength="255" name="title" style="color: #b7b7b7; background: #202021; height: 50px; margin-bottom: 15px;" placeholder="Your title"></textarea>
+                                    <label style="color: #fff;" for="content">Content</label>
+                                    <textarea maxlength="1000" name="content" style="color: #b7b7b7; background: #202021;" placeholder="Your Comment"></textarea>
+                                    <button type="submit"><i class="fa fa-location-arrow"></i> Review</button>
+                                </form>
                             </div>
-                            <form action="#">
-                                <textarea placeholder="Your Comment"></textarea>
-                                <button type="submit"><i class="fa fa-location-arrow"></i> Review</button>
-                            </form>
-                        </div>
+                        {% endif %}
                     </div>
                     <div class="col-lg-4 col-md-4">
                         <div class="anime__details__sidebar">
