@@ -142,7 +142,7 @@ ol {
 	top: -6px;
 	height: 32px;
 	width: 4px;
-	background: #e53637;
+	background: rgb(38, 187, 255);
 	content: "";
 }
 
@@ -1050,7 +1050,7 @@ ol {
 .anime__details__btn .follow-btn {
 	font-size: 13px;
 	color: #ffffff;
-	background: #e53637;
+	background: rgb(38, 187, 255);
 	display: inline-block;
 	font-weight: 700;
 	letter-spacing: 2px;
@@ -1063,7 +1063,7 @@ ol {
 .anime__details__btn .watch-btn span {
 	font-size: 13px;
 	color: #ffffff;
-	background: #e53637;
+	background: rgb(38, 187, 255);
 	display: inline-block;
 	font-weight: 700;
 	letter-spacing: 2px;
@@ -1076,7 +1076,7 @@ ol {
 .anime__details__btn .watch-btn i {
 	font-size: 20px;
 	display: inline-block;
-	background: #e53637;
+	background: rgb(38, 187, 255);
 	padding: 11px 5px 16px 8px;
 	color: #ffffff;
 	border-radius: 0 4px 4px 0;
@@ -1158,7 +1158,7 @@ ol {
 	font-weight: 700;
 	letter-spacing: 2px;
 	text-transform: uppercase;
-	background: #e53637;
+	background: rgb(38, 187, 255);
 	border: none;
 	padding: 10px 15px;
 	border-radius: 2px;
@@ -1292,7 +1292,7 @@ ol {
 
 .breadcrumb__links a i {
 	margin-right: 5px;
-	color: #e53637;
+	color: rgb(38, 187, 255);
 }
 
 .breadcrumb__links a:after {
