@@ -1,3 +1,5 @@
-minh@gmail.com
+docker compose up
 
-1
+stripe listen --forward-to localhost:8000/webhook/stripe/
+
+python3 manage.py runserver
