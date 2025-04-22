@@ -30,7 +30,6 @@ class Game(models.Model):
     publisher = models.CharField(max_length=255)
     release_date = models.DateTimeField(default=timezone.now)
     image = models.ImageField(upload_to='game_images')
-    category = models.CharField(max_length=255)
     categories = models.ManyToManyField(Category, related_name='games')
     
 

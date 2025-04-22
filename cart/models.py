@@ -1,6 +1,6 @@
 from django.db import models
 from users.models import MyUser
-from games.models import Game
+from games.models import Game, Key
 
 # Create your models here.
 class Order(models.Model):
@@ -20,6 +20,7 @@ class Transaction(models.Model):
     
     user = models.ForeignKey(MyUser, on_delete=models.CASCADE, related_name='transactions')
     game = models.ForeignKey(Game, on_delete=models.CASCADE, related_name='transactions')
+    key = models.ForeignKey(Key, on_delete=models.CASCADE, related_name='transactions')
     
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='failed')
     created_at = models.DateTimeField(auto_now_add=True)
