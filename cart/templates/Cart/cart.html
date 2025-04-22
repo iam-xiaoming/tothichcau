@@ -1,97 +1,14 @@
+{% extends "homepage/base.html" %}
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="description" content="Anime Template">
-    <meta name="keywords" content="Anime, unica, creative, html">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+{% block extra_css %}
+	<link rel="stylesheet" href="{% static 'cart/css/has.css' %}" />
+	<link rel="stylesheet" href="{% static 'cart/css/none.css' %}" />
+{% endblock %}
 
-    {% block title %}{% endblock %}
-
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-
-    <!-- Css Styles -->
-    <link rel="stylesheet" href="{% static 'homepage/css/bootstrap.min.css' %}" type="text/css">
-    <link rel="stylesheet" href="{% static 'homepage/css/font-awesome.min.css' %}" type="text/css">
-    <link rel="stylesheet" href="{% static 'homepage/css/elegant-icons.css' %}" type="text/css">
-    <link rel="stylesheet" href="{% static 'homepage/css/plyr.css' %}" type="text/css">
-    <link rel="stylesheet" href="{% static 'homepage/css/nice-select.css' %}" type="text/css">
-    <link rel="stylesheet" href="{% static 'homepage/css/owl.carousel.min.css' %}" type="text/css">
-    <link rel="stylesheet" href="{% static 'homepage/css/slicknav.min.css' %}" type="text/css">
-    <link rel="stylesheet" href="{% static 'homepage/css/style.css' %}" type="text/css">
-</head>
-<body>
-	
-	<!-- Page Preloder -->
-	<div id="preloder">
-		<div class="loader"></div>
-	</div>
-
-	<!-- Search model Begin -->
-	<div class="search-model">
-		<div class="h-100 d-flex align-items-center justify-content-center">
-			<div class="search-close-switch"><i class="icon_close"></i></div>
-			<form class="search-model-form">
-				<input type="text" id="search-input" placeholder="Search here.....">
-			</form>
-		</div>
-	</div>
-	<!-- Search model end -->
-
-	<!-- Header Section Begin -->
-	<header class="header">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-2">
-					<div class="header__logo">
-						<a href="{% url 'home' %}">
-							<img src="{% static 'homepage/img/logo.png' %}" alt="">
-						</a>
-					</div>
-				</div>
-				<div class="col-lg-8">
-					<div class="header__nav">
-						<nav class="header__menu mobile-menu">
-							<ul>
-								<li class="active"><a href="./index.html">Homepage</a></li>
-								<li><a href="./categories.html">Categories <span class="arrow_carrot-down"></span></a>
-									<ul class="dropdown">
-										<li><a href="./anime-details.html">Game Details</a></li>
-										<li><a href="./anime-watching.html">Anime Watching</a></li>
-										<li><a href="./blog-details.html">Blog Details</a></li>
-									</ul>
-								</li>
-								<li><a href="./blog.html">Our Blog</a></li>
-								<li><a href="#">Contacts</a></li>
-							</ul>
-						</nav>
-					</div>
-				</div>
-				<div class="col-lg-2">
-					<div class="header__right">
-						<a href="#" class="search-switch"><span class="icon_search"></span></a>
-						{% if user.is_authenticated %}
-							<a href="{% url 'profile' %}"><span class="icon_profile"></span></a>
-						{% else %}
-							<a href="{% url 'login' %}"><span class="icon_profile"></span></a>
-						{% endif %}
-					</div>
-				</div>
-			</div>
-			<div id="mobile-menu-wrap"></div>
-		</div>
-	</header>
-	<!-- Header End -->
-
+{% block content %}
     {% if orders.count > 0 %}
-        <link rel="stylesheet" href="{% static 'cart/css/has.css' %}" />
         <main class="cart-wrapper">
           <h1 class="cart-title">My Cart</h1>
           <div class="cart-content">
@@ -155,7 +72,6 @@
           </div>
         </main>
     {% else %}
-        <link rel="stylesheet" href="{% static 'cart/css/none.css' %}" />
         <main class="cart-container">
             <h1>My Cart</h1>
             <div class="empty-cart">
@@ -165,12 +81,8 @@
             </div>
         </main>
     {% endif %}
-	
-	<footer class="footer-note">
-		The lowest price offered on The Epic Games Store in the last 30 days before discount
-	</footer>
 
-	<script src="https://js.stripe.com/v3/"></script>
+    <script src="https://js.stripe.com/v3/"></script>
     <script>
         var stripe = Stripe('{{ STRIPE_PUBLISHABLE_KEY }}');
         document.getElementById('checkout-btn').addEventListener('click', function(event) {
@@ -192,14 +104,4 @@
             });
         });
     </script>
-
-	<script src="{% static 'homepage/js/jquery-3.3.1.min.js' %}"></script>
-	<script src="{% static 'homepage/js/bootstrap.min.js' %}"></script>
-	<script src="{% static 'homepage/js/player.js' %}"></script>
-	<script src="{% static 'homepage/js/jquery.nice-select.min.js' %}"></script>
-	<script src="{% static 'homepage/js/mixitup.min.js' %}"></script>
-	<script src="{% static 'homepage/js/jquery.slicknav.js' %}"></script>
-	<script src="{% static 'homepage/js/owl.carousel.min.js' %}"></script>
-	<script src="{% static 'homepage/js/main.js' %}"></script>
-</body>	
-</html>
+{% endblock %}

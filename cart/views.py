@@ -5,7 +5,7 @@ from django.views import View
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import Order
-from games.models import Game, Key, UserGame
+from games.models import Game, Key, UserGame, Category
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView
@@ -97,6 +97,7 @@ class CartView(LoginRequiredMixin, ListView):
         context['total_discounted_price'] = total_discounted_price
         context['discount'] = total_price - total_discounted_price
         context['STRIPE_PUBLISHABLE_KEY'] = settings.STRIPE_PUBLISHABLE_KEY
+        context['categories'] = Category.objects.all()
         return context
     
 
