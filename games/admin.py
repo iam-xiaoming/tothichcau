@@ -1,12 +1,11 @@
 from django.contrib import admin
-from .models import Game, Key, UserGame, GameHero, Category, Comment
+from .models import Game, Key, UserGame, Category, Comment
 from django import forms
 from django.forms import CheckboxSelectMultiple
 from django.core.exceptions import ValidationError
 from cart.models import Transaction
 
 # Register your models here.
-admin.site.register(GameHero)
 admin.site.register(Category)
 
 

@@ -155,3 +155,11 @@ class ForgotPasswordForm(forms.Form):
             raise forms.ValidationError("Email is required.")
         return email
 
+
+class UserUpdateForm(forms.ModelForm):
+    email = forms.EmailField(widget=forms.EmailInput(attrs={
+        'readonly': 'readonly'
+    }))
+    class Meta:
+        model = MyUser
+        fields = ['username', 'email', 'full_name']

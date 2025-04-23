@@ -92,6 +92,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     )
     id = models.CharField(max_length=50, primary_key=True)
     username = models.CharField(max_length=20, unique=True)
+    full_name = models.CharField(max_length=255, blank=True, null=True)
     email = models.EmailField(unique=True)
     role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='user')
     created_at = models.DateTimeField(default=timezone.now)
