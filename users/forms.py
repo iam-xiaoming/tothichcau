@@ -13,10 +13,12 @@ User = get_user_model()
 
 class UserLoginForm(forms.Form):
     email = forms.EmailField(widget=forms.EmailInput(attrs={
-        'placeholder': 'Email address'
+        'placeholder': 'Email address',
+        'class': 'form-input'
     }))
     password = forms.CharField(widget=forms.PasswordInput(attrs={
-        'placeholder': 'Password'
+        'placeholder': 'Password',
+        'class': 'form-input'
     }))
     
     def clean(self):
@@ -48,13 +50,16 @@ class UserLoginForm(forms.Form):
     
 class UserRegisterForm(UserCreationForm):
     email = forms.EmailField(widget=forms.EmailInput({
-        'placeholder': 'Email address'
+        'placeholder': 'Email address',
+        'class': 'form-input'
     }))
     password1 = forms.CharField(widget=forms.PasswordInput({
-        'placeholder': 'Password'
+        'placeholder': 'Password',
+        'class': 'form-input'
     }))
     password2 = forms.CharField(widget=forms.PasswordInput({
-        'placeholder': 'Confirm Password'
+        'placeholder': 'Confirm Password',
+        'class': 'form-input'
     }))
     
     class Meta:

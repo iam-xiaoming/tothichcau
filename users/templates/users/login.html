@@ -2,21 +2,22 @@
 {% load static %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'users/css/login_animation.css' %}">       
+    <link rel="stylesheet" href="{% static 'users/css/login_animation.css' %}">
+    <link rel="stylesheet" href="{% static 'users/css/login.css' %}">   
 {% endblock %}
 
 {% block content %}
     <section class="game-slider-section py-5">
         <div style="margin-top: 30px;" class="container">
-            <div class="game-slider-wrapper">
-                <div class="game-row" id="row1"></div>
-                <div class="game-row" id="row2"></div>
+            <div class="slider-container">
+                <div id="row1" class="image-track"></div>
+                <div id="row2" class="image-track reverse"></div>
             </div>
         </div>
     </section>
 
     <!-- Login Section Begin -->
-    <section class="login spad">
+    <section style="background: inherit;" class="login spad">
         <div class="container">
             <div class="row">
                 <div class="col-lg-6">
@@ -48,44 +49,56 @@
     </section>
     <!-- Login Section End -->
     
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            let totalImages = 15;
-            const imageBlockSize = 10;
+   <script>
+        function checkAllImagesLoaded() {
+            loadedImages++;
+            if (loadedImages >= totalToLoad) {
+                requestAnimationFrame(() => {
+                    rowIds.forEach(rowId => {
+                        const row = document.getElementById(rowId);
+                        
+                        row.style.display = 'none';
+                        void row.offsetHeight;
+                        row.style.display = '';
         
-            if (totalImages % imageBlockSize !== 0) {
-                totalImages += imageBlockSize - (totalImages % imageBlockSize);
+                        row.classList.add('animate');
+                    });
+                });
             }
-        
-            const rowIds = ['row1', 'row2'];
-        
-            rowIds.forEach(rowId => {
-                const row = document.getElementById(rowId);
-        
-                const gameItems = [];
-                const imgPath = "{% static 'users/img/icon_img/img' %}";
-                for (let i = 1; i <= totalImages; i++) {
-                    const gameItem = document.createElement('div');
-                    gameItem.className = 'game-item';
-        
-                    const img = document.createElement('img');
-                    img.src = imgPath + i + ".jpeg";
-                    img.alt = `Game ${i}`;
-        
-                    gameItem.appendChild(img);
-                    gameItems.push(gameItem);
-                }
-        
-                for (let i = gameItems.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [gameItems[i], gameItems[j]] = [gameItems[j], gameItems[i]];
-                }
-        
-                gameItems.forEach(gameItem => row.appendChild(gameItem));
-        
-                const clonedItems = gameItems.map(item => item.cloneNode(true));
-                clonedItems.forEach(clonedItem => row.appendChild(clonedItem));
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+        const totalImages = 20;
+        const rowIds = ['row1', 'row2'];
+        const imgPath = "{% static 'users/img/icon_img/img' %}";
+    
+        rowIds.forEach(rowId => {
+            const row = document.getElementById(rowId);
+    
+            const items = [];
+            for (let i = 1; i <= totalImages; i++) {
+                const item = createGameItem(i);
+                row.appendChild(item);
+                items.push(item);
+            }
+    
+            items.forEach(item => {
+                const clone = item.cloneNode(true);
+                row.appendChild(clone);
             });
         });
-    </script>
+    
+        function createGameItem(i) {
+            const div = document.createElement('div');
+            div.className = 'game-item';
+    
+            const img = document.createElement('img');
+            img.src = imgPath + i + ".jpeg";
+            img.alt = `Game ${i}`;
+    
+            div.appendChild(img);
+            return div;
+        }
+    });
+   </script>
 {% endblock %}

@@ -34,10 +34,10 @@
 html,
 body {
 	height: 100%;
-	font-family: "Roboto", sans-serif;
+	font-family: "Roboto", sans-serif !important;
 	-webkit-font-smoothing: antialiased;
-	/* background: #0b0c2a; */
 	background: #101014;
+	
 }
 
 h1,
@@ -49,7 +49,7 @@ h6 {
 	margin: 0;
 	color: #111111;
 	font-weight: 400;
-	font-family: "Roboto", sans-serif;
+	font-family: "Roboto", sans-serif !important;
 }
 
 .line-clamp {
@@ -1892,8 +1892,12 @@ ol {
 }
 
 .signup .login__form h5 a {
-	color: rgb(38, 187, 255);
+	color: #ff4343;
 	font-weight: 700;
+}
+
+.signup .login__form h5 a:hover {
+	text-decoration: underline;
 }
 
 .signup .login__social__links {
