@@ -1,0 +1,15 @@
+.form-input {
+    border-radius: 30px;
+}
+
+button, .primary-btn {
+    border-radius: 30px !important;
+}
+
+button:hover, .primary-btn:hover {
+    background: rgba(38, 187, 255, 0.7);
+}
+
+.login__social__links ul a {
+    border-radius: 30px;
+}
