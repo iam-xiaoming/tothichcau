@@ -1,6 +1,15 @@
 /* Profile Page Styles */
+.list-group {
+    width: 100%;
+}
+
+.list-group .list-group-item {
+    font-size: 13px;
+}
+
 .search-bar {
     margin-bottom: 0 !important;
+    position: relative;
 }
 
 .search-bar input {
