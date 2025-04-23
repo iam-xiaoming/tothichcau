@@ -116,14 +116,6 @@ class UserGame(models.Model):
         return f"{self.user.email} owns {self.game.name}"
 
 
-# custom hero page
-class GameHero(models.Model):
-    name = models.CharField(max_length=255)
-    image = models.ImageField(upload_to='game_hero_images')
-    
-    def __str__(self):
-        return self.name
-
 
 # comment
 class Comment(models.Model):

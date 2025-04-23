@@ -52,7 +52,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_elasticsearch_dsl',
     'search.apps.SearchConfig',
-    'transactions.apps.TransactionsConfig'
+    'transactions.apps.TransactionsConfig',
+    'admin_manager.apps.AdminManagerConfig'
 ]
 
 MIDDLEWARE = [

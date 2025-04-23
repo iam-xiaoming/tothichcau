@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import UserLoginForm, UserRegisterForm, ForgotPasswordForm
+from .forms import UserLoginForm, UserRegisterForm, ForgotPasswordForm, UserUpdateForm
 from users.firebase_helpers import firebase_config
 from django.contrib import messages
 from games.models import UserGame
@@ -7,6 +7,8 @@ from games.models import UserGame
 from django.views.generic import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import logout, login
+from django.views.generic.edit import FormMixin
+from games.models import Category
 
 # Create your views here.
 def login_view(request):
@@ -24,7 +26,13 @@ def login_view(request):
             print(form.errors)
     else:
         form = UserLoginForm()
-    return render(request, 'users/login.html', {'form': form, 'errors': form.errors})
+        
+    context = {
+        'form': form,
+        'errors': form.errors,
+        'categories': Category.objects.all()
+    }
+    return render(request, 'users/login.html', context)
 
 
 def register(request):
@@ -44,18 +52,52 @@ def register(request):
         else:
             print(form.errors)
     else:
-        form = UserRegisterForm()
-    return render(request, 'users/signup.html', {'form': form, 'errors': form.errors})
+        form = UserRegisterForm() 
+        
+    context = {
+        'form': form,
+        'errors': form.errors,
+        'categories': Category.objects.all()
+    }
+    return render(request, 'users/signup.html', context)
 
 
-class ProfileView(LoginRequiredMixin, ListView):
+class ProfileView(LoginRequiredMixin, FormMixin, ListView):
     model = UserGame
     template_name = 'users/profile.html'
     context_object_name = 'user_games'
     login_url = 'login'
+    ordering = ['-transaction__created_at']
+    paginate_by = 10
+    form_class = UserUpdateForm
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = Category.objects.all()
+        return context
+        
     
     def get_queryset(self):
         return UserGame.objects.filter(user=self.request.user)
+    
+    
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs.update({'instance': self.request.user})
+        return kwargs
+
+    def post(self, request, *args, **kwargs):
+        self.object_list = self.get_queryset()
+        form = self.get_form()
+
+        if form.is_valid():
+            form.save()
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+    def get_success_url(self):
+        return self.request.path
 
 
 def logout_view(request):

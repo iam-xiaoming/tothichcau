@@ -70,26 +70,26 @@
                                     <h3>Profile Information</h3>
                                 </div>
                                 <div class="profile-card__body">
-                                    <form action="#" method="POST">
+                                    <form action="" method="POST">
                                         {% csrf_token %}
                                         <div class="form-group">
                                             <label>Username</label>
                                             <div class="input__item">
-                                                <input type="text" value="{{ user.username }}" readonly>
+                                                {{ form.username }}
                                                 <span class="fa fa-user"></span>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label>Email Address</label>
                                             <div class="input__item">
-                                                <input type="text" value="{{ user.email }}" readonly>
-                                                <span class="fa fa-user"></span>
+                                                {{ form.email }}
+                                                <span class="fa-solid fa-envelope"></span>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label>Full Name (Optional)</label>
                                             <div class="input__item">
-                                                <input type="text" name="full_name" value="{{ user.full_name|default:'' }}">
+                                                {{ form.full_name }}
                                                 <span class="fa fa-id-card"></span>
                                             </div>
                                         </div>
@@ -132,11 +132,6 @@
                             <h3>Purchase History</h3>
                             <div class="search-bar mb-3">
                                 <input type="text" id="searchInput" class="form-control" placeholder="Search your games...">
-                                <ul class="list-group position-absolute mt-1" style="z-index: 1000;">
-                                    <li class="list-group-item">Valorant</li>
-                                    <li class="list-group-item">Elden Ring</li>
-                                    <li class="list-group-item">Cyberpunk 2077</li>
-                                </ul>
                             </div>
                         </div>
                         <div class="profile-card__body">
@@ -222,4 +217,65 @@
     </section>
     <!-- Profile Content End -->
     <script src="{% static 'users/js/main.js' %}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const searchInput = document.getElementById('searchInput');
+            const purchaseHistoryContainer = document.querySelector('.purchase-history');
+            let originalContent = purchaseHistoryContainer ? purchaseHistoryContainer.innerHTML : '';
+            let currentQuery = '';
+        
+            searchInput.addEventListener('input', function () {
+                const query = searchInput.value.trim();
+                currentQuery = query;
+        
+                if (query === '') {
+                    purchaseHistoryContainer.innerHTML = originalContent;
+                    return;
+                }
+        
+                fetch(`/api/search/user-games/?query=${encodeURIComponent(query)}`)
+                    .then(response => {
+                        if (!response.ok) throw new Error('Network response was not ok');
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (query !== currentQuery) return;
+        
+                        purchaseHistoryContainer.innerHTML = '';
+        
+                        if (data.length === 0) {
+                            purchaseHistoryContainer.innerHTML = '<p>No result</p>';
+                            return;
+                        }
+        
+                        data.forEach(item => {
+                            const gameHTML = `
+                                <div class="purchase-product">
+                                    <div class="product-image">
+                                        <img src="${item.game.image}" alt="${item.game.name}">
+                                    </div>
+                                    <div class="product-info">
+                                        <a style="display: block;" href="/transaction/${item.transaction.id}/"><h5>${item.game.name}</h5></a>
+                                        <div class="product-key">
+                                            <span class="key-label">Game Key:</span>
+                                            <span class="key-value">${item.key.key}</span>
+                                            <button class="copy-key" data-key="hidden">
+                                                <i class="fa fa-copy"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                            purchaseHistoryContainer.insertAdjacentHTML('beforeend', gameHTML);
+                        });
+                    })
+                    .catch(error => {
+                        if (query === currentQuery) {
+                            purchaseHistoryContainer.innerHTML = '<p>Error loading results</p>';
+                        }
+                        console.error('Error during fetch:', error);
+                    });
+            });
+        });
+    </script>               
 {% endblock %}
