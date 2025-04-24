@@ -1,16 +1,26 @@
 import os
-from django.db.models.signals import post_delete, post_save
+from django.db.models.signals import post_delete, post_save, pre_save
 from django.dispatch import receiver
 from .models import Game, Key
 
 
 @receiver(post_delete, sender=Game)
-def delete_game_image(sender, instance, **kwargs):
-    if instance.image and os.path.isfile(instance.image.path):
-        print('Signal: deleting image:', instance.image.path)
-        os.remove(instance.image.path)
+def delete_game(sender, instance, **kwargs):
+    if instance:
+        instance.image.delete(save=False)
         
 
+@receiver(pre_save, sender=Game)
+def save_game(sender, instance, **kwargs):
+    if instance.pk:
+        old_instance = Game.objects.get(pk=instance.pk)
+        
+        if old_instance.image != instance.image:
+            if old_instance.image:
+                old_instance.image.delete(save=False)
+
+
+# update key and then update game
 @receiver(post_save, sender=Key)
 def update_game_quantity_on_add(sender, instance, created, **kwargs):
     game = instance.game
