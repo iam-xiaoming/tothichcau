@@ -31,35 +31,18 @@ class Game(models.Model):
     release_date = models.DateTimeField(default=timezone.now)
     image = models.ImageField(upload_to='game_images')
     categories = models.ManyToManyField(Category, related_name='games')
-    
 
 
     def __str__(self):
         return self.name
-    
-    
-    # def delete(self, *args, **kwargs):
-    #     if self.image and os.path.isfile(self.image.path):
-    #         print('Deleting image:', self.image.path)
-    #         os.remove(self.image.path)
-    #     super().delete(*args, **kwargs)
 
 
     def save(self, *args, **kwargs):
-        is_create = Game.objects.filter(pk=self.pk).exists()
-        
-        try:
-            old = Game.objects.get(pk=self.pk)
-        except Game.DoesNotExist:
-            old = None
-            
-        if old and old.image and old.image != self.image:
-            if os.path.isfile(old.image.path):
-                os.remove(old.image.path)
-        
+        is_create = not Game.objects.filter(pk=self.pk).exists()
+
         super().save(*args, **kwargs)
-        
-        if not is_create:
+
+        if is_create:
             try:
                 # Create Stripe product
                 stripe_product = stripe.Product.create(
@@ -68,7 +51,7 @@ class Game(models.Model):
                 )
 
                 # Calculate discounted price
-                discounted = self.discounted_price 
+                discounted = self.discounted_price
 
                 # Create Stripe price
                 stripe_price = stripe.Price.create(
@@ -83,6 +66,7 @@ class Game(models.Model):
             except Exception as e:
                 print(f"Stripe error: {e}")
                 raise
+
             
     @property
     def discounted_price(self):
