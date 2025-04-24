@@ -1,0 +1,18 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Signed Image Test</title>
+</head>
+<body>
+    <img id="my-img" src="" alt="no img">
+
+    <script>
+        const staticFiles = {
+            image1: "{{ static_url|safe }}",
+        };
+        document.getElementById('my-img').src = staticFiles.image1;
+    </script>
+</body>
+</html>
