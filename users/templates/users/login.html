@@ -19,7 +19,7 @@
     <!-- Login Section Begin -->
     <section style="background: inherit;" class="login spad">
         <div class="container">
-            <div class="row">
+            <div style="display: flex; align-items: center;" class="row">
                 <div class="col-lg-6">
                     <div class="login__form">
                         <h3>Login</h3>
@@ -37,11 +37,36 @@
                         </form>
                         <a href="#" class="forget_pass">Forgot Your Password?</a>
                     </div>
+                    
                 </div>
-                <div class="col-lg-6">
+                <div class="col-lg-6 mx-auto text-center">
                     <div class="login__register">
-                        <h3>Dont’t Have An Account?</h3>
+                        <h3>Don't Have An Account?</h3>
                         <a href="{% url 'register' %}" class="primary-btn">Register Now</a>
+                    </div>
+                </div>
+                <div style="width: 100vw; padding-top: 60px;" class="row d-flex justify-content-center">
+                    <div class="col-lg-6">
+                        <div class="login__social__links">
+                            <span>or</span>
+                            <ul>
+                                <li>
+                                    <a href="#" class="facebook">
+                                        <i class="fa fa-facebook"></i> Sign in With Facebook
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="google">
+                                        <i class="fa fa-google"></i> Sign in With Google
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="twitter">
+                                        <i class="fa fa-twitter"></i> Sign in With Twitter
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
