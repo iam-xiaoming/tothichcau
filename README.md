@@ -10,3 +10,10 @@ python3 manage.py search_index --rebuild
 
 
 Kênh chơi game với mục đích đem lại niềm vui cho mọi người: https://www.facebook.com/profile.php?id=100027733654960&mibextid=LQQJ4d
+
+
+https://396913705803.signin.aws.amazon.com/console
+
+hoangtuthieutien
+
+nothingsgonnachangemyloveforyou-2
