@@ -17,7 +17,6 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
@@ -30,6 +29,43 @@ STRIPE_WEBHOOK_SECRET = config('STRIPE_WEBHOOK_SECRET')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+
+# Basic Storage configuration for Amazon S3 (Irrespective of Django versions)
+AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME')
+AWS_DEFAULT_REGION = config('AWS_DEFAULT_REGION')
+
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+
+AWS_S3_FILE_OVERWRITE = False
+
+
+if not DEBUG:
+    STORAGES = {
+        # Media file (image) management 
+        'default': {
+            'BACKEND': 'storages.backends.s3boto3.S3Boto3Storage',
+            'OPTIONS': {
+                'access_key': AWS_ACCESS_KEY_ID,
+                'secret_key': AWS_SECRET_ACCESS_KEY,
+                'bucket_name': AWS_STORAGE_BUCKET_NAME,
+                'region_name': AWS_DEFAULT_REGION,
+            },
+        },
+        # CSS and JS file management
+        'staticfiles': {
+            'BACKEND': 'storages.backends.s3boto3.S3StaticStorage',
+            'OPTIONS': {
+                'access_key': AWS_ACCESS_KEY_ID,
+                'secret_key': AWS_SECRET_ACCESS_KEY,
+                'bucket_name': AWS_STORAGE_BUCKET_NAME,
+                'region_name': AWS_DEFAULT_REGION,
+            },
+        },
+    }
+
+
 
 ALLOWED_HOSTS = []
 
@@ -160,39 +196,6 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-
-# Basic Storage configuration for Amazon S3 (Irrespective of Django versions)
-AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
-AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME')
-AWS_DEFAULT_REGION = config('AWS_DEFAULT_REGION')
-
-AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
-
-AWS_S3_FILE_OVERWRITE = False
-
-STORAGES = {
-    # Media file (image) management 
-    'default': {
-        'BACKEND': 'storages.backends.s3boto3.S3Boto3Storage',
-        'OPTIONS': {
-            'access_key': AWS_ACCESS_KEY_ID,
-            'secret_key': AWS_SECRET_ACCESS_KEY,
-            'bucket_name': AWS_STORAGE_BUCKET_NAME,
-            'region_name': AWS_DEFAULT_REGION,
-        },
-    },
-    # CSS and JS file management
-    'staticfiles': {
-        'BACKEND': 'storages.backends.s3boto3.S3StaticStorage',
-        'OPTIONS': {
-            'access_key': AWS_ACCESS_KEY_ID,
-            'secret_key': AWS_SECRET_ACCESS_KEY,
-            'bucket_name': AWS_STORAGE_BUCKET_NAME,
-            'region_name': AWS_DEFAULT_REGION,
-        },
-    },
-}
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

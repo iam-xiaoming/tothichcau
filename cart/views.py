@@ -230,12 +230,10 @@ def webhook_view(request):
                 if not key:
                     return JsonResponse({'error': 'Out of stock. No available key for this game.'}, status=400)
             
-            UserGame.objects.create(user=user, game=game, key=key)
-            
             key.status = 'sold'
             key.save()
             
-            Transaction.objects.create(
+            trx = Transaction.objects.create(
                 user=user,
                 game=game,
                 key=key,
@@ -249,7 +247,7 @@ def webhook_view(request):
                 exp_month=exp_month,
                 exp_year=exp_year
             )
-            
+            UserGame.objects.create(user=user, game=game, key=key, transaction=trx)
             Order.objects.filter(user=user, game=game).delete()
             
         except Exception as e:

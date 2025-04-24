@@ -50,9 +50,22 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="media">
+                                <button class="media-btn">
+                                    <i class="fa-solid fa-images"></i>
+                                    <span>Gallery</span>
+                                </button>
+                            </div>
+                            <!-- Gallery Modal -->
+                            <div id="galleryModal" class="gallery-modal">
+                                <span class="close-btn" onclick="closeGallery()">&times;</span>
+                                <div class="gallery-content">
+                                    <img src="img1.jpg" alt="Screenshot 1">
+                                </div>
+                            </div>
                             {% if request.session.uid %}
                                 <div class="anime__details__btn">
-                                    <a href="#" class="follow-btn">Follow</a>
+                                    <a href="#" class="follow-btn">Move to wishlist</a>
                                     <a href="#" class="watch-btn" data-game-id="{{ object.id }}"><span>Loading...</span><i class="fa fa-angle-right"></i></a>
                                 </div>
                             {% endif %}
@@ -199,5 +212,15 @@
             }
             return cookieValue;
         }
-    </script>    
+    </script>  
+    
+    <script>
+        function openGallery() {
+            document.getElementById('galleryModal').style.display = 'block';
+        }
+        
+        function closeGallery() {
+            document.getElementById('galleryModal').style.display = 'none';
+        }
+    </script>        
 {% endblock %}
