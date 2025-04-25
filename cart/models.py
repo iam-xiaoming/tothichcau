@@ -1,6 +1,7 @@
 from django.db import models
 from users.models import MyUser
-from games.models import Game, Key
+from games.models import Game
+from keys.models import Key
 
 # Create your models here.
 class Order(models.Model):

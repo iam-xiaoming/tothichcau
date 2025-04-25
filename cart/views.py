@@ -5,7 +5,10 @@ from django.views import View
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import Order
-from games.models import Game, Key, UserGame, Category
+from games.models import Game
+from keys.models import Key
+from users.models import UserGame
+from game_features.models import Category
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView

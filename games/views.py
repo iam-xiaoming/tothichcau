@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Game, Category, Comment
+from .models import Game, Category
+from users.models import Comment
 from django.views.generic import DetailView
 
 # Create your views here.

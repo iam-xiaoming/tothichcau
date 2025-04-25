@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
-from games.models import Game, Category
+from games.models import Game
+from game_features.models import Category
 from admin_manager.models import GameHero
 from django.views.generic import ListView
 

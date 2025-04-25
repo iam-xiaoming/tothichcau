@@ -2,13 +2,13 @@ from django.shortcuts import render, redirect
 from .forms import UserLoginForm, UserRegisterForm, ForgotPasswordForm, UserUpdateForm
 from users.firebase_helpers import firebase_config
 from django.contrib import messages
-from games.models import UserGame
+from .models import UserGame
 # from users.firebase_helpers import firebase_config
 from django.views.generic import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import logout, login
 from django.views.generic.edit import FormMixin
-from games.models import Category
+from game_features.models import Category
 
 # Create your views here.
 def login_view(request):

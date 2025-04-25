@@ -1,21 +1,14 @@
 from django.db import models
 from django.utils import timezone
-from users.models import MyUser
 import stripe
 from django.conf import settings
 from decimal import Decimal
 from django.core.validators import MaxValueValidator, MinValueValidator
-import os
+from game_features.models import Category
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 # Create your models here.
-class Category(models.Model):
-    name = models.CharField(max_length=255, unique=True)
-
-    def __str__(self):
-        return self.name
-    
 class Game(models.Model):
     stripe_product_id = models.CharField(max_length=100, unique=True, editable=False)
     stripe_price_id = models.CharField(max_length=100, unique=True, editable=False)
@@ -71,43 +64,3 @@ class Game(models.Model):
     @property
     def discounted_price(self):
         return self.price * (Decimal(100 - self.discount) / 100)
-     
-
-class Key(models.Model):
-    STATUS_CHOICES = (
-        ('available', 'Available'),
-        ('sold', 'Sold'),
-    )
-    
-    game = models.ForeignKey(Game, on_delete=models.CASCADE, related_name='keys')
-    key = models.CharField(max_length=255, unique=True)
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='available')
-    
-    def __str__(self):
-        return self.key
-    
-
-class UserGame(models.Model):
-    from cart.models import Transaction
-    
-    user = models.ForeignKey(MyUser, on_delete=models.CASCADE, related_name='owned_games')
-    game = models.ForeignKey(Game, on_delete=models.CASCADE, related_name='owned_by_users')
-    key = models.ForeignKey(Key, on_delete=models.CASCADE, related_name='user_game')
-    transaction = models.ForeignKey(Transaction, on_delete=models.CASCADE, related_name='user_game')
-    
-    
-    def __str__(self):
-        return f"{self.user.email} owns {self.game.name}"
-
-
-
-# comment
-class Comment(models.Model):
-    title = models.CharField(max_length=255)
-    content = models.TextField(max_length=1000)
-    game = models.ForeignKey(Game, on_delete=models.CASCADE, related_name='comment')
-    user = models.ForeignKey(MyUser, on_delete=models.CASCADE, related_name='comment')
-    created_at = models.DateTimeField(auto_now=True)
-    
-    def __str__(self):
-        return self.title
