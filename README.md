@@ -17,3 +17,13 @@ https://396913705803.signin.aws.amazon.com/console
 hoangtuthieutien
 
 nothingsgonnachangemyloveforyou-2
+
+### Running tutorial
+
+1. clone về
+2. xin file env
+3. mở docker desktop
+4. chạy `docker compose up`
+5. chạy `py manage.py makemigrations`
+6. chạy `py manage.py migrate`
+6. chạy `py manage.py runserver`
