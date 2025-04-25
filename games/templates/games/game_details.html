@@ -51,17 +51,10 @@
                                 </div>
                             </div>
                             <div class="media">
-                                <button class="media-btn">
+                                <button class="media-btn" onclick="openGallery()">
                                     <i class="fa-solid fa-images"></i>
                                     <span>Gallery</span>
                                 </button>
-                            </div>
-                            <!-- Gallery Modal -->
-                            <div id="galleryModal" class="gallery-modal">
-                                <span class="close-btn" onclick="closeGallery()">&times;</span>
-                                <div class="gallery-content">
-                                    <img src="img1.jpg" alt="Screenshot 1">
-                                </div>
                             </div>
                             {% if request.session.uid %}
                                 <div class="anime__details__btn">
@@ -133,6 +126,22 @@
     </section>
     <!-- Anime Section End -->
 
+    <!-- Gallery Modal -->
+    <div id="galleryModal" class="gallery-modal">
+        <span class="close-btn" onclick="closeGallery()">&times;</span>
+        <div class="gallery-content">
+            <div class="iframe-wrapper">
+                <div id="galleryContainer" style="width: 100%; height: 400px; overflow: hidden;"></div>
+            </div>
+            <div class="gallery-items-container">
+                <button class="nav-btn prev-btn">&lt;</button>
+                <div class="gallery-items">
+                    <!-- button -->
+                </div>
+                <button class="nav-btn next-btn">&gt;</button>
+            </div>
+        </div>
+    </div>
 
     <style>
         .watch-btn.disabled {
@@ -140,87 +149,7 @@
             opacity: 0.5;
         }
     </style>
+    
+    <script src="{% static 'games/js/gallery.js' %}"></script>
 
-    <script>
-        document.querySelectorAll('.watch-btn').forEach(btn => {
-            const gameId = btn.getAttribute('data-game-id');
-            
-            fetch(`/api/cart/contains/?game_id=${gameId}`)
-                .then(res => res.json())
-                .then(data => {
-                    btn.classList.remove('loading');
-                    if (data.in_cart) {
-                        btn.classList.add('disabled');
-                        btn.querySelector('span').textContent = 'In Cart';
-                    }
-                    else if (data.in_library){
-                        btn.classList.add('disabled');
-                        btn.querySelector('span').textContent = 'In Library';
-                    } else {
-                        btn.querySelector('span').textContent = 'Add to cart';
-                    }
-                })
-                .catch(err => {
-                    console.error(`Error checking cart status for game ${gameId}:`, err);
-                });
-        });        
-
-        document.querySelectorAll('.watch-btn').forEach(button => {
-            button.addEventListener('click', function (e) {
-                e.preventDefault(); // Prevent link default behavior
-    
-                const gameId = this.getAttribute('data-game-id');
-                const btn = this;
-    
-                fetch("{% url 'add_to_cart' %}", {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                        'X-CSRFToken': getCookie('csrftoken')
-                    },
-                    body: new URLSearchParams({
-                        'game_id': gameId
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.already_in_cart || data.success) {
-                        btn.classList.add('disabled');
-                        btn.querySelector('span').textContent = 'In Cart';
-                    }     
-    
-                    if (data.success) {
-                        updateCartCount(); // Only update cart badge when new item added
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-            });
-        });
-    
-        // CSRF token helper
-        function getCookie(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                document.cookie.split(';').forEach(cookie => {
-                    const [key, value] = cookie.trim().split('=');
-                    if (key === name) {
-                        cookieValue = decodeURIComponent(value);
-                    }
-                });
-            }
-            return cookieValue;
-        }
-    </script>  
-    
-    <script>
-        function openGallery() {
-            document.getElementById('galleryModal').style.display = 'block';
-        }
-        
-        function closeGallery() {
-            document.getElementById('galleryModal').style.display = 'none';
-        }
-    </script>        
 {% endblock %}

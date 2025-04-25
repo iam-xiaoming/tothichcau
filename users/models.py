@@ -3,6 +3,8 @@ from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, Permis
 from django.utils import timezone
 from users.firebase_helpers import firebase_config
 import time
+from games.models import Game
+from keys.models import Key
 
 # Create your models here.
 class CustomUserManager(BaseUserManager):
@@ -109,5 +111,30 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
 
+class UserGame(models.Model):
+    from cart.models import Transaction
+    
+    user = models.ForeignKey(MyUser, on_delete=models.CASCADE, related_name='owned_games')
+    game = models.ForeignKey(Game, on_delete=models.CASCADE, related_name='owned_by_users')
+    key = models.ForeignKey(Key, on_delete=models.CASCADE, related_name='user_game')
+    transaction = models.ForeignKey(Transaction, on_delete=models.CASCADE, related_name='user_game')
+    
+    
+    def __str__(self):
+        return f"{self.user.email} owns {self.game.name}"
 
 
+
+# comment
+class Comment(models.Model):
+    
+    from users.models import MyUser
+    
+    title = models.CharField(max_length=255)
+    content = models.TextField(max_length=1000)
+    game = models.ForeignKey(Game, on_delete=models.CASCADE, related_name='comment')
+    user = models.ForeignKey(MyUser, on_delete=models.CASCADE, related_name='comment')
+    created_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return self.title

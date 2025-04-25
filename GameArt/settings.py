@@ -91,7 +91,9 @@ INSTALLED_APPS = [
     'transactions.apps.TransactionsConfig',
     'admin_manager.apps.AdminManagerConfig',
     # storages
-    'storages'
+    'storages',
+    'game_features.apps.GameFeaturesConfig',
+    'keys.apps.KeysConfig'
 ]
 
 MIDDLEWARE = [

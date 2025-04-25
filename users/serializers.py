@@ -1,6 +1,8 @@
 from rest_framework import serializers
-from games.models import Game, UserGame, Key
+from games.models import Game
+from keys.models import Key
 from cart.models import Transaction
+from .models import UserGame
 
 class TransactionSerializer(serializers.ModelSerializer):
     class Meta:

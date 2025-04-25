@@ -1,6 +1,7 @@
 from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.registries import registry
-from games.models import UserGame, Game
+from games.models import Game
+from .models import UserGame
 
 
 @registry.register_document

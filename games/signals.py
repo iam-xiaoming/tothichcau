@@ -1,7 +1,8 @@
 import os
 from django.db.models.signals import post_delete, post_save, pre_save
 from django.dispatch import receiver
-from .models import Game, Key
+from .models import Game
+from keys.models import Key
 
 
 @receiver(post_delete, sender=Game)

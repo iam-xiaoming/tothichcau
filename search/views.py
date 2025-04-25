@@ -6,7 +6,8 @@ from elasticsearch_dsl import Q
 from search.serializers import SearchQuerySerializer
 from games.documents import GameDocument
 from games.serializers import GameSerializer
-from games.models import Game, UserGame
+from games.models import Game
+from users.models import UserGame
 from users.documents import UserGameDocument
 from users.serializers import UserGameSerializer
 from users.documents import UserGameDocument

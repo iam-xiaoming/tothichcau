@@ -3,6 +3,8 @@ from users.models import MyUser
 from django.contrib.auth.admin import UserAdmin
 from users.firebase_helpers import firebase_config
 from django.contrib import messages
+from .models import UserGame, Comment
+from cart.models import Transaction
 
 # Register your models here.
 class CustomUserAdmin(UserAdmin):
@@ -44,3 +46,27 @@ class CustomUserAdmin(UserAdmin):
 
 
 admin.site.register(MyUser, CustomUserAdmin)
+
+@admin.register(UserGame)
+class UserGameAdmin(admin.ModelAdmin):
+    list_display = ('user', 'game', 'key', 'key_status', 'created_at',)
+    list_filter = ('game',)
+    search_fields = ('user__email', 'user__username', 'game__name')
+    autocomplete_fields = ('user', 'game')
+    
+    def key_status(self, obj):
+        return obj.key.status
+    
+    def created_at(self, obj):
+        return Transaction.objects.get(user=obj.user, game=obj.game).created_at
+    
+    key_status.short_description = 'key status'
+    created_at.short_description = 'created at'
+    
+    
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ('user', 'game', 'title', 'created_at',)
+    list_filter = ('user', 'game',)
+    search_fields = ('user', 'game',)
+    autocomplete_fields = ('user', 'game',)
