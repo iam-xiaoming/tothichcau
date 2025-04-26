@@ -147,14 +147,79 @@
         </div>
     </div>
 
-    <style>
-        .watch-btn.disabled {
-            pointer-events: none;
-            opacity: 0.5;
-        }
-    </style>
     <script>
+        document.querySelectorAll('.watch-btn').forEach(btn => {
+            const gameId = btn.getAttribute('data-game-id');
+            
+            fetch(`/api/cart/contains/?game_id=${gameId}`)
+                .then(res => res.json())
+                .then(data => {
+                    btn.classList.remove('loading');
+                    if (data.in_cart) {
+                        btn.classList.add('disabled');
+                        btn.querySelector('span').textContent = 'In Cart';
+                    }
+                    else if (data.in_library){
+                        btn.classList.add('disabled');
+                        btn.querySelector('span').textContent = 'In Library';
+                    } else {
+                        btn.querySelector('span').textContent = 'Add to cart';
+                    }
+                })
+                .catch(err => {
+                    console.error(`Error checking cart status for game ${gameId}:`, err);
+                });
+        });        
+
+        document.querySelectorAll('.watch-btn').forEach(button => {
+            button.addEventListener('click', function (e) {
+                e.preventDefault(); // Prevent link default behavior
+    
+                const gameId = this.getAttribute('data-game-id');
+                const btn = this;
+    
+                fetch("{% url 'add_to_cart' %}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    body: new URLSearchParams({
+                        'game_id': gameId
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.already_in_cart || data.success) {
+                        btn.classList.add('disabled');
+                        btn.querySelector('span').textContent = 'In Cart';
+                    }     
+    
+                    if (data.success) {
+                        updateCartCount(); // Only update cart badge when new item added
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            });
+        });
+    
+        // CSRF token helper
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                document.cookie.split(';').forEach(cookie => {
+                    const [key, value] = cookie.trim().split('=');
+                    if (key === name) {
+                        cookieValue = decodeURIComponent(value);
+                    }
+                });
+            }
+            return cookieValue;
+        }
+
         const pk = "{{ game.id }}";
-    </script>
+    </script>   
     <script src="{% static 'games/js/gallery.js' %}"></script>
 {% endblock %}

@@ -9,7 +9,7 @@ from cart.models import Transaction
 # Register your models here.
 class CustomUserAdmin(UserAdmin):
     model = MyUser
-    list_display = ('email', 'username', 'role', 'is_staff', 'created_at')
+    list_display = ('id', 'email', 'username', 'role', 'is_staff', 'created_at')
     list_filter = ('role', 'is_staff')
     fieldsets = (
         (None, {'fields': ('username', 'email', 'password', 'role')}),
@@ -22,7 +22,7 @@ class CustomUserAdmin(UserAdmin):
             'fields': ('username', 'email', 'password1', 'password2', 'role', 'is_staff', 'is_active')}
         ),
     )
-    search_fields = ('username', 'email')
+    search_fields = ('id', 'username', 'email')
     ordering = ('created_at',)
     actions = ['reset_password']
 
@@ -49,9 +49,9 @@ admin.site.register(MyUser, CustomUserAdmin)
 
 @admin.register(UserGame)
 class UserGameAdmin(admin.ModelAdmin):
-    list_display = ('user', 'game', 'key', 'key_status', 'created_at',)
+    list_display = ('id', 'user', 'game', 'key', 'key_status', 'created_at',)
     list_filter = ('game',)
-    search_fields = ('user__email', 'user__username', 'game__name')
+    search_fields = ('id', 'user__email', 'user__username', 'game__name')
     autocomplete_fields = ('user', 'game')
     
     def key_status(self, obj):
