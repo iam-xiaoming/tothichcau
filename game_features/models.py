@@ -10,7 +10,7 @@ class Category(models.Model):
 
 
 def validate_video_size(value):
-    max_size = 100 * 1024 * 1024
+    max_size = 50 * 1024 * 1024
     if value.size > max_size:
         raise ValidationError(f"Video is too large in order to upload (total size): {value.size / (1024 * 1024):.2f})/{(max_size / 1024 * 1024):.2f}MB")
     
