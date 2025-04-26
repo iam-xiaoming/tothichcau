@@ -67,7 +67,7 @@ if not DEBUG:
 
 
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 # Application definition
@@ -90,7 +90,7 @@ INSTALLED_APPS = [
     'rest_framework',
     
     # search
-    'django_elasticsearch_dsl',
+    # 'django_elasticsearch_dsl',
     
     'search.apps.SearchConfig',
     'transactions.apps.TransactionsConfig',
