@@ -189,6 +189,7 @@ function closeGallery() {
     const modal = document.getElementById('galleryModal');
     modal.classList.remove('show');
     modal.classList.add('hide');
+    document.body.classList.remove('no-scroll')
     
     const videoElement = document.querySelector('#galleryContainer video');
     if (videoElement) {
