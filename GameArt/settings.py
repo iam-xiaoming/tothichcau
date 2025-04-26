@@ -85,13 +85,20 @@ INSTALLED_APPS = [
     'games.apps.GameConfig',
     'users.apps.UsersConfig',
     'cart.apps.CartConfig',
+    
+    # rest frame work
     'rest_framework',
+    
+    # search
     'django_elasticsearch_dsl',
+    
     'search.apps.SearchConfig',
     'transactions.apps.TransactionsConfig',
     'admin_manager.apps.AdminManagerConfig',
+    
     # storages
     'storages',
+    
     'game_features.apps.GameFeaturesConfig',
     'keys.apps.KeysConfig'
 ]

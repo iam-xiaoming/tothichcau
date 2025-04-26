@@ -1068,18 +1068,9 @@ ol {
 	font-weight: 700;
 	letter-spacing: 2px;
 	text-transform: uppercase;
-	padding: 14px 20px;
-	border-radius: 4px 0 0 4px;
+	padding: 14px 25px;
+	border-radius: 4px;
 	margin-right: 1px;
-}
-
-.anime__details__btn .watch-btn i {
-	font-size: 20px;
-	display: inline-block;
-	background: rgb(38, 187, 255);
-	padding: 11px 5px 16px 8px;
-	color: #ffffff;
-	border-radius: 0 4px 4px 0;
 }
 
 .anime__details__review {

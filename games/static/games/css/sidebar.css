@@ -1,3 +1,9 @@
+.no-scroll {
+    overflow: hidden;
+    height: 100vh;
+}
+
+
 .suggest-name {
     color: #fff;
     font-weight: 600;
@@ -52,7 +58,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.85);
+    background: rgba(0, 0, 0, 0.9);
     justify-content: center;
     align-items: center;
     z-index: 1000;
@@ -116,11 +122,12 @@
     overflow-x: auto;
     overflow-y: hidden;
     width: 100%;
+    padding: 5px;
 }
 
 .gallery-item {
     width: calc((100% - 3 * 0.75rem) / 4);
-    height: 70px;
+    height: 90px;
     padding: 0.5rem;
     background-size: cover;
     background-position: center;
@@ -138,6 +145,8 @@
     text-align: center;
     position: relative;
     flex-shrink: 0;
+    border: none;
+    background: transparent;
 }
 
 .gallery-item:hover {
@@ -220,6 +229,10 @@
 .next-btn {
     right: -50px;
     background-color: red;
+}
+
+.next-btn i {
+    rotate: 180deg;
 }
 
 /* ==== GALLERY ACTIVE ITEM ==== */

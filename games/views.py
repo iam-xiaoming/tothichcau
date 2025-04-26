@@ -2,6 +2,11 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import Game, Category
 from users.models import Comment
 from django.views.generic import DetailView
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.status import HTTP_404_NOT_FOUND
+from rest_framework.response import Response
+from .serializers import GameSerializer
 
 # Create your views here.
 class GameDetailView(DetailView):
@@ -33,3 +38,14 @@ class GameDetailView(DetailView):
         return redirect('game_details', pk=game.pk)
         
         
+        
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def game_media_review(request, pk):
+    try:
+        game = Game.objects.get(id=pk)
+    except Game.DoesNotExist:
+        return Response({'error': 'Game not found'}, status=HTTP_404_NOT_FOUND)
+    
+    serializer = GameSerializer(game)
+    return Response(serializer.data)
