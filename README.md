@@ -26,7 +26,7 @@
 6. chạy `py manage.py runserver`
 
 
-8. nếu DEBUG = False, khi ảnh/video/css/js.... sẽ lưu trên aws. truy cập `https://396913705803.signin.aws.amazon.com/console` tk: `hoangtuthieutien`, mk: `nothingsgonnachangemyloveforyou-2` và chọn bucket ứng với tên `AWS_STORAGE_BUCKET_NAME` trong file .env
+8. nếu DEBUG = False, khi ảnh/video/css/js.... sẽ lưu trên aws. truy cập `https://396913705803.signin.aws.amazon.com/console`, tk: `hoangtuthieutien`, mk: `nothingsgonnachangemyloveforyou-2`; chỗ thanh tìm kiếm, gõ chữ `S3` rồi nhấn vào `S3`. và chọn bucket ứng với tên `AWS_STORAGE_BUCKET_NAME` trong file .env, 
 
 9. Nếu muốn dùng tính năng thanh toán chạy `stripe listen --forward-to localhost:8000/webhook/stripe/`, nếu không sẽ bị lỗi. stripe webhook cần phải cài stripe cli, chứ đéo phải cài mỗi cái thư viện stripe là đủ ok. còn cài thế nào thì lên youtube. cài xong thì chạy `stripe login`, phải login, đéo biết thì hỏi chatgpt. cái tài khoản stripe login này phải là cái tài khoản trùng với tài khoản đc thêm vào project, nếu không sẽ bị lỗi.
 
