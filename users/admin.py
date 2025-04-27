@@ -58,7 +58,7 @@ class UserGameAdmin(admin.ModelAdmin):
         return obj.key.status
     
     def created_at(self, obj):
-        return Transaction.objects.get(user=obj.user, game=obj.game).created_at
+        return obj.transaction.created_at
     
     key_status.short_description = 'key status'
     created_at.short_description = 'created at'

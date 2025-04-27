@@ -37,10 +37,8 @@ class GameDetailView(DetailView):
         
         return redirect('game_details', pk=game.pk)
         
-        
-        
+           
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
 def game_media_review(request, pk):
     try:
         game = Game.objects.get(id=pk)

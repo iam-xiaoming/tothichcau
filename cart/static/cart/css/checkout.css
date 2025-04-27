@@ -174,7 +174,6 @@ body {
   
   .item-actions {
     display: flex;
-    gap: 20px;
     align-self: flex-end;
     font-size: 0.9rem;
   }
@@ -243,3 +242,9 @@ body {
     position: absolute;
     bottom: 20px;
   }
+
+  .item-actions {
+    justify-content: flex-end;
+  }
+
+  

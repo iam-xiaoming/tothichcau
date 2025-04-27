@@ -10,9 +10,9 @@ urlpatterns = [
     
     path('webhook/stripe/', views.webhook_view, name='webhook_stripe'),
 
-    path('api/cart/count/', views.get_cart_count, name='cart_count'),
-    path('api/cart/add/', views.add_to_cart, name='add_to_cart'),
-    path('api/cart/contains/', views.is_game_in_cart, name='is_game_in_cart'),
+    path('api/cart/count/<str:pk>/', views.get_cart_count, name='cart_count'),
+    path('api/cart/add/<str:pk>/<int:game_pk>/', views.add_to_cart, name='add_to_cart'),
+    
     path('cart/delete/<int:pk>/', views.CartDeleteView.as_view(), name='cart-delete')
 
 ]

@@ -3,8 +3,8 @@
 
 
 {% block extra_css %}
-	<link rel="stylesheet" href="{% static 'cart/css/has.css' %}" />
-	<link rel="stylesheet" href="{% static 'cart/css/none.css' %}" />
+	<link rel="stylesheet" href="{% static 'cart/css/checkout.css' %}" />
+	<link rel="stylesheet" href="{% static 'cart/css/nothing.css' %}" />
 {% endblock %}
 
 {% block content %}
@@ -36,10 +36,10 @@
 							{% endif %}
 							<div class="item-actions">
 								<form action="{% url 'cart-delete' order.pk %}" method="POST">
+                                    <a style="display: inline-block; margin-right: 10px;" href="#">Move to wishlist</a>
 									{% csrf_token %}
 									<button type="submit">Remove</button>
 								</form>
-								<a href="#">Move to wishlist</a>
 							</div>
 						</div>
                     </div>
