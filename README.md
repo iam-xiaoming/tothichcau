@@ -15,7 +15,7 @@
 1. clone về
 2. xin file env
 3. mở docker desktop, chạy `docker compose up` nếu muốn sử dụng tính năng search, nếu không hãy vào settings.py, INSTALLED_APPS và comment `django_elasticsearch_dsl` lại, nếu không, thêm hoặc chỉnh sửa sẽ lỗi. còn nếu muốn dùng search, sau khi docker compose up, chạy `python3 manage.py search_index --rebuild`
-4. Nếu muốn lưu file ảnh/video trên máy, thì vào settings.py DEBUG = True, không thì False. nếu DEBUG = False, thì sau đó chạy `python3 manage.py collectstatic`, nó hỏi thì ấn `yes`, rồi `runserver`, sau đó vào Chrome, nhấn Ctrl + Shift + R (Window) hoặc Cmd + Option + R (Mac) (nếu đéo thấy gì thay đổi thì ấn tiếp 2 3 lần nữa)
+4. Nếu muốn lưu file ảnh/video trên máy, thì vào settings.py DEBUG = True, không thì False. nếu DEBUG = False, thì sau đó chạy `python3 manage.py collectstatic`, nó hỏi thì ấn `yes`, rồi `runserver`, sau đó vào Chrome, nhấn Ctrl + Shift + R (Window) hoặc Cmd + Option + R (Mac) để nó xóa cache (file js, css còn lưu ở cache) (nếu đéo thấy gì thay đổi thì ấn tiếp 2 3 lần nữa)
 
 5. chạy `py manage.py makemigrations`
 6. chạy `py manage.py migrate`
