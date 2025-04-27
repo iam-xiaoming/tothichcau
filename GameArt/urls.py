@@ -25,6 +25,7 @@ import users.urls
 import cart.urls
 import search.urls
 import transactions.urls
+import keys.urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -34,7 +35,8 @@ urlpatterns = [
     path('', include(users.urls)),
     path('', include(cart.urls)),
     path('', include(search.urls)),
-    path('', include(transactions.urls))
+    path('', include(transactions.urls)),
+    path('', include(keys.urls))
 ]
 
 

@@ -17,10 +17,6 @@ class GameDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         game = self.get_object()
-        if game.keys.filter(status='available').exists():
-            context['status'] = 'Available'
-        else:
-            context['status'] = 'Stockout'
             
         context['categories'] = Category.objects.all()
         context['games_suggest'] = Game.objects.all()[:3]

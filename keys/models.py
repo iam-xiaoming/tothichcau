@@ -5,6 +5,7 @@ from games.models import Game
 class Key(models.Model):
     STATUS_CHOICES = (
         ('available', 'Available'),
+        ('reserved', 'Reserved'),
         ('sold', 'Sold')
     )
     

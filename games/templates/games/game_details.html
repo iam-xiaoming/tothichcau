@@ -59,7 +59,9 @@
                             {% if request.session.uid %}
                                 <div class="anime__details__btn">
                                     <a href="#" class="follow-btn">Move to wishlist</a>
-                                    <a href="#" class="watch-btn" data-game-id="{{ object.id }}"><span>Loading...</span></a>
+                                    <a href="#" class="watch-btn" data-game-id="{{ object.id }}">
+                                        <span>Loading...</span>
+                                    </a>
                                 </div>
                             {% endif %}
                         </div>
@@ -148,45 +150,94 @@
     </div>
 
     <script>
-        const game_pk = "{{ game.id }}";
+        const game_pk = "{{ object.pk }}";
 
-        document.querySelectorAll('.watch-btn').forEach(btn => {
-            btn.classList.remove('loading')
-            btn.classList.remove('disabled')
-            btn.querySelector('span').textContent = 'Add to Cart'
-        })
-
-        document.querySelectorAll('.watch-btn').forEach(button => {
-            button.addEventListener('click', function (e) {
-                e.preventDefault(); // Prevent link default behavior
-    
-                const btn = this;
-    
-                fetch(`/api/cart/add/${user_pk}/${game_pk}/`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                        'X-CSRFToken': getCookie('csrftoken')
-                    },
-                    body: new URLSearchParams({
-                        'game_id': game_pk
-                    })
-                })
+        function getKeyCount() {
+            fetch(`/api/get_key_available_count/${game_pk}/`)
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        updateCartCount(data.order_count);
-                    } else if (data.stockout) {
-                        btn.classList.remove('loading')
-                        btn.classList.add('disabled')
-                        btn.querySelector('span').textContent = 'Stock out'
+                        const keyCount = data.key_available_count;
+        
+                        document.querySelectorAll('.watch-btn').forEach(btn => {
+                            btn.classList.remove('loading');
+                            if (keyCount > 0) {
+                                btn.classList.remove('disabled');
+                                btn.querySelector('span').innerHTML = '<i class="fa-solid fa-cart-plus"></i> Add to cart'
+                            } else {
+                                btn.classList.add('disabled');
+                                btn.querySelector('span').textContent = 'Stock out';
+                            }
+                        });
+                    } else {
+                        console.error('Failed to fetch key count');
                     }
                 })
                 .catch(error => {
-                    console.error('Error:', error);
+                    console.error('Error fetching key count:', error);
+                });
+        }
+        
+        document.addEventListener('DOMContentLoaded', function () {
+            getKeyCount();
+        
+            document.querySelectorAll('.watch-btn').forEach(btn => {
+                btn.classList.remove('loading');
+                btn.classList.remove('disabled');
+                btn.querySelector('span').innerHTML = '<i class="fa-solid fa-cart-plus"></i> Add to cart'
+            });
+        
+            document.querySelectorAll('.watch-btn').forEach(button => {
+                button.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    
+                    const btn = this;
+        
+                    btn.classList.add('loading');
+                    btn.classList.add('disabled');
+                    btn.querySelector('span').textContent = 'Adding...';
+        
+                    fetch(`/api/cart/add/${user_pk}/${game_pk}/`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                            'X-CSRFToken': getCookie('csrftoken')
+                        },
+                        body: new URLSearchParams({
+                            'game_id': game_pk,
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            updateCartCount(data.order_count);
+                            
+                            // update add to cart btn
+                            if (data.key_remain > 0) {
+                                btn.classList.remove('loading');
+                                btn.classList.add('disabled');
+                                btn.querySelector('span').innerHTML = '<i class="fa-solid fa-cart-plus"></i> Add to cart'
+                            } else {
+                                btn.classList.remove('loading');
+                                btn.classList.add('disabled');
+                                btn.querySelector('span').textContent = 'Stock out';
+                            }
+                        } else {
+                            btn.classList.remove('loading');
+                            btn.classList.add('disabled');
+                            btn.querySelector('span').textContent = 'Stock out';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        btn.classList.remove('loading');
+                        btn.classList.remove('disabled');
+                        btn.querySelector('span').textContent = 'Error';
+                    });
                 });
             });
-        });
+        });        
+
 
         // CSRF token helper
         function getCookie(name) {
