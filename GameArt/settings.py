@@ -90,7 +90,7 @@ INSTALLED_APPS = [
     'rest_framework',
     
     # search
-    'django_elasticsearch_dsl',
+    # 'django_elasticsearch_dsl',
     
     'search.apps.SearchConfig',
     'transactions.apps.TransactionsConfig',
