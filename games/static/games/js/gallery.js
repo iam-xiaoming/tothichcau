@@ -1,7 +1,7 @@
 const imageUrls = [];
 const videoUrls = [];
 
-fetch(`/api/game/${pk}/media/review/`)
+fetch(`/api/game/${game_pk}/media/review/`)
     .then(response => response.json())
     .then(data => {
         const imageReviews = data.game_image_reviews || [];

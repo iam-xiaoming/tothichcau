@@ -127,18 +127,25 @@
 
 
 	<script>
-		function updateCartCount() {
-			fetch("{% url 'cart_count' %}")
-				.then(response => response.json())
-				.then(data => {
-					const cartBadge = document.querySelector('.cart-badge');
-					cartBadge.textContent = data.order_count;
-				})
-				.catch(error => {
-					console.error('Error fetching cart count:', error);
-				});
+		const user_pk = "{{ user.pk }}";
+
+		function updateCartCount(quantity) {
+			const cartBadge = document.querySelector('.cart-badge');
+			
+			if (quantity) {
+				cartBadge.textContent = quantity;
+			} else {
+				fetch(`/api/cart/count/${user_pk}/`)
+					.then(response => response.json())
+					.then(data => {
+						cartBadge.textContent = data.order_count;
+					})
+					.catch(error => {
+						console.error('Error fetching cart count:', error);
+					});
+			}
 		}
-		window.addEventListener('DOMContentLoaded', updateCartCount);
+		window.addEventListener('DOMContentLoaded', () => updateCartCount());
 	</script>
 
 	<!-- search engine  -->

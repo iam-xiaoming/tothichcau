@@ -8,6 +8,7 @@ class Order(models.Model):
     user = models.ForeignKey(MyUser, on_delete=models.CASCADE, related_name='orders')
     game = models.ForeignKey(Game, on_delete=models.CASCADE, related_name='orders')
     created_at = models.DateTimeField(auto_now_add=True)
+    key = models.OneToOneField(Key, models.CASCADE, related_name='orders')
     
     def __str__(self):
         return f"Order #{self.id} - {self.game.name}"

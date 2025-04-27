@@ -16,6 +16,10 @@ hoangtuthieutien
 
 nothingsgonnachangemyloveforyou-2
 
+find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
+
+find . -path "*/migrations/*.pyc" -delete
+
 ### Running tutorial
 
 1. clone về

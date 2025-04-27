@@ -15,68 +15,56 @@ from django.views.generic import ListView
 from users.models import MyUser
 from .models import Transaction
 import logging
-from django.views.decorators.http import require_GET
 from django.db import transaction
 from django.urls import reverse
+
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.status import HTTP_404_NOT_FOUND
+from rest_framework.response import Response
 
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 # Create your views here.
-@require_GET
-def is_game_in_cart(request):
-    if not request.user.is_authenticated:
-        return JsonResponse({'in_cart': False})
-
-    game_id = request.GET.get('game_id')
-    if not game_id:
-        return JsonResponse({'error': 'Missing game_id'}, status=400)
-
-
-    in_cart = Order.objects.filter(user=request.user, game_id=game_id).exists()
-    if in_cart:
-        return JsonResponse({'in_cart': in_cart})
-    in_library = UserGame.objects.filter(user=request.user,
-                                    game=Game.objects.get(id=game_id)).exists()
-    if in_library:
-        return JsonResponse({'in_library': in_library})
-        
-    return JsonResponse({'add_to_cart': True})
-
-
-@csrf_exempt
-def add_to_cart(request):
-    if request.method == 'POST' and request.user.is_authenticated:
-        user = request.user
-        game_id = request.POST.get('game_id')
-
-        try:
-            game = Game.objects.get(id=game_id)
-        except Game.DoesNotExist:
-            return JsonResponse({'success': False, 'message': 'Game not found.'})
-
-        # Check if already in cart
-        if Order.objects.filter(user=user, game=game).exists():
-            return JsonResponse({
-                'success': False,
-                'already_in_cart': True,
-                'message': 'Already in cart.'
-            })
-
-        # Add to cart
-        Order.objects.create(user=user, game=game)
-        return JsonResponse({'success': True, 'message': 'Game added to cart!'})
-
-    return JsonResponse({'success': False, 'message': 'Invalid request or not authenticated.'})
-
-
-def get_cart_count(request):
-    user = request.user
-    if user.is_authenticated:
-        order_count = user.orders.count()  # Correct way to access related orders
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def add_to_cart(request, pk, game_pk):
+    try:
+        user = MyUser.objects.get(pk=pk)
+        game = Game.objects.get(id=game_pk)
+    except MyUser.DoesNotExist:
+        return Response({'error': 'User not found.'}, status=404)
+    except Game.DoesNotExist:
+        return Response({'error': 'Game not found.'}, status=404)
+    
+    available_key = Key.objects.filter(status='available').first()
+    
+    if not available_key:
+        return Response({'stockout': 'Stockout'}, status=400)
+    
+    try:
+        order = Order.objects.create(user=user, game=game, key=available_key)
+        # update key status
+        available_key.status = 'pending'
+        available_key.save()
+        # get total order count of specific user
+        order_count = user.orders.count()
+    except Exception as e:
+        return Response({'error': str(e)}, status=400)
     else:
-        order_count = 0  # If not authenticated, set count to 0
-    return JsonResponse({'order_count': order_count})
+        return Response({'success': True, 'order_count': order_count, 'message': 'Game added to cart!'})
+    
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_cart_count(request, pk):
+    try:
+        order_count =  Order.objects.filter(user__pk=pk).count()
+    except MyUser.DoesNotExist:
+        return Response({'error': 'User not found.'}, status=404)
+    
+    return Response({'message': 'success', 'order_count': order_count}, status=200)
 
 
 class CartView(LoginRequiredMixin, ListView):
@@ -85,9 +73,10 @@ class CartView(LoginRequiredMixin, ListView):
     context_object_name = 'orders'
     login_url = '/login/'
 
-    def get_queryset(self):
+    def get_queryset(self):        
         # Return only the orders of the logged-in user
         return self.request.user.orders.all()
+    
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -109,6 +98,12 @@ class CartDeleteView(LoginRequiredMixin, View):
     
     def post(self, request, pk, *args, **kwargs):
         order = get_object_or_404(Order, pk=pk, user=request.user)
+        # update key status
+        if order.key:
+            order.key.status = 'available'
+            order.key.save()
+            
+        # delete order
         order.delete()
         return redirect('cart')
     
@@ -167,11 +162,10 @@ def webhook_view(request):
     except (ValueError, stripe.error.SignatureVerificationError) as e:
         logger.warning(f"[Webhook] Invalid signature or payload: {e}")
         return HttpResponse(status=400)
-    
 
     if event['type'] not in ['checkout.session.completed', 'checkout.session.async_payment_succeeded']:
         return HttpResponse(status=200)
-    
+
     session = event['data']['object']
     session_id = session.get('id')
     customer_email = session.get('customer_details', {}).get('email')
@@ -226,34 +220,41 @@ def webhook_view(request):
         except Game.DoesNotExist:
             logger.warning(f"[Webhook] Game with product ID {product_id} not found.")
             continue
-        
-        try:
-            with transaction.atomic():
-                key = Key.objects.select_for_update().filter(game=game, status='available').first()
-                if not key:
-                    return JsonResponse({'error': 'Out of stock. No available key for this game.'}, status=400)
-            
-            key.status = 'sold'
-            key.save()
-            
-            trx = Transaction.objects.create(
-                user=user,
-                game=game,
-                key=key,
-                status=status,
-                session_id=session_id,
-                total_amount=total_amount,
-                customer_email=customer_email,
-                brand=brand,
-                last4=last4,
-                phone=phone,
-                exp_month=exp_month,
-                exp_year=exp_year
-            )
-            UserGame.objects.create(user=user, game=game, key=key, transaction=trx)
-            Order.objects.filter(user=user, game=game).delete()
-            
-        except Exception as e:
-            raise JsonResponse({'error': str(e)}, status=500)
+
+        # Start database atomic block
+        for order in Order.objects.all():
+            try:
+                with transaction.atomic():
+                    # transaction
+                    trx = Transaction.objects.create(
+                        user=user,
+                        game=game,
+                        status=status,
+                        session_id=session_id,
+                        total_amount=total_amount,
+                        customer_email=customer_email,
+                        brand=brand,
+                        last4=last4,
+                        phone=phone,
+                        exp_month=exp_month,
+                        exp_year=exp_year,
+                        key=order.key
+                    )
+                    # user game
+                    UserGame.objects.create(
+                        user=user,
+                        game=game,
+                        key=order.key,
+                        transaction=trx
+                    )
+                    # update
+                    order.key.status = 'sold'
+                    order.key.save()
+                    
+                    order.delete()
+
+            except Exception as e:
+                logger.error(f"[Webhook] Failed processing game {game.name}: {e}")
+                return JsonResponse({'error': str(e)}, status=500)
 
     return HttpResponse(status=200)
