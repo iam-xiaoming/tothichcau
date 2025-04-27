@@ -230,46 +230,42 @@ def webhook_view(request):
         product_id = item['price']['product']
         total_amount = item['amount_total'] / 100
 
-        for order in Order.objects.all():
+        for order in user.orders.all():
             try:
-                # Lock the key with select_for_update to avoid race conditions
-                order = Order.objects.select_for_update().get(pk=order.pk)
+                with transaction.atomic():
+                    if order.key.status != 'reserved':
+                        logger.warning(f"[Webhook] Key for order {order.pk} is not available.")
+                        continue
 
-                # Check if key is available
-                if order.key.status != 'available':
-                    logger.warning(f"[Webhook] Key for order {order.pk} is not available.")
-                    continue
+                    trx = Transaction.objects.create(
+                        user=user,
+                        game=order.game,
+                        status=status,
+                        session_id=session_id,
+                        total_amount=total_amount,
+                        customer_email=customer_email,
+                        brand=brand,
+                        last4=last4,
+                        phone=phone,
+                        exp_month=exp_month,
+                        exp_year=exp_year,
+                        key=order.key
+                    )
 
-                trx = Transaction.objects.create(
-                    user=user,
-                    game=order.game,
-                    status=status,
-                    session_id=session_id,
-                    total_amount=total_amount,
-                    customer_email=customer_email,
-                    brand=brand,
-                    last4=last4,
-                    phone=phone,
-                    exp_month=exp_month,
-                    exp_year=exp_year,
-                    key=order.key
-                )
+                    UserGame.objects.create(
+                        user=user,
+                        game=order.game,
+                        key=order.key,
+                        transaction=trx
+                    )
 
-                UserGame.objects.create(
-                    user=user,
-                    game=order.game,
-                    key=order.key,
-                    transaction=trx
-                )
-
-                # Update key status to sold
-                order.key.status = 'sold'
-                order.key.save()
-
-                order.delete()
+                    order.key.status = 'sold'
+                    order.key.save()
+                    order.delete()
 
             except Exception as e:
                 logger.error(f"[Webhook] Failed processing game {order.game}: {e}")
-                continue  # Continue with the next order
+                continue
+
 
     return HttpResponse(status=200)

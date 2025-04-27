@@ -28,7 +28,7 @@ STRIPE_PUBLISHABLE_KEY = config('STRIPE_PUBLISHABLE_KEY')
 STRIPE_WEBHOOK_SECRET = config('STRIPE_WEBHOOK_SECRET')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 # Basic Storage configuration for Amazon S3 (Irrespective of Django versions)
 AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
@@ -90,7 +90,7 @@ INSTALLED_APPS = [
     'rest_framework',
     
     # search
-    # 'django_elasticsearch_dsl',
+    'django_elasticsearch_dsl',
     
     'search.apps.SearchConfig',
     'transactions.apps.TransactionsConfig',
