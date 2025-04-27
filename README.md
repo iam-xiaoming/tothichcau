@@ -30,3 +30,15 @@ find . -path "*/migrations/*.pyc" -delete
 5. chạy `py manage.py makemigrations`
 6. chạy `py manage.py migrate`
 6. chạy `py manage.py runserver`
+
+
+export VISUAL=nano
+
+crontab -e
+
+crontab -l
+
+*/10 * * * * /Users/nguyenminh/Mac/CoDaiVaHoaDanhDanh/venv/bin/python /Users/nguyenminh/Mac/CoDaiVaHoaDanhDanh/manage.py release_expired_orders >> /Users/nguyenminh/Mac/CoDaiVaHoaDanhDanh/logs/cron_release.log 2>&1
+
+
+*/3 * * * * echo "Cron job ran at $(date)" >> /Users/nguyenminh/Mac/CoDaiVaHoaDanhDanh/logs/test_cron.log 2>&1
