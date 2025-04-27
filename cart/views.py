@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
 import stripe
 from django.views import View
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse, HttpResponse, HttpResponseForbidden
 from django.views.decorators.csrf import csrf_exempt
 from .models import Order
 from games.models import Game
@@ -29,6 +29,7 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 # Create your views here.
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
+@transaction.atomic
 def add_to_cart(request, pk, game_pk):
     try:
         user = MyUser.objects.get(pk=pk)
@@ -38,22 +39,32 @@ def add_to_cart(request, pk, game_pk):
     except Game.DoesNotExist:
         return Response({'error': 'Game not found.'}, status=404)
     
-    available_key = Key.objects.filter(status='available').first()
+    key = Key.objects.select_for_update().filter(game=game, status='available').first()
     
-    if not available_key:
-        return Response({'stockout': 'Stockout'}, status=400)
+    if not key:
+        return Response({'success': False, 'message': 'Stock out'}, status=200)
     
     try:
-        order = Order.objects.create(user=user, game=game, key=available_key)
         # update key status
-        available_key.status = 'pending'
-        available_key.save()
+        key.status = 'reserved'
+        key.save()
+        
+        order = Order.objects.create(user=user, game=game, key=key)
+        
         # get total order count of specific user
         order_count = user.orders.count()
+        
+        # get number of available key remaining
+        key_remain = Key.objects.filter(status='available').count()
+        
     except Exception as e:
         return Response({'error': str(e)}, status=400)
     else:
-        return Response({'success': True, 'order_count': order_count, 'message': 'Game added to cart!'})
+        return Response({
+            'success': True,
+            'order_count': order_count,
+            'key_remain': key_remain,
+            'message':'Game added to cart!'})
     
 
 @api_view(['GET'])
@@ -97,14 +108,18 @@ class CartDeleteView(LoginRequiredMixin, View):
     login_url = '/login/'
     
     def post(self, request, pk, *args, **kwargs):
-        order = get_object_or_404(Order, pk=pk, user=request.user)
-        # update key status
-        if order.key:
-            order.key.status = 'available'
-            order.key.save()
+        with transaction.atomic():
+            order = get_object_or_404(Order.objects.select_for_update(), pk=pk, user=request.user)
+            key = order.key
             
-        # delete order
-        order.delete()
+            if not key or key.status != 'reserved':
+                return HttpResponseForbidden("This key is no longer reserved or already available.")
+            
+            key.status = 'available'
+            key.save()
+
+            order.delete()
+
         return redirect('cart')
     
 
@@ -215,46 +230,46 @@ def webhook_view(request):
         product_id = item['price']['product']
         total_amount = item['amount_total'] / 100
 
-        try:
-            game = Game.objects.get(stripe_product_id=product_id)
-        except Game.DoesNotExist:
-            logger.warning(f"[Webhook] Game with product ID {product_id} not found.")
-            continue
-
-        # Start database atomic block
         for order in Order.objects.all():
             try:
-                with transaction.atomic():
-                    # transaction
-                    trx = Transaction.objects.create(
-                        user=user,
-                        game=game,
-                        status=status,
-                        session_id=session_id,
-                        total_amount=total_amount,
-                        customer_email=customer_email,
-                        brand=brand,
-                        last4=last4,
-                        phone=phone,
-                        exp_month=exp_month,
-                        exp_year=exp_year,
-                        key=order.key
-                    )
-                    # user game
-                    UserGame.objects.create(
-                        user=user,
-                        game=game,
-                        key=order.key,
-                        transaction=trx
-                    )
-                    # update
-                    order.key.status = 'sold'
-                    order.key.save()
-                    
-                    order.delete()
+                # Lock the key with select_for_update to avoid race conditions
+                order = Order.objects.select_for_update().get(pk=order.pk)
+
+                # Check if key is available
+                if order.key.status != 'available':
+                    logger.warning(f"[Webhook] Key for order {order.pk} is not available.")
+                    continue
+
+                trx = Transaction.objects.create(
+                    user=user,
+                    game=order.game,
+                    status=status,
+                    session_id=session_id,
+                    total_amount=total_amount,
+                    customer_email=customer_email,
+                    brand=brand,
+                    last4=last4,
+                    phone=phone,
+                    exp_month=exp_month,
+                    exp_year=exp_year,
+                    key=order.key
+                )
+
+                UserGame.objects.create(
+                    user=user,
+                    game=order.game,
+                    key=order.key,
+                    transaction=trx
+                )
+
+                # Update key status to sold
+                order.key.status = 'sold'
+                order.key.save()
+
+                order.delete()
 
             except Exception as e:
-                logger.error(f"[Webhook] Failed processing game {game.name}: {e}")
-                return JsonResponse({'error': str(e)}, status=500)
+                logger.error(f"[Webhook] Failed processing game {order.game}: {e}")
+                continue  # Continue with the next order
 
     return HttpResponse(status=200)
