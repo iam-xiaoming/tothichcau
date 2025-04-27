@@ -10,7 +10,7 @@
 
 ### Running tutorial
 0. `pull origin main` không đc thì chạy `git reset --hard HEAD`, xong pull lại. nếu không thấy cập nhật gì thì đóng hết mấy file đang mở.
-0. lỗi: đổi tên db trong file .env hay đổi cái đéo gì cũng đc mà trong settings.py nó vẫn load cái cũ, ko cập nhật cái mới (cách để biết cũ hay mới là vào settings.py dùng lệnh `print` ra rồi `runserver` để xem nó in ra terminal là cái đéo gì), thì đóng hết tất cả các terminal, xong bật lại cái mới
+1. lỗi: đổi tên db trong file .env hay đổi cái đéo gì cũng đc mà trong settings.py nó vẫn load cái cũ, ko cập nhật cái mới (cách để biết cũ hay mới là vào settings.py dùng lệnh `print` ra rồi `runserver` để xem nó in ra terminal là cái đéo gì), thì đóng hết tất cả các terminal, xong bật lại cái mới
 
 1. clone về
 2. xin file env
@@ -20,7 +20,7 @@
 5. chạy `py manage.py makemigrations`
 6. chạy `py manage.py migrate`
 
-10. khúc `5`, `6` mà lỗi thì xóa hết file migrations, xóa như nào thì hỏi chatgpt. sau khi xóa nếu chạy lỗi `no module` cái đéo gì đó thì `pip uninstall Django` ->  `pip install Django`. còn nếu lỗi nữa thì lên Aiven xóa database tạo lại cái mới
+7. khúc `makemigrations`, `migrate` mà lỗi thì xóa hết file migrations, xóa như nào thì hỏi chatgpt. sau khi xóa nếu chạy lỗi `no module` cái đéo gì đó thì `pip uninstall Django` ->  `pip install Django`. còn nếu lỗi nữa thì lên Aiven xóa database tạo lại cái mới
 
 7. run `python3 manage.py createsuperuser` để tạo tài khoản admin
 6. chạy `py manage.py runserver`
