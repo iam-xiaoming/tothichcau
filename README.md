@@ -8,7 +8,7 @@
 
 <!-- find . -path "*/migrations/*.pyc" -delete -->
 
-### Running tutorial
+### Bí kiếp cua gái
 0. `pull origin main` không đc thì chạy `git reset --hard HEAD`, xong pull lại. nếu không thấy cập nhật gì thì đóng hết mấy file đang mở.
 1. lỗi: đổi tên db trong file .env hay đổi cái đéo gì cũng đc mà trong settings.py nó vẫn load cái cũ, ko cập nhật cái mới (cách để biết cũ hay mới là vào settings.py dùng lệnh `print` ra rồi `runserver` để xem nó in ra terminal là cái đéo gì), thì đóng hết tất cả các terminal, xong bật lại cái mới
 
