@@ -1,0 +1,22 @@
+.anime__details__title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.game-avg-score {
+    background: #00ce7a;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-weight: 2.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.game-avg-score span {
+    color: #000 !important;
+    font-size: 1.3rem;
+    font-weight: 600;
+}

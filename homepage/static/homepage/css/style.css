@@ -727,7 +727,7 @@ ol {
 	display: flex;
 	align-items: center;
 	gap: 12px;
-	padding-top: 12px;
+	padding-top: 10px;
 }
 
 .product .price-section * {
@@ -824,10 +824,6 @@ ol {
 	position: absolute;
 	right: 10px;
 	bottom: 10px;
-}
-
-.product__item__text {
-	padding-top: 10px;
 }
 
 .product__item__text ul {

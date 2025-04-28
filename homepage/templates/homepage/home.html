@@ -27,6 +27,7 @@
             left: 0;
         }
     </style>
+    <link rel="stylesheet" href="{% static 'homepage/css/product_rating.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -90,6 +91,7 @@
                                             <div class="product__item__text">
                                                 <span class="base-game">Base Game</span>
                                                 <h5 class="line-clamp">{{ game.name }}</h5>
+                                                <span style="font-size: 12px;" class="base-game">{{ game.rating|capfirst }}</span>
                                             </div>
                                             <div class="price-section">
                                                 {% if game.discount > 0 %}

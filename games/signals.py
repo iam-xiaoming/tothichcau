@@ -1,6 +1,6 @@
 from django.db.models.signals import post_delete, post_save, pre_save
 from django.dispatch import receiver
-from .models import Game
+from .models import Game, Rating
 import stripe
 
 
@@ -66,3 +66,38 @@ def post_save_game(sender, instance, created, **kwargs):
     except Exception as e:
         print(f"Stripe sync error: {e}")
         raise
+
+
+@receiver(post_save, sender=Rating)
+def scoring(sender, instance, created, **kwargs):
+    if created:
+        score = instance.score
+        weighted = instance.weighted
+        avg_score = instance.game.average_score
+        
+        if avg_score:
+            avg_score = (avg_score + weighted * score) / (weighted + 1)
+        else:
+            avg_score = score
+            
+        avg_score_percentage = avg_score * 10
+        
+        if avg_score_percentage <= 19:
+            instance.game.rating = 'overwhelmingly negative'
+        elif avg_score_percentage <= 39:
+            instance.game.rating = 'mostly negative' 
+        elif avg_score_percentage <= 69:
+            instance.game.rating = 'mixed'
+        elif avg_score_percentage <= 79:
+            instance.game.rating = 'mostly positive'
+        elif avg_score_percentage <= 94:
+            instance.game.rating = 'very positive'
+        else:
+            instance.game.rating = 'overwhelmingly positive'
+        
+        instance.game.average_score = avg_score
+            
+        instance.save()
+        instance.game.save()
+        
+        

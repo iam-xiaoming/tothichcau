@@ -1,7 +1,8 @@
 <!-- localhost:8000/api/search/games/?query=elden&offset=0&limit=10 -->
+### Link donate đây nha ae
+![Alt text](donate.jpg)
 
-
-<!-- Kênh chơi game với mục đích đem lại niềm vui cho mọi người: https://www.facebook.com/profile.php?id=100027733654960&mibextid=LQQJ4d -->
+Kênh chơi game với mục đích đem lại niềm vui cho mọi người: https://www.facebook.com/profile.php?id=100027733654960&mibextid=LQQJ4d
 
 
 <!-- find . -path "*/migrations/*.py" -not -name "__init__.py" -delete -->
@@ -20,7 +21,7 @@
 5. chạy `py manage.py makemigrations`
 6. chạy `py manage.py migrate`
 
-7. khúc `makemigrations`, `migrate` mà lỗi thì xóa hết file migrations, xóa như nào thì hỏi chatgpt. sau khi xóa nếu chạy lỗi `no module` cái đéo gì đó thì `pip uninstall Django` ->  `pip install Django`. còn nếu lỗi nữa thì lên Aiven xóa database tạo lại cái mới
+7. khúc `makemigrations`, `migrate` mà lỗi kiểu như `column xxx and relation yyy already exist....` thì xóa hết file migrations, xóa như nào thì hỏi chatgpt. sau khi xóa nếu chạy lỗi `no module` cái đéo gì đó thì `pip uninstall Django` ->  `pip install Django`. còn nếu lỗi nữa thì lên Aiven xóa database tạo lại cái mới
 
 7. run `python3 manage.py createsuperuser` để tạo tài khoản admin
 6. chạy `py manage.py runserver`

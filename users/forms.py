@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model
 from users.firebase_helpers import firebase_config
-from users.models import MyUser
+from users.models import MyUser, Comment
 from django.utils import timezone
 import traceback
 import time
@@ -168,3 +168,38 @@ class UserUpdateForm(forms.ModelForm):
     class Meta:
         model = MyUser
         fields = ['username', 'email', 'full_name']
+        
+        
+class UserCommentForm(forms.ModelForm):
+    title = forms.CharField(widget=forms.Textarea(attrs={
+        'maxlength': '255',
+        'placeholder': 'Your title...',
+        'style': 'color: #b7b7b7; background: #202021; height: 50px; margin-bottom: 15px;'
+    }))
+    content = forms.CharField(widget=forms.Textarea(attrs={
+        'placeholder': 'Your content...',
+        'maxlength': '1000',
+        'style': 'color: #b7b7b7; background: #202021;'
+    }))
+    
+    class Meta:
+        model = Comment
+        fields = ['title', 'content']
+        
+        
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        self.game = kwargs.pop('game', None)
+        
+        super().__init__(*args, **kwargs)
+        
+        
+    def save(self, commit=True):
+        comment = super().save(commit=False)
+        if self.user:
+            comment.user = self.user
+        if self.game:
+            comment.game = self.game
+        if commit:
+            comment.save()
+        return comment

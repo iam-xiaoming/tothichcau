@@ -58,6 +58,7 @@ def add_to_cart(request, pk, game_pk):
         key_remain = Key.objects.filter(status='available').count()
         
     except Exception as e:
+        print(e)
         return Response({'error': str(e)}, status=400)
     else:
         return Response({
@@ -100,7 +101,6 @@ class CartView(LoginRequiredMixin, ListView):
         context['total_discounted_price'] = total_discounted_price
         context['discount'] = total_price - total_discounted_price
         context['STRIPE_PUBLISHABLE_KEY'] = settings.STRIPE_PUBLISHABLE_KEY
-        context['categories'] = Category.objects.all()
         return context
     
 

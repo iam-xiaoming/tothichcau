@@ -29,8 +29,7 @@ def login_view(request):
         
     context = {
         'form': form,
-        'errors': form.errors,
-        'categories': Category.objects.all()
+        'errors': form.errors
     }
     return render(request, 'users/login.html', context)
 
@@ -56,8 +55,7 @@ def register(request):
         
     context = {
         'form': form,
-        'errors': form.errors,
-        'categories': Category.objects.all()
+        'errors': form.errors
     }
     return render(request, 'users/signup.html', context)
 
@@ -73,7 +71,6 @@ class ProfileView(LoginRequiredMixin, FormMixin, ListView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['categories'] = Category.objects.all()
         return context
         
     

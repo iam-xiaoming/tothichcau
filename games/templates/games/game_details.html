@@ -7,6 +7,35 @@
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'games/css/sidebar.css' %}">
+    <link rel="stylesheet" href="{% static 'games/css/game_score.css' %}">
+
+    <style>
+        input[type="number"].no-arrows::-webkit-outer-spin-button,
+        input[type="number"].no-arrows::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type="number"].no-arrows {
+            -moz-appearance: textfield;
+        }
+
+        input[type='number'] {
+            width: 100px;
+            border-radius: 5px;
+            border: none;
+            padding-left: 20px;
+        }
+
+        .form-row {
+            gap: 25px;
+            margin: 0;
+        }
+
+        .form-left {
+            flex: 2;
+        }
+    </style>
 {% endblock %}
 
 {% block content %}
@@ -33,19 +62,25 @@
                     <div class="col-lg-9">
                         <div class="anime__details__text">
                             <div class="anime__details__title">
-                                <h3>{{ game.name }}</span>
+                                <h3 style="margin-bottom: 0;">{{ game.name }}</h3>
+                                {% if object.average_score %}
+                                    <div class="game-avg-score">
+                                        <span>{{ object.average_score }}</span>
+                                    </div>
+                                {% endif %}
                             </div>
                             <p>{{ game.description }}</p>
                             <div class="anime__details__widget">
                                 <div class="row">
                                     <div class="col-lg-6 col-md-6">
                                         <ul>
-                                            <li><span>Publisher:</span>{{ game.publisher }}</li>
+                                            <li><span>Publisher:</span>{{ game.publisher|upper }}</li>
                                             <li><span>Date released:</span>{{ game.release_date }}</li>
-                                            <li><span>Status:</span>{{ status }}</li>
-                                            <li><span>Genre:</span>{% for category in game.categories.all %}{{category.name }}{% if not forloop.last %}, {% endif %}
+                                            <li id="game-status-li"><span id="game-status">Status:</span>Loading...</li>
+                                            <li><span>Genre:</span>{% for category in game.categories.all %}{{category.name|upper }}{% if not forloop.last %}, {% endif %}
                                               {% endfor %}
                                             </li>
+                                            <li><span>Rating:</span>{{ game.rating|upper }}</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -82,6 +117,7 @@
                                         <div style="display: flex;align-items:center; gap: 10px;" class="comment-info">
                                             <h6>{{ comment.user }}</h6>
                                             <span style="color: #b7b7b7; margin-bottom: 10px; font-size: 14px;">{{ comment.created_at|date:"d/m/Y" }}</span>
+                                            <span style="color: #b7b7b7; margin-bottom: 10px; font-size: 14px;">Rate: {{ comment.comment_rating.score }}</span>
                                         </div>
                                         <p>{{ comment.content }}</p>
                                     </div>
@@ -95,13 +131,18 @@
                                 </div>
                                 <form action="" method="POST">
                                     {% csrf_token %}
-                                    
-                                    <input type="hidden" name="game_id" value="{{ game.id }}">
-                                    
-                                    <label style="color: #fff;" for="title">Title</label>
-                                    <textarea maxlength="255" name="title" style="color: #b7b7b7; background: #202021; height: 50px; margin-bottom: 15px;" placeholder="Your title"></textarea>
-                                    <label style="color: #fff;" for="content">Content</label>
-                                    <textarea maxlength="1000" name="content" style="color: #b7b7b7; background: #202021;" placeholder="Your Comment"></textarea>
+                                    <div style="display: flex; align-items: flex-start;" class="form-row">
+                                        <div class="form-left">
+                                            <label for="{{ comment_form.title.id_for_label }}" style="color: #fff; display: block;">Title</label>
+                                            {{ comment_form.title }}
+                                        </div>
+                                        <div class="form-right">
+                                            <label for="{{ scoring_form.score.id_for_label }}" style="color: #fff; display: block;">Score</label>
+                                            {{ scoring_form.score }}
+                                        </div>
+                                    </div>
+                                    <label for="{{ comment_form.content.id_for_label }}" style="color: #fff; display: block;" for="content">Content</label>
+                                    {{ comment_form.content }}
                                     <button type="submit"><i class="fa fa-location-arrow"></i> Review</button>
                                 </form>
                             </div>
@@ -152,6 +193,8 @@
     <script>
         const game_pk = "{{ object.pk }}";
 
+        const liElement = document.getElementById('game-status-li');
+
         function getKeyCount() {
             fetch(`/api/get_key_available_count/${game_pk}/`)
                 .then(response => response.json())
@@ -169,6 +212,12 @@
                                 btn.querySelector('span').textContent = 'Stock out';
                             }
                         });
+
+                        if (keyCount > 0) {
+                            liElement.innerHTML = `<span id="game-status">Status</span>AVAILABLE`;
+                        } else {
+                            liElement.innerHTML = `<span id="game-status">Status</span>STOCK OUT`;
+                        }
                     } else {
                         console.error('Failed to fetch key count');
                     }
@@ -180,13 +229,13 @@
         
         document.addEventListener('DOMContentLoaded', function () {
             getKeyCount();
-        
+            
             document.querySelectorAll('.watch-btn').forEach(btn => {
                 btn.classList.remove('loading');
                 btn.classList.remove('disabled');
                 btn.querySelector('span').innerHTML = '<i class="fa-solid fa-cart-plus"></i> Add to cart'
             });
-        
+            
             document.querySelectorAll('.watch-btn').forEach(button => {
                 button.addEventListener('click', function (e) {
                     e.preventDefault();
@@ -217,15 +266,19 @@
                                 btn.classList.remove('loading');
                                 btn.classList.add('disabled');
                                 btn.querySelector('span').innerHTML = '<i class="fa-solid fa-cart-plus"></i> Add to cart'
+                                liElement.innerHTML = `<span id="game-status">Status</span>AVAILABLE`;
+
                             } else {
                                 btn.classList.remove('loading');
                                 btn.classList.add('disabled');
                                 btn.querySelector('span').textContent = 'Stock out';
+                                liElement.innerHTML = `<span id="game-status">Status</span>STOCK OUT`;
                             }
                         } else {
                             btn.classList.remove('loading');
                             btn.classList.add('disabled');
                             btn.querySelector('span').textContent = 'Stock out';
+                            liElement.innerHTML = `<span id="game-status">Status</span>STOCK OUT`;
                         }
                     })
                     .catch(error => {
