@@ -27,7 +27,6 @@
             left: 0;
         }
     </style>
-    <link rel="stylesheet" href="{% static 'homepage/css/product_rating.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -78,7 +77,7 @@
                             <div class="product-list" id="trending-product-list">
                                 {% for game in games %}
                                     <div class="col-lg-3 col-md-4 col-sm-6 col-12 product-card">
-                                        <a href="{% url 'game_details' game.pk %}">
+                                        <a class="item-click" game-pk="{{ game.pk }}" href="{% url 'game_details' game.pk %}">
                                             <div class="product__item">
                                                 {% if game.quantity > 0 %}
                                                     <div class="product__item__pic set-bg" data-setbg="{{ game.image.url }}"></div>
@@ -139,7 +138,7 @@
                                                     {% else %}
                                                         <div class="product__item__pic set-bg sold-out" data-setbg="{{ game.image.url }}">
                                                             <div class="overplay"></div>
-                                                            <img class="sold-out-img" src="{% static 'games/images/sold_out.png' %}" alt="">
+                                                            {% comment %} <img class="sold-out-img" src="{% static 'games/images/sold_out.png' %}" alt=""> {% endcomment %}
                                                         </div>
                                                     {% endif %}
                                                 </div>
@@ -226,5 +225,30 @@
                 }
             });
         });        
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const selectedItems = [];
+        
+            document.querySelectorAll('.item-click').forEach(item => {
+                item.addEventListener('click', async function (e) {
+                    e.preventDefault();
+                    
+                    const gamePk = this.getAttribute('game-pk');
+                    const userId = user_pk;
+                    
+                    selectedItems.push({
+                        item_id: gamePk,
+                        event_type: 'view',
+                        timestamp: Math.floor(Date.now() / 1000)
+                    });
+                    
+                    await sendInteractions(userId, selectedItems);
+                    
+                    window.location.href = this.href;
+                });
+            });
+        });
     </script>
 {% endblock %}

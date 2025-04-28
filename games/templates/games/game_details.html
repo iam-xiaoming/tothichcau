@@ -195,6 +195,7 @@
 
         const liElement = document.getElementById('game-status-li');
 
+        // api get total available keys
         function getKeyCount() {
             fetch(`/api/get_key_available_count/${game_pk}/`)
                 .then(response => response.json())
@@ -230,12 +231,14 @@
         document.addEventListener('DOMContentLoaded', function () {
             getKeyCount();
             
+            // Set initial button state
             document.querySelectorAll('.watch-btn').forEach(btn => {
                 btn.classList.remove('loading');
                 btn.classList.remove('disabled');
                 btn.querySelector('span').innerHTML = '<i class="fa-solid fa-cart-plus"></i> Add to cart'
             });
             
+            // Add event listener to each "watch-btn"
             document.querySelectorAll('.watch-btn').forEach(button => {
                 button.addEventListener('click', function (e) {
                     e.preventDefault();
@@ -274,6 +277,13 @@
                                 btn.querySelector('span').textContent = 'Stock out';
                                 liElement.innerHTML = `<span id="game-status">Status</span>STOCK OUT`;
                             }
+
+                            // Send interaction when "Add to cart" is clicked
+                            sendInteractions(user_pk, [{
+                                item_id: game_pk,
+                                event_type: 'like',
+                                timestamp: Math.floor(Date.now() / 1000)
+                            }]);
                         } else {
                             btn.classList.remove('loading');
                             btn.classList.add('disabled');
@@ -289,22 +299,7 @@
                     });
                 });
             });
-        });        
-
-
-        // CSRF token helper
-        function getCookie(name) {
-                let cookieValue = null;
-                if (document.cookie && document.cookie !== '') {
-                    document.cookie.split(';').forEach(cookie => {
-                        const [key, value] = cookie.trim().split('=');
-                        if (key === name) {
-                            cookieValue = decodeURIComponent(value);
-                        }
-                    });
-                }
-                return cookieValue;
-            }
+        });
     </script>   
     <script src="{% static 'games/js/gallery.js' %}"></script>
 {% endblock %}

@@ -20,9 +20,10 @@ from django.urls import reverse
 
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.status import HTTP_404_NOT_FOUND
 from rest_framework.response import Response
 
+from track.models import UserInteraction
+from datetime import datetime
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -257,6 +258,14 @@ def webhook_view(request):
                         game=order.game,
                         key=order.key,
                         transaction=trx
+                    )
+                    
+                    timestamp = int(datetime.now().timestamp() * 1000)
+                    UserInteraction.objects.create(
+                        user_id=user.id,
+                        item_id=order.game.pk,
+                        event_type='buy',
+                        timestamp=timestamp
                     )
 
                     order.key.status = 'sold'
