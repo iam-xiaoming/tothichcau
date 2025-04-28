@@ -75,10 +75,8 @@
 						<nav class="header__menu mobile-menu">
 							<ul>
 								<li><a href="#!">Categories <span class="arrow_carrot-down"></span></a>
-									<ul class="dropdown">
-										{% for category in categories %}
-											<li><a href="#!">{{ category }}</a></li>
-										{% endfor %}
+									<ul class="dropdown" id="categoryDropdown">
+										<!-- <li><a href="#!">{{ category }}</a></li> -->
 									</ul>
 								</li>
 								<li><a href="./blog.html">Our Blog</a></li>
@@ -145,7 +143,9 @@
 					});
 			}
 		}
-		window.addEventListener('DOMContentLoaded', () => updateCartCount());
+		if (user_pk && user_pk !== "None") {
+			window.addEventListener('DOMContentLoaded', () => updateCartCount());
+		}
 	</script>
 
 	<!-- search engine  -->
@@ -215,6 +215,31 @@
 			});
 		});
 		
-	</script>			
+	</script>
+	
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			fetch('/api/category/')
+				.then(response => response.json())
+				.then(data => {
+					if (data.success) {
+						const dropdown = document.getElementById('categoryDropdown');
+						dropdown.innerHTML = '';
+						
+						data.categories.forEach(category => {
+							const li = document.createElement('li');
+							const a = document.createElement('a');
+							a.href = `#!`;
+							a.textContent = category.name;
+							li.appendChild(a);
+							dropdown.appendChild(li);
+						});
+					}
+				})
+				.catch(error => {
+					console.error('Error loading categories:', error);
+				});
+		});		
+	</script>
 </body>	
 </html>
