@@ -69,6 +69,8 @@ if not DEBUG:
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
+print(config('DB_NAME'))
+
 
 # Application definition
 
@@ -100,7 +102,8 @@ INSTALLED_APPS = [
     'storages',
     
     'game_features.apps.GameFeaturesConfig',
-    'keys.apps.KeysConfig'
+    'keys.apps.KeysConfig',
+    'track.apps.TrackConfig'
 ]
 
 MIDDLEWARE = [

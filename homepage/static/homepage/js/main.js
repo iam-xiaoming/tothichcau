@@ -7,6 +7,48 @@
     Created: Colorib
 ---------------------------------------------------------  */
 
+// Send interaction data to the backend (e.g., view or add to cart)
+function sendInteractions(userId, selectedItems) {
+    fetch('/api/interaction/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: JSON.stringify({
+            user_id: userId,
+            items: selectedItems
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log('Interaction recorded successfully');
+        } else {
+            console.error('Failed to record interaction');
+        }
+    })
+    .catch(error => {
+        console.error('Error sending interaction:', error);
+    });
+}
+
+
+ // CSRF token helper
+ function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        document.cookie.split(';').forEach(cookie => {
+            const [key, value] = cookie.trim().split('=');
+            if (key === name) {
+                cookieValue = decodeURIComponent(value);
+            }
+        });
+    }
+    return cookieValue;
+}
+
+
 'use strict';
 
 (function ($) {

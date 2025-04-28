@@ -41,3 +41,33 @@ crontab -l
 */10 * * * * /Users/nguyenminh/Mac/CoDaiVaHoaDanhDanh/venv/bin/python /Users/nguyenminh/Mac/CoDaiVaHoaDanhDanh/manage.py release_expired_orders >> /Users/nguyenminh/Mac/CoDaiVaHoaDanhDanh/logs/cron_release.log 2>&1
 
 */3 * * * * echo "Cron job ran at $(date)" >> /Users/nguyenminh/Mac/CoDaiVaHoaDanhDanh/logs/test_cron.log 2>&1
+
+
+
+<!-- user interactions -->
+{
+  "type": "record",
+  "name": "Interactions",
+  "namespace": "com.amazonaws.personalize.schema",
+  "fields": [
+    {
+      "name": "USER_ID",
+      "type": "string"
+    },
+    {
+      "name": "ITEM_ID",
+      "type": "string"
+    },
+    {
+      "name": "TIMESTAMP",
+      "type": "long"
+    },
+    {
+      "name": "EVENT_TYPE",
+      "type": "string"
+    }
+  ],
+  "version": "1.0"
+}
+
+
