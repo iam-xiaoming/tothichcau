@@ -3,6 +3,7 @@ from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, Permis
 from django.utils import timezone
 from users.firebase_helpers import firebase_config
 import time
+from django.core.exceptions import ValidationError
 
 # Create your models here.
 class CustomUserManager(BaseUserManager):
@@ -111,21 +112,34 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
 
 class UserGame(models.Model):    
     user = models.ForeignKey(MyUser, on_delete=models.CASCADE, related_name='owned_games')
-    game = models.ForeignKey('games.Game', on_delete=models.CASCADE, related_name='owned_by_users')
+    
+    game = models.ForeignKey('games.Game', on_delete=models.CASCADE, related_name='game_owned_by_users', null=True, blank=True, editable=False)
+    dlc = models.ForeignKey('games.DLC', on_delete=models.CASCADE, related_name='dlc_owned_by_users', null=True, blank=True, editable=False)
+    
     key = models.ForeignKey('keys.Key', on_delete=models.CASCADE, related_name='user_game')
     transaction = models.ForeignKey('cart.Transaction', on_delete=models.CASCADE, related_name='user_game')
     
-    
     def __str__(self):
-        return f"{self.user.email} owns {self.game.name}"
-
+        if self.game:
+            return f"{self.user.email} owns {self.game.name}"
+        
+        return f"{self.user.email} owns {self.dlc.name}"
+    
+    def clean(self):
+        super().clean()
+        
+        if not (self.game or self.dlc):
+            raise ValidationError('Game or DLC must be not none.')
 
 
 # comment
 class Comment(models.Model):
     title = models.CharField(max_length=255)
     content = models.TextField(max_length=1000)
-    game = models.ForeignKey('games.Game', on_delete=models.CASCADE, related_name='comment')
+    
+    game = models.ForeignKey('games.Game', on_delete=models.CASCADE, related_name='comment', null=True, blank=True, editable=False)
+    dlc = models.ForeignKey('games.DLC', on_delete=models.CASCADE, related_name='comment', null=True, blank=True, editable=False)
+    
     user = models.ForeignKey(MyUser, on_delete=models.CASCADE, related_name='comment')
     created_at = models.DateTimeField(auto_now=True)
     

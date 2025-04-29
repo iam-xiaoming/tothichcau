@@ -1,5 +1,5 @@
 from django import forms
-from .models import Game, Rating
+from .models import Game, Rating, DLC
 from game_features.models import Category
 from django.forms import CheckboxSelectMultiple
 from django.core.exceptions import ValidationError
@@ -23,6 +23,12 @@ class GameAdminForm(forms.ModelForm):
             raise ValidationError({'categories': "Cannot select more than 4 categories."})
         return cleaned_data
     
+
+class DLCAdminForm(forms.ModelForm):
+    class Meta:
+        model = DLC
+        fields = ['game', 'name', 'description', 'price', 'discount', 'release_date', 'image']
+    
     
 class UserRating(forms.ModelForm):
     score = forms.IntegerField(min_value=0, max_value=10, widget=forms.NumberInput(attrs={
@@ -37,20 +43,33 @@ class UserRating(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user', None)
         self.game = kwargs.pop('game', None)
+        self.dlc = kwargs.pop('dlc', None)
         self.comment = kwargs.pop('comment', None)
         
         super().__init__(*args, **kwargs)
         
+    def clean(self):
+        clean_data =  super().clean()
+        
+        if not (self.game or self.dlc):
+            raise forms.ValidationError('Game or DLC must be provided.')
+        return clean_data
+        
     def save(self, commit=True):
         rating = super().save(commit=False)
+        
         if self.user:
             rating.user = self.user
         if self.game:
             rating.game = self.game
+        if self.dlc:
+            rating.dlc = self.dlc
         if self.comment:
             rating.comment = self.comment
-        if rating:
+            
+        if commit:
             rating.save()
+            
         return rating
             
         

@@ -49,8 +49,8 @@ admin.site.register(MyUser, CustomUserAdmin)
 
 @admin.register(UserGame)
 class UserGameAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'game', 'key', 'key_status', 'created_at',)
-    list_filter = ('game',)
+    list_display = ('id', 'user', 'key', 'key_status', 'created_at',)
+    list_filter = ('game', 'dlc',)
     search_fields = ('id', 'user__email', 'user__username', 'game__name')
     autocomplete_fields = ('user', 'game')
     
@@ -66,7 +66,24 @@ class UserGameAdmin(admin.ModelAdmin):
     
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('user', 'game', 'title', 'created_at',)
-    list_filter = ('user', 'game',)
-    search_fields = ('user', 'game',)
-    autocomplete_fields = ('user', 'game',)
+    list_display = ('user', 'get_object_name', 'get_type', 'title', 'created_at',)
+    list_filter = ('user', 'game', 'dlc',)
+    search_fields = ('user', 'game', 'dlc', 'title',)
+    autocomplete_fields = ('user', 'game', 'dlc',)
+    
+    
+    def get_object_name(self, obj):
+        if obj.game:
+            return obj.game.name
+        elif obj.dlc:
+            return obj.dlc.name
+        else:
+            return '-'
+        
+    def get_type(self, obj):
+        if obj.game:
+            return 'Base Game'
+        return 'Downloadable Content'
+    
+    get_object_name.short_description = 'game'
+    get_type.short_description = 'type'

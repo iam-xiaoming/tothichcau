@@ -17,24 +17,45 @@ def validate_video_size(value):
     
 
 def get_image_upload_to(instance, filename):
+    if instance.dlc:
+        return f'game_image_reviews/{instance.dlc.name}/dlc_images/{filename}'
     return f'game_image_reviews/{instance.game.name}/images/{filename}'
 
 def get_video_upload_to(instance, filename):
-    return f'game_video_reviews/{instance.game.name}/videos/{filename}' 
+    if instance.dlc:
+        return f'game_video_reviews/{instance.dlc.name}/dlc_videos/{filename}'
+    return f'game_video_reviews/{instance.game.name}/videos/{filename}'
+
     
 
 class GameImageReview(models.Model):
-    game = models.ForeignKey('games.Game', on_delete=models.CASCADE, related_name='game_image_reviews')
+    game = models.ForeignKey('games.Game', on_delete=models.CASCADE, related_name='game_image_reviews', null=True, blank=True)
+    dlc = models.ForeignKey('games.DLC', on_delete=models.CASCADE, related_name='dlc_image_reviews', null=True, blank=True)
     
     image = models.ImageField(upload_to=get_image_upload_to)
     
     def __str__(self):
-        return f'Image Reviews of {self.game.name}'
+        if self.game:
+            return f'Video Reviews of {self.game.name}'
+        return f'Image Reviews of DLC: {self.dlc.name} for {self.dlc.game.name}'
+    
+    def clean(self):
+        super().clean()
+        if not (self.game or self.dlc):
+            raise ValidationError('Game or DLC must be not none.')
     
     
 class GameVideoReview(models.Model):
-    game = models.ForeignKey('games.Game', on_delete=models.CASCADE, related_name='game_video_reviews')
+    game = models.ForeignKey('games.Game', on_delete=models.CASCADE, related_name='game_video_reviews', null=True, blank=True)
+    dlc = models.ForeignKey('games.DLC', on_delete=models.CASCADE, related_name='dlc_video_reviews', null=True, blank=True)
     video = models.FileField(upload_to=get_video_upload_to)
     
     def __str__(self):
-        return f'Video Reviews of {self.game.name}'
+        if self.game:
+            return f'Video Reviews of {self.game.name}'
+        return f'Video Reviews of {self.dlc.name}'
+    
+    def clean(self):
+        super().clean()
+        if not (self.game or self.dlc):
+            raise ValidationError('Game or DLC must be not none.')

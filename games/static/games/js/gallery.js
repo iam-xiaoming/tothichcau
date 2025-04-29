@@ -1,30 +1,31 @@
 const imageUrls = [];
 const videoUrls = [];
 
-fetch(`/api/game/${game_pk}/media/review/`)
-    .then(response => response.json())
-    .then(data => {
-        const imageReviews = data.game_image_reviews || [];
-        const videoReviews = data.game_video_reviews || [];
+fetch(api_gallery_url)
+.then(response => response.json())
+.then(data => {
+    const imageReviews = data.image_reviews || [];
+    const videoReviews = data.video_reviews || [];
 
-        imageReviews.forEach(img => {
-            if (img.image) {
-                imageUrls.push(img.image);
-            }
-        });
+    imageReviews.forEach(img => {
+        if (img.image) {
+            imageUrls.push(img.image);
+        }
+    });
 
-        videoReviews.forEach(vid => {
-            if (vid.video) {
-                videoUrls.push(vid.video);
-            }
-        });
+    videoReviews.forEach(vid => {
+        if (vid.video) {
+            videoUrls.push(vid.video);
+        }
+    });
 
-        console.log('Images:', imageUrls);
-        console.log('Videos:', videoUrls);
+    console.log('Images:', imageUrls);
+    console.log('Videos:', videoUrls);
 
-        createGalleryItems();
-    })
-    .catch(error => console.error('Error:', error));
+    createGalleryItems();
+})
+.catch(error => console.error('Error:', error));
+
 
 let currentIndex = 0;
 let items = [];

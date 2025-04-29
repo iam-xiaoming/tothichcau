@@ -56,7 +56,7 @@
             <div class="anime__details__content">
                 <div class="row">
                     <div class="col-lg-3">
-                        <div class="anime__details__pic set-bg" data-setbg="{{ game.image.url }}">
+                        <div class="anime__details__pic set-bg" data-setbg="{{ object.image.url }}">
                         </div>
                     </div>
                     <div class="col-lg-9">
@@ -74,13 +74,29 @@
                                 <div class="row">
                                     <div class="col-lg-6 col-md-6">
                                         <ul>
-                                            <li><span>Publisher:</span>{{ game.publisher|upper }}</li>
-                                            <li><span>Date released:</span>{{ game.release_date }}</li>
-                                            <li id="game-status-li"><span id="game-status">Status:</span>Loading...</li>
-                                            <li><span>Genre:</span>{% for category in game.categories.all %}{{category.name|upper }}{% if not forloop.last %}, {% endif %}
-                                              {% endfor %}
-                                            </li>
-                                            <li><span>Rating:</span>{{ game.rating|upper }}</li>
+                                            {% if object.status == 'base' %}
+                                                <li><span>Publisher:</span> {{ object.publisher|upper }}</li>
+                                                <li><span>Date released:</span> {{ object.release_date }}</li>
+                                                <li id="game-status-li"><span id="game-status">Status:</span> Loading...</li>
+                                                <li><span>Genre:</span> 
+                                                    {% for category in object.categories.all %}
+                                                        {{ category.name|upper }} 
+                                                        {% if not forloop.last %}, {% endif %}
+                                                    {% endfor %}
+                                                </li>                                            
+                                                <li><span>Rating:</span> {{ object.rating|upper }}</li>
+                                            {% else %}
+                                                <li><span>Publisher:</span> {{ object.game.publisher|upper }}</li>
+                                                <li><span>Date released:</span> {{ object.release_date|date:"d/m/Y" }}</li>
+                                                <li id="game-status-li"><span id="game-status">Status:</span> Loading...</li>
+                                                <li><span>Genre:</span> 
+                                                    {% for category in object.game.categories.all %}
+                                                        {{ category.name|upper }} 
+                                                        {% if not forloop.last %}, {% endif %}
+                                                    {% endfor %}
+                                                </li>                                            
+                                                <li><span>Rating:</span> {{ object.rating|upper }}</li>
+                                            {% endif %}
                                         </ul>
                                     </div>
                                 </div>
@@ -108,7 +124,7 @@
                             <div class="section-title">
                                 <h5>Reviews</h5>
                             </div>
-                            {% for comment in game.comment.all %}
+                            {% for comment in object.comment.all %}
                                 <div class="anime__review__item">
                                     <div class="anime__review__item__pic">
                                         <img src="{{ comment.user.image.url }}" alt="">
@@ -191,13 +207,29 @@
     </div>
 
     <script>
+
         const game_pk = "{{ object.pk }}";
+        const gameType = "{{ object.status }}"
+
+        let api_gallery_url = null
+        let api_key_count_url = null
+        let api_add_to_cart = null
+
+        if (gameType === 'base') {
+            api_gallery_url = `/api/game/${game_pk}/media/review/`
+            api_key_count_url = `/api/get_game_key_available_count/${game_pk}/`;
+            api_add_to_cart = `/api/cart/game/add/${user_pk}/${game_pk}/`
+        } else {
+            api_gallery_url = `/api/game/dlc/${game_pk}/media/review/`
+            api_key_count_url = `/api/get_dlc_key_available_count/${game_pk}/`;
+            api_add_to_cart = `/api/cart/dlc/add/${user_pk}/${game_pk}/`
+        }
 
         const liElement = document.getElementById('game-status-li');
 
         // api get total available keys
         function getKeyCount() {
-            fetch(`/api/get_key_available_count/${game_pk}/`)
+            fetch(api_key_count_url)
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
@@ -215,9 +247,9 @@
                         });
 
                         if (keyCount > 0) {
-                            liElement.innerHTML = `<span id="game-status">Status</span>AVAILABLE`;
+                            liElement.innerHTML = `<span id="game-status">Status</span> AVAILABLE`;
                         } else {
-                            liElement.innerHTML = `<span id="game-status">Status</span>STOCK OUT`;
+                            liElement.innerHTML = `<span id="game-status">Status</span> STOCK OUT`;
                         }
                     } else {
                         console.error('Failed to fetch key count');
@@ -249,7 +281,7 @@
                     btn.classList.add('disabled');
                     btn.querySelector('span').textContent = 'Adding...';
         
-                    fetch(`/api/cart/add/${user_pk}/${game_pk}/`, {
+                    fetch(api_add_to_cart, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/x-www-form-urlencoded',
@@ -269,13 +301,13 @@
                                 btn.classList.remove('loading');
                                 btn.classList.add('disabled');
                                 btn.querySelector('span').innerHTML = '<i class="fa-solid fa-cart-plus"></i> Add to cart'
-                                liElement.innerHTML = `<span id="game-status">Status</span>AVAILABLE`;
+                                liElement.innerHTML = `<span id="game-status">Status</span> AVAILABLE`;
 
                             } else {
                                 btn.classList.remove('loading');
                                 btn.classList.add('disabled');
                                 btn.querySelector('span').textContent = 'Stock out';
-                                liElement.innerHTML = `<span id="game-status">Status</span>STOCK OUT`;
+                                liElement.innerHTML = `<span id="game-status">Status</span> STOCK OUT`;
                             }
 
                             // Send interaction when "Add to cart" is clicked
@@ -288,7 +320,7 @@
                             btn.classList.remove('loading');
                             btn.classList.add('disabled');
                             btn.querySelector('span').textContent = 'Stock out';
-                            liElement.innerHTML = `<span id="game-status">Status</span>STOCK OUT`;
+                            liElement.innerHTML = `<span id="game-status">Status</span> STOCK OUT`;
                         }
                     })
                     .catch(error => {
@@ -300,6 +332,6 @@
                 });
             });
         });
-    </script>   
+    </script>
     <script src="{% static 'games/js/gallery.js' %}"></script>
 {% endblock %}

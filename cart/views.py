@@ -5,10 +5,8 @@ from django.views import View
 from django.http import JsonResponse, HttpResponse, HttpResponseForbidden
 from django.views.decorators.csrf import csrf_exempt
 from .models import Order
-from games.models import Game
+from games.models import Game, DLC
 from keys.models import Key
-from users.models import UserGame
-from game_features.models import Category
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView
@@ -22,8 +20,9 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from track.models import UserInteraction
 from datetime import datetime
+import numpy as np
+from .utils import create_transaction, create_user_game, create_user_interaction
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -31,7 +30,7 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 @transaction.atomic
-def add_to_cart(request, pk, game_pk):
+def add_game_to_cart(request, pk, game_pk):
     try:
         user = MyUser.objects.get(pk=pk)
         game = Game.objects.get(id=game_pk)
@@ -68,6 +67,47 @@ def add_to_cart(request, pk, game_pk):
             'key_remain': key_remain,
             'message':'Game added to cart!'})
     
+    
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+@transaction.atomic
+def add_dlc_to_cart(request, pk, game_pk):
+    try:
+        user = MyUser.objects.get(pk=pk)
+        dlc = DLC.objects.get(id=game_pk)
+    except MyUser.DoesNotExist:
+        return Response({'error': 'User not found.'}, status=404)
+    except DLC.DoesNotExist:
+        return Response({'error': 'DLC not found.'}, status=404)
+    
+    key = Key.objects.select_for_update().filter(dlc=dlc, status='available').first()
+    
+    if not key:
+        return Response({'success': False, 'message': 'Stock out'}, status=200)
+    
+    try:
+        # update key status
+        key.status = 'reserved'
+        key.save()
+        
+        order = Order.objects.create(user=user, dlc=dlc, key=key)
+        
+        # get total order count of specific user
+        order_count = user.orders.count()
+        
+        # get number of available key remaining
+        key_remain = Key.objects.filter(status='available').count()
+        
+    except Exception as e:
+        print(e)
+        return Response({'error': str(e)}, status=400)
+    else:
+        return Response({
+            'success': True,
+            'order_count': order_count,
+            'key_remain': key_remain,
+            'message':'Game added to cart!'})
+
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -83,8 +123,8 @@ def get_cart_count(request, pk):
 class CartView(LoginRequiredMixin, ListView):
     model = Order
     template_name = 'cart/cart.html'
-    context_object_name = 'orders'
     login_url = '/login/'
+    context_object_name = 'orders'
 
     def get_queryset(self):        
         # Return only the orders of the logged-in user
@@ -94,10 +134,14 @@ class CartView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         orders = context['orders']
-
-        total_price = sum(order.game.price for order in orders)
-        total_discounted_price = sum(order.game.discounted_price for order in orders)
         
+        games = [order.game for order in orders if order.game]
+        dlcs = [order.dlc for order in orders if order.dlc]
+                
+        total_price = np.sum(game.price for game in games) + np.sum(dlc.price for dlc in dlcs)
+        total_discounted_price = np.sum(game.discounted_price for game in games) + np.sum(dlc.discounted_price for dlc in dlcs)
+        
+        context['orders'] = Order.objects.select_related('game', 'dlc').all()
         context['total_price'] = total_price
         context['total_discounted_price'] = total_discounted_price
         context['discount'] = total_price - total_discounted_price
@@ -237,44 +281,28 @@ def webhook_view(request):
                     if order.key.status != 'reserved':
                         logger.warning(f"[Webhook] Key for order {order.pk} is not available.")
                         continue
-
-                    trx = Transaction.objects.create(
-                        user=user,
-                        game=order.game,
-                        status=status,
-                        session_id=session_id,
-                        total_amount=total_amount,
-                        customer_email=customer_email,
-                        brand=brand,
-                        last4=last4,
-                        phone=phone,
-                        exp_month=exp_month,
-                        exp_year=exp_year,
-                        key=order.key
-                    )
-
-                    UserGame.objects.create(
-                        user=user,
-                        game=order.game,
-                        key=order.key,
-                        transaction=trx
-                    )
                     
                     timestamp = int(datetime.now().timestamp() * 1000)
-                    UserInteraction.objects.create(
-                        user_id=user.id,
-                        item_id=order.game.pk,
-                        event_type='buy',
-                        timestamp=timestamp
-                    )
+                    
+                    if order.game:
+                        item_id = order.game.id
+                        trx = create_transaction(user, status, session_id, total_amount, customer_email, brand, last4, phone, exp_month, exp_year, order.key, order.game, None)
+                        
+                        create_user_game(user, order.key, trx, order.game)
+                    else:
+                        item_id = order.dlc.id
+                        trx = create_transaction(user, status, session_id, total_amount, customer_email, brand, last4, phone, exp_month, exp_year, order.key, None, order.dlc)
+                        
+                        create_user_game(user, order.key, trx, None, order.dlc)
+
+                    create_user_interaction(user_id, item_id, timestamp)
 
                     order.key.status = 'sold'
                     order.key.save()
                     order.delete()
 
             except Exception as e:
-                logger.error(f"[Webhook] Failed processing game {order.game}: {e}")
+                logger.error(f"[Webhook] Failed processing game {order.game if order.game else order.dlc}: {e}")
                 continue
-
 
     return HttpResponse(status=200)
