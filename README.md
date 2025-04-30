@@ -5,11 +5,11 @@
 Kênh chơi game với mục đích đem lại niềm vui cho mọi người: https://www.facebook.com/profile.php?id=100027733654960&mibextid=LQQJ4d
 
 
-tranthihuyenaaaaa@gmail.com
+<!-- tranthihuyenaaaaa@gmail.com -->
 
-find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
+<!-- find . -path "*/migrations/*.py" -not -name "__init__.py" -delete -->
 
-find . -path "*/migrations/*.pyc" -delete
+<!-- find . -path "*/migrations/*.py" -not -name "__init__.py" -delete -->
 
 ### Bí kiếp cua gái
 0. `pull origin main` không đc thì chạy `git reset --hard HEAD`, xong pull lại. nếu không thấy cập nhật gì thì đóng hết mấy file đang mở.
