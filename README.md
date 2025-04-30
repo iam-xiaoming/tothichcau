@@ -5,6 +5,8 @@
 Kênh chơi game với mục đích đem lại niềm vui cho mọi người: https://www.facebook.com/profile.php?id=100027733654960&mibextid=LQQJ4d
 
 
+haha
+
 find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
 
 find . -path "*/migrations/*.pyc" -delete
