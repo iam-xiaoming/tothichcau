@@ -41,6 +41,7 @@
     margin-bottom: 1rem;
     text-transform: uppercase;
     letter-spacing: 2px;
+    color: #fff;
 }
 
 .blog-hero-content p {
@@ -84,6 +85,10 @@
 .filter-group label {
     font-size: 0.9rem;
     color: var(--secondary-text);
+}
+
+.filter-group .nice-select {
+    background: none;
 }
 
 .filter-group select {
@@ -229,6 +234,10 @@
     color: var(--secondary-text);
     margin-bottom: 20px;
     line-height: 1.6;
+}
+
+.post-excerpt p {
+    color: inherit;
 }
 
 /* Post Meta */

@@ -1,35 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NeonGamer Blog - Community Posts</title>
-    <link rel="stylesheet" href="blog-styles.css">
-    <link rel="stylesheet" href="styles.css">
+{% extends "homepage/base.html" %}
+{% load static %}
+
+{% block title %}
+    <title>GameArt Blog - Community Posts</title>
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'blog/css/blog-styles.css' %}">
+    <link rel="stylesheet" href="{% static 'blog/css/styles.css' %}">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-</head>
-<body>
+{% endblock %}
+
+{% block content %}
     <div class="cursor-glow"></div>
-    
-    <header>
-        <div class="logo">
-            <h1><a href="index.html">NEON<span>GAMER</span></a></h1>
-        </div>
-        <nav>
-            <div class="menu-toggle">
-                <i class="fas fa-bars"></i>
-            </div>
-            <ul class="nav-menu">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="#">News</a></li>
-                <li><a href="review.html">Reviews</a></li>
-                <li><a href="#" class="active">Blog</a></li>
-                <li><a href="#">Guides</a></li>
-                <li><a href="#">About</a></li>
-            </ul>
-        </nav>
-    </header>
 
     <div class="blog-hero">
         <div class="blog-hero-content">
@@ -407,6 +392,5 @@
         </div>
     </footer>
 
-    <script src="script.js"></script>
-</body>
-</html>
+    <script src="{% static 'blog/js/script.js' %}"></script>
+{% endblock %}
