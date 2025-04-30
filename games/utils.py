@@ -72,3 +72,8 @@ def instance_scoring(instance, score, weighted):
     instance.average_score = avg_score
         
     return instance
+
+
+def get_game_dlcs(instance):
+    if instance:
+        return instance.dlc.all()
