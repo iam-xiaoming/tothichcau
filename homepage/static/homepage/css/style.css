@@ -52,6 +52,14 @@ h6 {
 	font-family: "Roboto", sans-serif !important;
 }
 
+.product__sidebar__view__item {
+    transition: transform 0.3s ease-in-out;
+}
+
+.suggest-item:hover .product__sidebar__view__item {
+	transform: scale(1.03);
+}
+
 .line-clamp {
 	overflow: hidden;
 	display: -webkit-box;
@@ -671,7 +679,7 @@ ol {
 	position: relative;
 	overflow: hidden;
 	width: 100%;
-	padding-top: 10px;
+	padding-top: 20px;
   }
   
   .product-list {
@@ -785,7 +793,7 @@ ol {
 }
 
 .product__item__pic {
-	height: 400px;
+	height: 360px;
 	position: relative;
 	border-radius: 15px;
 }
@@ -946,8 +954,8 @@ ol {
 }
 
 .anime__details__pic {
-	height: 440px;
-	border-radius: 5px;
+	height: 400px;
+	border-radius: 10px;
 	position: relative;
 }
 

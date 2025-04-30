@@ -27,6 +27,7 @@
             left: 0;
         }
     </style>
+    <!-- <link rel="stylesheet" href="{% static 'homepage/css/rating_badge.css' %}"> -->
 {% endblock %}
 
 {% block content %}
@@ -75,68 +76,47 @@
                                 <i class="fa-solid fa-arrow-left"></i>
                             </button>
                             <div class="product-list" id="trending-product-list">
-                                {% for game in items.games %}
+                                {% for game in most_view %}
+                                    {% if game.status == 'base' %}
+                                        {% url 'base-game-details' game.pk as game_url %}
+                                    {% else %}
+                                        {% url 'dlc-game-details' game.pk as game_url %}
+                                    {% endif %}
                                     <div class="col-lg-3 col-md-4 col-sm-6 col-12 product-card">
-                                        {% if game.status == 'base' %}
-                                            <a class="item-click" game-pk="{{ game.pk }}" href="{% url 'game_details' game.pk %}">
-                                                <div class="product__item">
-                                                    {% if game.quantity > 0 %}
-                                                        <div class="product__item__pic set-bg" data-setbg="{{ game.image.url }}"></div>
-                                                    {% else %}
-                                                        <div class="product__item__pic set-bg sold-out" data-setbg="{{ game.image.url }}">
-                                                            <div class="overplay"></div>
-                                                        </div>
-                                                    {% endif %}
-                                                </div>
-                                                <div class="product__item__text">
-                                                    {% if game.status == 'base' %}
-                                                        <span class="base-game">Base Game</span>
-                                                    {% else %}
-                                                        <span class="base-game">Downloadable Content</span>
-                                                    {% endif %}
-                                                    
-                                                    <h5 class="line-clamp">{{ game.name }}</h5>
-                                                    <span style="font-size: 12px;" class="base-game">{{ game.rating|capfirst }}</span>
-                                                </div>
-                                                <div class="price-section">
-                                                    {% if game.discount > 0 %}
-                                                        <span class="sale">-{{ game.discount }}%</span>
-                                                        <span class="origin-price">${{ game.price }}</span>
-                                                    {% endif %}
-                                                    <span class="current-price">${{ game.discounted_price|floatformat:2 }}</span>
-                                                </div>
-                                            </a>
-                                        {% else %}
-                                            <a class="item-click" game-pk="{{ game.pk }}" href="{% url 'dlc-details' game.pk %}">
-                                                <div class="product__item">
-                                                    {% if game.quantity > 0 %}
-                                                        <div class="product__item__pic set-bg" data-setbg="{{ game.image.url }}"></div>
-                                                    {% else %}
-                                                        <div class="product__item__pic set-bg sold-out" data-setbg="{{ game.image.url }}">
-                                                            <div class="overplay"></div>
-                                                        </div>
-                                                    {% endif %}
-                                                </div>
-                                                <div class="product__item__text">
-                                                    {% if game.status == 'base' %}
-                                                        <span class="base-game">Base Game</span>
-                                                    {% else %}
-                                                        <span class="base-game">Downloadable Content</span>
-                                                    {% endif %}
-                                                    
-                                                    <h5 class="line-clamp">{{ game.name }}</h5>
-                                                    <span style="font-size: 12px;" class="base-game">{{ game.rating|capfirst }}</span>
-                                                </div>
-                                                <div class="price-section">
-                                                    {% if game.discount > 0 %}
-                                                        <span class="sale">-{{ game.discount }}%</span>
-                                                        <span class="origin-price">${{ game.price }}</span>
-                                                    {% endif %}
-                                                    <span class="current-price">${{ game.discounted_price|floatformat:2 }}</span>
-                                                </div>
-                                            </a>
-                                        {% endif %}
-                                       
+                                        <a class="item-click" game-pk="{{ game.pk }}" href="{{ game_url }}">
+                                            <div class="product__item">
+                                                <!-- <div class="rating-section">
+                                                    <div class="rating-wrapper">
+                                                        <i class="fa-solid fa-star">
+                                                            <span class="score-text">5.5</span>
+                                                        </i>
+                                                    </div>
+                                                </div> -->
+                                                {% if game.quantity > 0 %}
+                                                    <div class="product__item__pic set-bg" data-setbg="{{ game.image.url }}"></div>
+                                                {% else %}
+                                                    <div class="product__item__pic set-bg sold-out" data-setbg="{{ game.image.url }}">
+                                                        <div class="overplay"></div>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                            <div class="product__item__text">
+                                                {% if game.status == 'base' %}
+                                                    <span class="base-game">Base Game</span>
+                                                {% else %}
+                                                    <span class="base-game">Downloadable Content</span>
+                                                {% endif %}
+                                                <h5 class="line-clamp">{{ game.name }}</h5>
+                                                <span style="font-size: 12px;" class="base-game">{{ game.rating|title }}</span>
+                                            </div>
+                                            <div class="price-section">
+                                                {% if game.discount > 0 %}
+                                                    <span style="font-weight: 500;" class="sale">-{{ game.discount }}%</span>
+                                                    <span class="origin-price">${{ game.price }}</span>
+                                                {% endif %}
+                                                <span style="font-weight: 600;" class="current-price">${{ game.discounted_price|floatformat:2 }}</span>
+                                            </div>
+                                        </a>                                       
                                     </div>
                                 {% endfor %}
                             </div>
@@ -165,28 +145,37 @@
                                 <i class="fa-solid fa-arrow-left"></i>
                             </button>
                             <div class="product-list" id="sale-product-list">
-                                {% for game in games %}
+                                {% for game in recommended %}
+                                    {% if game.status == 'base' %}
+                                        {% url 'base-game-details' game.pk as game_url %}
+                                    {% else %}
+                                        {% url 'dlc-game-details' game.pk as game_url %}
+                                    {% endif %}
                                     {% if game.discount > 0 %}
                                         <div class="col-lg-3 col-md-4 col-sm-6 col-12 product-card">
-                                            <a href="{% url 'game_details' game.pk %}">
+                                            <a href="{{ game_url }}">
                                                 <div class="product__item">
                                                     {% if game.quantity > 0 %}
                                                         <div class="product__item__pic set-bg" data-setbg="{{ game.image.url }}"></div>
                                                     {% else %}
                                                         <div class="product__item__pic set-bg sold-out" data-setbg="{{ game.image.url }}">
                                                             <div class="overplay"></div>
-                                                            {% comment %} <img class="sold-out-img" src="{% static 'games/images/sold_out.png' %}" alt=""> {% endcomment %}
                                                         </div>
                                                     {% endif %}
                                                 </div>
                                                 <div class="product__item__text">
-                                                    <span class="base-game">Base Game</span>
+                                                    {% if game.status == 'base' %}
+                                                        <span class="base-game">Base Game</span>
+                                                    {% else %}
+                                                        <span class="base-game">Downloadable Content</span>
+                                                    {% endif %}
                                                     <h5 class="line-clamp">{{ game.name }}</h5>
+                                                    <span style="font-size: 11px;" class="base-game">{{ game.rating|title }}</span>
                                                 </div>
                                                 <div class="price-section">
-                                                    <span class="sale">-{{ game.discount }}%</span>
+                                                    <span style="font-weight: 500;" class="sale">-{{ game.discount }}%</span>
                                                     <span class="origin-price">${{ game.price }}</span>
-                                                    <span class="current-price">${{ game.discounted_price|floatformat:2 }}</span>
+                                                    <span style="font-weight: 600;" class="current-price">${{ game.discounted_price|floatformat:2 }}</span>
                                                 </div>
                                             </a>
                                         </div>
