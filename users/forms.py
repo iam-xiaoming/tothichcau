@@ -190,16 +190,30 @@ class UserCommentForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user', None)
         self.game = kwargs.pop('game', None)
+        self.dlc = kwargs.pop('dlc', None)
         
         super().__init__(*args, **kwargs)
+        
+    def clean(self):
+        clean_data = super().clean()
+        
+        if not (self.game or self.dlc):
+            raise forms.ValidationError('Game or DLC must be provided.')
+        
+        return clean_data
         
         
     def save(self, commit=True):
         comment = super().save(commit=False)
+        
         if self.user:
             comment.user = self.user
         if self.game:
             comment.game = self.game
+        if self.dlc:
+            comment.dlc = self.dlc
+            
         if commit:
             comment.save()
+            
         return comment

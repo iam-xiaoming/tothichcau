@@ -28,6 +28,10 @@
     <link rel="stylesheet" href="{% static 'homepage/css/style.css' %}" type="text/css">
 	<link rel="stylesheet" href="{% static 'homepage/css/search.css' %}">
 
+	<script>
+		const user_pk = "{{ user.pk }}";
+	</script>
+
 	{% block extra_css %}{% endblock %}
 
 	<style>
@@ -125,8 +129,6 @@
 
 
 	<script>
-		const user_pk = "{{ user.pk }}";
-
 		function updateCartCount(quantity) {
 			const cartBadge = document.querySelector('.cart-badge');
 			

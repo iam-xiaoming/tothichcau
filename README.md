@@ -5,9 +5,9 @@
 Kênh chơi game với mục đích đem lại niềm vui cho mọi người: https://www.facebook.com/profile.php?id=100027733654960&mibextid=LQQJ4d
 
 
-<!-- find . -path "*/migrations/*.py" -not -name "__init__.py" -delete -->
+find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
 
-<!-- find . -path "*/migrations/*.pyc" -delete -->
+find . -path "*/migrations/*.pyc" -delete
 
 ### Bí kiếp cua gái
 0. `pull origin main` không đc thì chạy `git reset --hard HEAD`, xong pull lại. nếu không thấy cập nhật gì thì đóng hết mấy file đang mở.
@@ -42,32 +42,6 @@ crontab -l
 
 */3 * * * * echo "Cron job ran at $(date)" >> /Users/nguyenminh/Mac/CoDaiVaHoaDanhDanh/logs/test_cron.log 2>&1
 
-
-
-<!-- user interactions -->
-{
-  "type": "record",
-  "name": "Interactions",
-  "namespace": "com.amazonaws.personalize.schema",
-  "fields": [
-    {
-      "name": "USER_ID",
-      "type": "string"
-    },
-    {
-      "name": "ITEM_ID",
-      "type": "string"
-    },
-    {
-      "name": "TIMESTAMP",
-      "type": "long"
-    },
-    {
-      "name": "EVENT_TYPE",
-      "type": "string"
-    }
-  ],
-  "version": "1.0"
-}
+api/dlc/3/media/review/
 
 
