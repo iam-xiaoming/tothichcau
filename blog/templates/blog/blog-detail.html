@@ -1,0 +1,301 @@
+{% extends "homepage/base.html" %}
+{% load static %}
+
+{% block title %}
+<title>The Future of Open World Gaming - NeonGamer</title>
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'blog/css/blog-styles.css' %}">
+    <link rel="stylesheet" href="{% static 'blog/css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'blog/css/blog-detail-styles.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="cursor-glow"></div>
+
+    <div class="blog-detail-container">
+        <div class="blog-detail-header">
+            <div class="blog-detail-category pc">Action</div>
+            <h1 class="blog-detail-title">The Future of Open World Gaming: Trends and Innovations</h1>
+            
+            <div class="blog-detail-meta">
+                <div class="blog-detail-author">
+                    <img src="{{ user.image.url }}" alt="Author Avatar" class="author-avatar">
+                    <div class="author-info">
+                        <span class="author-name">Alex Johnson</span>
+                        <span class="author-role">Senior Gaming Editor</span>
+                    </div>
+                </div>
+                <div class="blog-detail-date">
+                    <i class="far fa-calendar-alt"></i>
+                    <span>June 15, 2023</span>
+                </div>
+                <div class="blog-detail-reading-time">
+                    <i class="far fa-clock"></i>
+                    <span>8 min read</span>
+                </div>
+                <div class="blog-detail-views">
+                    <i class="far fa-eye"></i>
+                    <span>3.2K views</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="blog-detail-content-wrapper">
+            <div class="blog-detail-main">
+                <div class="blog-detail-content">
+                    <p class="blog-detail-excerpt">
+                        Open world games have evolved dramatically over the past decade, pushing the boundaries of what's possible in interactive entertainment. From procedurally generated landscapes to living, breathing cities, the genre continues to innovate and surprise players.
+                    </p>
+
+                    <div class="blog-detail-text">
+                        <h2>The Evolution of Open Worlds</h2>
+                        <p>
+                            When we look back at the early days of open world gaming, titles like <strong>Grand Theft Auto III</strong> and <strong>The Elder Scrolls III: Morrowind</strong> stand out as revolutionary. These games introduced players to vast digital playgrounds with unprecedented freedom. Fast forward to today, and the scale and detail of modern open worlds are simply staggering.
+                        </p>
+                        <p>
+                            Modern titles like <strong>Red Dead Redemption 2</strong> and <strong>The Legend of Zelda: Breath of the Wild</strong> have redefined what players expect from open world experiences. These games don't just offer large maps; they present living ecosystems with complex AI systems, dynamic weather, and intricate physics simulations.
+                        </p>
+                    </div>
+
+                    <div class="blog-detail-tags">
+                        <span class="tags-title">Tags:</span>
+                        <div class="tags-list">
+                            <a href="#" class="tag">#OpenWorldGames</a>
+                            <a href="#" class="tag">#GameDevelopment</a>
+                            <a href="#" class="tag">#Gaming</a>
+                            <a href="#" class="tag">#PCGaming</a>
+                            <a href="#" class="tag">#GameDesign</a>
+                        </div>
+                    </div>
+
+                    <div class="blog-detail-share-bottom">
+                        <span>Share this article:</span>
+                        <div class="share-buttons">
+                            <a href="#" class="share-button twitter"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="share-button facebook"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" class="share-button reddit"><i class="fab fa-reddit-alien"></i></a>
+                            <a href="#" class="share-button linkedin"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#" class="share-button copy" id="copy-link-bottom"><i class="far fa-copy"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="blog-detail-comments">
+                    <h3 class="comments-title">Comments <span class="comments-count">(5)</span></h3>
+                    
+                    <div class="comment-form-container">
+                        <h4>Leave a Comment</h4>
+                        <form class="comment-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="comment-name">Name <span class="required">*</span></label>
+                                    <input type="text" id="comment-name" name="comment-name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="comment-email">Email <span class="required">*</span></label>
+                                    <input type="email" id="comment-email" name="comment-email" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="comment-content">Comment <span class="required">*</span></label>
+                                <textarea id="comment-content" name="comment-content" rows="5" required></textarea>
+                            </div>
+                            <button type="submit" class="btn-primary">Post Comment</button>
+                        </form>
+                    </div>
+
+                    <div class="comments-list">
+                        <div class="comment">
+                            <div class="comment-avatar">
+                                <img src="/placeholder.svg?height=60&width=60" alt="User Avatar">
+                            </div>
+                            <div class="comment-content">
+                                <div class="comment-meta">
+                                    <span class="comment-author">Sarah Parker</span>
+                                    <span class="comment-date">June 16, 2023 at 10:45 AM</span>
+                                </div>
+                                <div class="comment-text">
+                                    <p>Great article! I think the most exciting development in open world games is definitely the AI improvements. Games like Red Dead Redemption 2 really showed what's possible when NPCs have complex routines and behaviors.</p>
+                                </div>
+                                <div class="comment-actions">
+                                    <a href="#" class="comment-reply">Reply</a>
+                                    <a href="#" class="comment-like"><i class="far fa-heart"></i> <span>12</span></a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="comment">
+                            <div class="comment-avatar">
+                                <img src="/placeholder.svg?height=60&width=60" alt="User Avatar">
+                            </div>
+                            <div class="comment-content">
+                                <div class="comment-meta">
+                                    <span class="comment-author">Mike Reynolds</span>
+                                    <span class="comment-date">June 16, 2023 at 2:30 PM</span>
+                                </div>
+                                <div class="comment-text">
+                                    <p>I'm still not convinced about procedural generation. Sure, No Man's Sky has improved a lot since launch, but handcrafted worlds still feel more meaningful to me. I'd rather have a smaller map with more attention to detail than an infinite one that feels repetitive.</p>
+                                </div>
+                                <div class="comment-actions">
+                                    <a href="#" class="comment-reply">Reply</a>
+                                    <a href="#" class="comment-like"><i class="far fa-heart"></i> <span>8</span></a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="comment reply">
+                            <div class="comment-avatar">
+                                <img src="/placeholder.svg?height=60&width=60" alt="User Avatar">
+                            </div>
+                            <div class="comment-content">
+                                <div class="comment-meta">
+                                    <span class="comment-author">Alex Johnson</span>
+                                    <span class="comment-author-badge">Author</span>
+                                    <span class="comment-date">June 16, 2023 at 3:15 PM</span>
+                                </div>
+                                <div class="comment-text">
+                                    <p>@Mike - That's a fair point! I think the future is probably a hybrid approach, where procedural techniques are used as a starting point but then designers come in and add the handcrafted touches that make places memorable.</p>
+                                </div>
+                                <div class="comment-actions">
+                                    <a href="#" class="comment-reply">Reply</a>
+                                    <a href="#" class="comment-like"><i class="far fa-heart"></i> <span>5</span></a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="comment">
+                            <div class="comment-avatar">
+                                <img src="/placeholder.svg?height=60&width=60" alt="User Avatar">
+                            </div>
+                            <div class="comment-content">
+                                <div class="comment-meta">
+                                    <span class="comment-author">Lisa Chen</span>
+                                    <span class="comment-date">June 17, 2023 at 9:20 AM</span>
+                                </div>
+                                <div class="comment-text">
+                                    <p>I'm really excited about the potential for VR in open world games. Imagine exploring these massive worlds in full immersion! The technology isn't quite there yet for comfortable long sessions, but I think that's where we're headed eventually.</p>
+                                </div>
+                                <div class="comment-actions">
+                                    <a href="#" class="comment-reply">Reply</a>
+                                    <a href="#" class="comment-like"><i class="far fa-heart"></i> <span>3</span></a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="comment">
+                            <div class="comment-avatar">
+                                <img src="/placeholder.svg?height=60&width=60" alt="User Avatar">
+                            </div>
+                            <div class="comment-content">
+                                <div class="comment-meta">
+                                    <span class="comment-author">David Wilson</span>
+                                    <span class="comment-date">June 17, 2023 at 11:05 AM</span>
+                                </div>
+                                <div class="comment-text">
+                                    <p>One thing I think you missed is how cloud gaming might impact open world design. If processing power isn't limited to what's in the player's home, we could see some truly massive simulations that wouldn't be possible otherwise.</p>
+                                </div>
+                                <div class="comment-actions">
+                                    <a href="#" class="comment-reply">Reply</a>
+                                    <a href="#" class="comment-like"><i class="far fa-heart"></i> <span>7</span></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="comments-pagination">
+                        <span class="current">1</span>
+                        <a href="#">2</a>
+                        <a href="#">→</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="blog-detail-sidebar">
+                <div class="sidebar-section author-section">
+                    <div class="author-card">
+                        <img src="/placeholder.svg?height=100&width=100" alt="Author Avatar" class="author-card-avatar">
+                        <h3 class="author-card-name">Alex Johnson</h3>
+                        <p class="author-card-posts">125 Articles</p>
+                        <a href="#" class="author-card-link">View All Posts</a>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">Related Articles</h3>
+                    <div class="related-posts">
+                        <div class="related-post">
+                            <div class="related-post-image">
+                                <img src="/placeholder.svg?height=80&width=120" alt="Related Post">
+                            </div>
+                            <div class="related-post-info">
+                                <h4><a href="#">The Evolution of RPG Mechanics in Modern Games</a></h4>
+                                <span class="related-post-date">May 28, 2023</span>
+                            </div>
+                        </div>
+                        <div class="related-post">
+                            <div class="related-post-image">
+                                <img src="/placeholder.svg?height=80&width=120" alt="Related Post">
+                            </div>
+                            <div class="related-post-info">
+                                <h4><a href="#">How Sandbox Games Changed the Industry Forever</a></h4>
+                                <span class="related-post-date">April 15, 2023</span>
+                            </div>
+                        </div>
+                        <div class="related-post">
+                            <div class="related-post-image">
+                                <img src="/placeholder.svg?height=80&width=120" alt="Related Post">
+                            </div>
+                            <div class="related-post-info">
+                                <h4><a href="#">Next-Gen Console Hardware: What It Means for Game Design</a></h4>
+                                <span class="related-post-date">March 3, 2023</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">Popular Tags</h3>
+                    <div class="sidebar-tags">
+                        <a href="#" class="sidebar-tag">#PCGaming</a>
+                        <a href="#" class="sidebar-tag">#OpenWorld</a>
+                        <a href="#" class="sidebar-tag">#RPG</a>
+                        <a href="#" class="sidebar-tag">#Esports</a>
+                        <a href="#" class="sidebar-tag">#GameDesign</a>
+                        <a href="#" class="sidebar-tag">#Indie</a>
+                        <a href="#" class="sidebar-tag">#PlayStation</a>
+                        <a href="#" class="sidebar-tag">#Xbox</a>
+                        <a href="#" class="sidebar-tag">#Nintendo</a>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">Newsletter</h3>
+                    <div class="sidebar-newsletter">
+                        <p>Subscribe to our newsletter to get the latest gaming news and articles delivered to your inbox.</p>
+                        <form class="newsletter-form">
+                            <input type="email" placeholder="Your email address" required>
+                            <button type="submit" class="btn-primary">Subscribe</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">Follow Us</h3>
+                    <div class="sidebar-social">
+                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-discord"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-twitch"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'blog/js/script.js' %}"></script>
+    <script src="{% static 'blog/js/blog-detail-script.js' %}"></script>
+{% endblock %}
