@@ -28,6 +28,7 @@ import transactions.urls
 import keys.urls
 import game_features.urls
 import track.urls
+import blog.urls
 
 
 urlpatterns = [
@@ -41,7 +42,8 @@ urlpatterns = [
     path('', include(transactions.urls)),
     path('', include(keys.urls)),
     path('', include(game_features.urls)),
-    path('', include(track.urls))
+    path('', include(track.urls)),
+    path('', include(blog.urls))
 ]
 
 

@@ -83,7 +83,7 @@
 										<!-- <li><a href="#!">{{ category }}</a></li> -->
 									</ul>
 								</li>
-								<li><a href="./blog.html">Our Blog</a></li>
+								<li><a href="{% url 'blog' %}">Our Blog</a></li>
 								<li><a href="#">Contacts</a></li>
 							{% if request.session.uid %}
 								<li><a href="{% url 'profile' %}">Profile</a></li>
