@@ -97,6 +97,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='user')
     created_at = models.DateTimeField(default=timezone.now)
+    image = models.ImageField(default='donate.jpg', upload_to='users/')
     
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)

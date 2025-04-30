@@ -3,12 +3,15 @@ from .forms import UserLoginForm, UserRegisterForm, ForgotPasswordForm, UserUpda
 from users.firebase_helpers import firebase_config
 from django.contrib import messages
 from .models import UserGame
-# from users.firebase_helpers import firebase_config
 from django.views.generic import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import logout, login
 from django.views.generic.edit import FormMixin
-from game_features.models import Category
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from django.core.files.storage import FileSystemStorage
+
 
 # Create your views here.
 def login_view(request):
@@ -71,12 +74,10 @@ class ProfileView(LoginRequiredMixin, FormMixin, ListView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        return context
-        
+        return context  
     
     def get_queryset(self):
         return UserGame.objects.filter(user=self.request.user)
-    
     
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -136,3 +137,15 @@ def forgot_password(request):
         form = ForgotPasswordForm()
 
     return render(request, 'users/forgot_password.html', {'form': form})
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def image_upload(request):
+    if 'image' in request.FILES:
+        image = request.FILES['image']
+        request.user.image = image
+        request.user.save()
+
+        return Response({'success': True, 'file_url': request.user.image.url}, status=200)
+    return Response({'error': 'No image provided'}, status=400)
