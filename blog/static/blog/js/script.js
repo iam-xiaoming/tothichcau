@@ -27,9 +27,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const createPostBtn = document.querySelector('.btn-create-post');
     if (createPostBtn) {
         createPostBtn.addEventListener('click', function(e) {
-            e.preventDefault();
+            // e.preventDefault();
             // In a real application, this would redirect to a post creation page
-            alert('This would redirect to a post creation form');
         });
     }
     

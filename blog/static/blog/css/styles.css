@@ -17,16 +17,19 @@
     --gradient-primary: linear-gradient(45deg, var(--neon-primary), var(--neon-secondary));
 }
 
+html, body {
+    background: none;
+}
+
 body {
     font-family: 'Roboto', sans-serif;
-    background-color: var(--primary-bg);
+    background-color: var(--primary-bg) !important;
     color: var(--primary-text);
     line-height: 1.6;
     overflow-x: hidden;
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-family: 'Orbitron', sans-serif;
     font-weight: 700;
     margin-bottom: 1rem;
     color: #ffffff;
