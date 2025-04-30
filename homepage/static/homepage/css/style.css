@@ -1912,73 +1912,6 @@ ol {
 	text-align: center;
 }
 
-/*---------------------
-  Footer
------------------------*/
-
-.footer {
-	background: #101014;
-	padding-top: 60px;
-	padding-bottom: 40px;
-	position: relative;
-}
-
-.page-up {
-	position: absolute;
-	left: 50%;
-	top: -25px;
-	margin-left: -25px;
-}
-
-.page-up a {
-	display: inline-block;
-	font-size: 36px;
-	color: #ffffff;
-	height: 50px;
-	width: 50px;
-	background: #e53637;
-	line-height: 50px;
-	text-align: center;
-	border-radius: 50%;
-}
-
-.page-up a span {
-	position: relative;
-	top: 2px;
-	left: -1px;
-}
-
-.footer__nav {
-	text-align: center;
-}
-
-.footer__nav ul li {
-	list-style: none;
-	display: inline-block;
-	position: relative;
-	margin-right: 40px;
-}
-
-.footer__nav ul li:last-child {
-	margin-right: 0;
-}
-
-.footer__nav ul li a {
-	font-size: 15px;
-	color: #b7b7b7;
-	display: block;
-	font-weight: 700;
-}
-
-.footer__copyright__text {
-	color: #b7b7b7;
-	margin-bottom: 0;
-	text-align: right;
-}
-
-.footer__copyright__text a {
-	color: #e53637;
-}
 
 /*--------------------------------- Responsive Media Quaries -----------------------------*/
 
@@ -2080,16 +2013,6 @@ ol {
 	.product__sidebar {
 		padding-top: 50px;
 	}
-	.footer__logo {
-		text-align: center;
-		margin-bottom: 20px;
-	}
-	.footer__nav {
-		margin-bottom: 15px;
-	}
-	.footer__copyright__text {
-		text-align: center;
-	}
 	.anime__details__widget ul li span {
 		width: 90px;
 	}
@@ -2185,16 +2108,6 @@ ol {
 	.product__sidebar {
 		padding-top: 50px;
 	}
-	.footer__logo {
-		text-align: center;
-		margin-bottom: 20px;
-	}
-	.footer__nav {
-		margin-bottom: 15px;
-	}
-	.footer__copyright__text {
-		text-align: center;
-	}
 	.blog__details__title h2 {
 		font-size: 34px;
 		line-height: normal;
@@ -2270,9 +2183,6 @@ ol {
 	.hero__text h2 {
 		font-size: 32px;
 	}
-	.footer__nav ul li {
-		margin-right: 10px;
-	}
 	.anime__details__btn .follow-btn {
 		padding: 14px 26px;
 		margin-right: 11px;
@@ -2324,4 +2234,114 @@ ol {
 	.anime__review__item__text {
 		padding: 18px 20px 20px;
 	}
+}
+
+
+
+:root {
+    --primary-bg: #0a0a0a;
+    --secondary-bg: #121212;
+    --card-bg: #1a1a1a;
+    --primary-text: #ffffff;
+    --secondary-text: #b0b0b0;
+    --neon-primary: #00f2ff;
+    --neon-secondary: #ff00e6;
+    --accent: #7611f7;
+    --gradient-primary: linear-gradient(45deg, var(--neon-primary), var(--neon-secondary));
+}
+
+
+
+.footer h1, h2, h3, h4, h5, h6 {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #ffffff;
+}
+
+footer {
+    background-color: var(--secondary-bg);
+    padding: 5rem 5% 2rem;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 3rem;
+    margin-bottom: 3rem;
+}
+
+.footer-logo h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+}
+
+.footer-logo span {
+    color: var(--neon-primary);
+}
+
+.footer-logo p {
+    color: var(--secondary-text);
+}
+
+.footer-links h3,
+.footer-categories h3,
+.footer-social h3 {
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    display: inline-block;
+}
+
+
+.footer-links ul,
+.footer-categories ul {
+    list-style: none;
+}
+
+.footer-links li,
+.footer-categories li {
+    margin-bottom: 0.8rem;
+}
+
+.footer-links a,
+.footer-categories a {
+    color: var(--secondary-text);
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.footer-links a:hover,
+.footer-categories a:hover {
+    color: var(--neon-primary);
+    padding-left: 5px;
+}
+
+.social-icons {
+    display: flex;
+    gap: 1rem;
+}
+
+.social-icons a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.social-icons a:hover {
+    background: var(--gradient-primary);
+    transform: translateY(-3px);
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--secondary-text);
+    font-size: 0.9rem;
 }

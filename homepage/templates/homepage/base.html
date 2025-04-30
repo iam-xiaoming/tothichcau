@@ -116,7 +116,51 @@
 
 	{% block content %}{% endblock %}
 
-	
+
+	<footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <h2>GAME<span>ART</span></h2>
+                <p>Your ultimate gaming destination</p>
+            </div>
+            <div class="footer-links">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li><a href="#">News</a></li>
+                    <li><a href="review.html">Reviews</a></li>
+                    <li><a href="{% url 'blog' %}">Blog</a></li>
+                    <li><a href="#">Guides</a></li>
+                    <li><a href="#">About</a></li>
+                </ul>
+            </div>
+            <div class="footer-categories">
+                <h3>Categories</h3>
+                <ul>
+                    <li><a href="#">PC Gaming</a></li>
+                    <li><a href="#">PlayStation</a></li>
+                    <li><a href="#">Xbox</a></li>
+                    <li><a href="#">Nintendo</a></li>
+                    <li><a href="#">Mobile Gaming</a></li>
+                    <li><a href="#">Esports</a></li>
+                </ul>
+            </div>
+            <div class="footer-social">
+                <h3>Follow Us</h3>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                    <a href="#"><i class="fab fa-discord"></i></a>
+                    <a href="#"><i class="fab fa-twitch"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2023 NeonGamer. All rights reserved.</p>
+        </div>
+    </footer>
 
 	<script src="{% static 'homepage/js/jquery-3.3.1.min.js' %}"></script>
 	<script src="{% static 'homepage/js/bootstrap.min.js' %}"></script>
