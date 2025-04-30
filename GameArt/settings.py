@@ -109,7 +109,8 @@ INSTALLED_APPS = [
     'game_features.apps.GameFeaturesConfig',
     'keys.apps.KeysConfig',
     'track.apps.TrackConfig',
-    'recommender.apps.RecommenderConfig'
+    'recommender.apps.RecommenderConfig',
+    'blog.apps.BlogConfig'
 ]
 
 MIDDLEWARE = [

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create New Post - NeonGamer</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="blog-styles.css">
+    <link rel="stylesheet" href="create-post-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="cursor-glow"></div>
+    
+    <header>
+        <div class="logo">
+            <h1><a href="index.html">NEON<span>GAMER</span></a></h1>
+        </div>
+        <nav>
+            <div class="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="#">News</a></li>
+                <li><a href="review.html">Reviews</a></li>
+                <li><a href="blog.html" class="active">Blog</a></li>
+                <li><a href="#">Guides</a></li>
+                <li><a href="#">About</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="create-post-container">
+        <div class="create-post-header">
+            <h1>Create New <span class="highlight">Post</span></h1>
+            <p>Share your gaming thoughts, experiences, and opinions with the community</p>
+        </div>
+
+        <div class="create-post-content">
+            <form id="post-form" class="post-form">
+                <div class="form-group">
+                    <label for="post-title">Post Title <span class="required">*</span></label>
+                    <input type="text" id="post-title" name="post-title" placeholder="Enter an engaging title..." required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="post-category">Category <span class="required">*</span></label>
+                        <select id="post-category" name="post-category" required>
+                            <option value="" disabled selected>Select a category</option>
+                            <option value="pc">PC Gaming</option>
+                            <option value="console">Console Gaming</option>
+                            <option value="retro">Retro Gaming</option>
+                            <option value="mobile">Mobile Gaming</option>
+                            <option value="esports">Esports</option>
+                            <option value="dev">Game Development</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="post-tags">Tags</label>
+                        <input type="text" id="post-tags" name="post-tags" placeholder="Add tags separated by commas...">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="post-featured-image">Featured Image <span class="required">*</span></label>
+                    <div class="image-upload-container">
+                        <div class="image-upload-area" id="image-upload-area">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Drag & drop an image here or click to browse</p>
+                            <p class="upload-info">Recommended size: 1200 x 630 pixels (16:9 ratio)</p>
+                        </div>
+                        <input type="file" id="post-featured-image" name="post-featured-image" accept="image/*" hidden>
+                        <div class="image-preview" id="image-preview"></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="post-excerpt">Short Excerpt <span class="required">*</span></label>
+                    <textarea id="post-excerpt" name="post-excerpt" placeholder="Write a brief summary of your post (150-200 characters)..." maxlength="200" required></textarea>
+                    <div class="char-counter"><span id="excerpt-counter">0</span>/200</div>
+                </div>
+
+                <div class="form-group">
+                    <label>Content <span class="required">*</span></label>
+                    <div class="editor-toolbar">
+                        <button type="button" class="toolbar-btn" data-command="bold" title="Bold"><i class="fas fa-bold"></i></button>
+                        <button type="button" class="toolbar-btn" data-command="italic" title="Italic"><i class="fas fa-italic"></i></button>
+                        <button type="button" class="toolbar-btn" data-command="underline" title="Underline"><i class="fas fa-underline"></i></button>
+                        <button type="button" class="toolbar-btn" data-command="strikeThrough" title="Strike Through"><i class="fas fa-strikethrough"></i></button>
+                        <span class="toolbar-divider"></span>
+                        <button type="button" class="toolbar-btn" data-command="h2" title="Heading 2"><i class="fas fa-heading"></i>2</button>
+                        <button type="button" class="toolbar-btn" data-command="h3" title="Heading 3"><i class="fas fa-heading"></i>3</button>
+                        <button type="button" class="toolbar-btn" data-command="p" title="Paragraph"><i class="fas fa-paragraph"></i></button>
+                        <span class="toolbar-divider"></span>
+                        <button type="button" class="toolbar-btn" data-command="justifyLeft" title="Align Left"><i class="fas fa-align-left"></i></button>
+                        <button type="button" class="toolbar-btn" data-command="justifyCenter" title="Align Center"><i class="fas fa-align-center"></i></button>
+                        <button type="button" class="toolbar-btn" data-command="justifyRight" title="Align Right"><i class="fas fa-align-right"></i></button>
+                        <span class="toolbar-divider"></span>
+                        <button type="button" class="toolbar-btn" data-command="insertUnorderedList" title="Bullet List"><i class="fas fa-list-ul"></i></button>
+                        <button type="button" class="toolbar-btn" data-command="insertOrderedList" title="Numbered List"><i class="fas fa-list-ol"></i></button>
+                        <span class="toolbar-divider"></span>
+                        <button type="button" class="toolbar-btn" data-command="createLink" title="Insert Link"><i class="fas fa-link"></i></button>
+                        <button type="button" class="toolbar-btn" data-command="insertImage" title="Insert Image"><i class="fas fa-image"></i></button>
+                        <button type="button" class="toolbar-btn" data-command="code" title="Code Block"><i class="fas fa-code"></i></button>
+                        <button type="button" class="toolbar-btn" data-command="blockquote" title="Blockquote"><i class="fas fa-quote-right"></i></button>
+                    </div>
+                    <div id="editor" class="editor-content" contenteditable="true"></div>
+                    <textarea id="post-content" name="post-content" hidden required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Additional Images</label>
+                    <div class="additional-images-container">
+                        <div class="additional-image-upload" id="additional-image-upload">
+                            <i class="fas fa-plus"></i>
+                            <span>Add Image</span>
+                        </div>
+                        <input type="file" id="additional-images" name="additional-images" accept="image/*" multiple hidden>
+                        <div class="additional-images-preview" id="additional-images-preview"></div>
+                    </div>
+                </div>
+
+                <div class="form-row checkbox-row">
+                    <div class="form-group checkbox-group">
+                        <input type="checkbox" id="allow-comments" name="allow-comments" checked>
+                        <label for="allow-comments">Allow comments on this post</label>
+                    </div>
+                    
+                    <div class="form-group checkbox-group">
+                        <input type="checkbox" id="featured-post" name="featured-post">
+                        <label for="featured-post">Mark as featured post</label>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" id="save-draft">Save as Draft</button>
+                    <button type="button" class="btn-secondary" id="preview-post">Preview</button>
+                    <button type="submit" class="btn-primary" id="publish-post">Publish Post</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Preview Modal -->
+    <div class="preview-modal" id="preview-modal">
+        <div class="preview-modal-content">
+            <div class="preview-header">
+                <h2>Post Preview</h2>
+                <button class="close-preview" id="close-preview"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="preview-body">
+                <div class="preview-post">
+                    <h1 id="preview-title">Your Post Title</h1>
+                    <div class="preview-meta">
+                        <span class="preview-author">By <strong>Your Username</strong></span>
+                        <span class="preview-date">Today</span>
+                        <span class="preview-category" id="preview-category">Category</span>
+                    </div>
+                    <div class="preview-featured-image" id="preview-featured-image">
+                        <img src="/placeholder.svg?height=400&width=800" alt="Preview Image">
+                    </div>
+                    <div class="preview-content" id="preview-content">
+                        <p>Your post content will appear here...</p>
+                    </div>
+                    <div class="preview-tags" id="preview-tags">
+                        <span class="preview-tag">Tag1</span>
+                        <span class="preview-tag">Tag2</span>
+                        <span class="preview-tag">Tag3</span>
+                    </div>
+                </div>
+            </div>
+            <div class="preview-footer">
+                <button class="btn-secondary" id="edit-post">Continue Editing</button>
+                <button class="btn-primary" id="confirm-publish">Publish Post</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <h2>NEON<span>GAMER</span></h2>
+                <p>Your ultimate gaming destination</p>
+            </div>
+            <div class="footer-links">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="#">News</a></li>
+                    <li><a href="review.html">Reviews</a></li>
+                    <li><a href="blog.html">Blog</a></li>
+                    <li><a href="#">Guides</a></li>
+                    <li><a href="#">About</a></li>
+                </ul>
+            </div>
+            <div class="footer-categories">
+                <h3>Categories</h3>
+                <ul>
+                    <li><a href="#">PC Gaming</a></li>
+                    <li><a href="#">PlayStation</a></li>
+                    <li><a href="#">Xbox</a></li>
+                    <li><a href="#">Nintendo</a></li>
+                    <li><a href="#">Mobile Gaming</a></li>
+                    <li><a href="#">Esports</a></li>
+                </ul>
+            </div>
+            <div class="footer-social">
+                <h3>Follow Us</h3>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                    <a href="#"><i class="fab fa-discord"></i></a>
+                    <a href="#"><i class="fab fa-twitch"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2023 NeonGamer. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="create-post-script.js"></script>
+</body>
+</html>
