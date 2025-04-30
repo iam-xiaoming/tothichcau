@@ -88,7 +88,7 @@
 }
 
 .filter-group .nice-select {
-    background: none;
+    background: none !important;
 }
 
 .filter-group select {
