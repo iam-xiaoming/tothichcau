@@ -5,7 +5,7 @@
 }
 
 .game-avg-score {
-    background: #00ce7a;
+    background: rgb(38, 187, 255);
     width: 50px;
     height: 50px;
     border-radius: 50%;
@@ -19,4 +19,18 @@
     color: #000 !important;
     font-size: 1.3rem;
     font-weight: 600;
+}
+
+
+.pagination {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.pagination span {
+    font-weight: 600;
+    color: #fff;
 }

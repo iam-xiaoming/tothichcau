@@ -8,6 +8,11 @@ from .serializers import GameSerializer, DLCSerializer
 from users.forms import UserCommentForm
 from django.contrib import messages
 from games.forms import UserRating
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from users.models import Comment
+from .utils import get_game_dlcs
+from recommender.utils import get_aws_recommended_items, aws_validators_recommendation
+from django.conf import settings
 
 # Create your views here.
 class GameDetailView(DetailView):
@@ -24,6 +29,37 @@ class GameDetailView(DetailView):
 
         context['comment_form'] = comment_form
         context['scoring_form'] = scoring_form
+        
+        items = dict()
+        
+        dlcs = get_game_dlcs(game)
+        if len(dlcs) > 0:
+            items = {
+                'title': 'Downloadable Content',
+                'games': dlcs
+            }
+        else:
+            recommended = get_aws_recommended_items(settings.RECOMMENDER, user.id, 5, settings.FILTERING)
+            items = {
+                'title': 'You may like',
+                'games': aws_validators_recommendation(list(map(lambda x: int(x['itemId']), recommended)))
+            }
+            
+        context['items'] = items
+        
+        comments = Comment.objects.filter(game=game).order_by('-created_at')
+        page = self.request.GET.get('page', 1)
+        paginator = Paginator(comments, 5)
+        
+        try:
+            comments_page = paginator.page(page)
+        except PageNotAnInteger:
+            comments_page = paginator.page(1)
+        except EmptyPage:
+            comments_page = paginator.page(paginator.num_pages)
+            
+        context['comments_page'] = comments_page
+        
         return context
 
     def post(self, request, *args, **kwargs):
@@ -40,7 +76,7 @@ class GameDetailView(DetailView):
             if scoring_form.is_valid():
                 comment.save()
                 scoring_form.save()
-                return redirect('game_details', pk=game.pk)
+                return redirect('base-game-details', pk=game.pk)
             else:
                 print('Scoring Errors', scoring_form.errors)
         else:
@@ -67,6 +103,30 @@ class DLCDetailView(DetailView):
 
         context['comment_form'] = comment_form
         context['scoring_form'] = scoring_form
+        
+        items = {'title': 'You may like'}
+        recommended = get_aws_recommended_items(settings.RECOMMENDER, user.id, 5, settings.FILTERING)
+        if len(recommended) > 0:
+            items['games'] = aws_validators_recommendation(list(map(lambda x: int(x['itemId']), recommended)))
+        else:
+            items['games'] = DLC.objects.all()[:5]
+            
+        
+        context['items'] = items
+        
+        comments = Comment.objects.filter(dlc=dlc).order_by('-created_at')
+        page = self.request.GET.get('page', 1)
+        paginator = Paginator(comments, 5)
+        
+        try:
+            comments_page = paginator.page(page)
+        except PageNotAnInteger:
+            comments_page = paginator.page(1)
+        except EmptyPage:
+            comments_page = paginator.page(paginator.num_pages)
+            
+        context['comments_page'] = comments_page
+        
         return context
 
     def post(self, request, *args, **kwargs):
@@ -83,7 +143,7 @@ class DLCDetailView(DetailView):
             if scoring_form.is_valid():
                 comment.save()
                 scoring_form.save()
-                return redirect('dlc-details', pk=dlc.pk)
+                return redirect('dlc-game-details', pk=dlc.pk)
             else:
                 print('Scoring Errors', scoring_form.errors)
         else:

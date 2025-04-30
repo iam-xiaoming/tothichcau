@@ -74,29 +74,23 @@
                                 <div class="row">
                                     <div class="col-lg-6 col-md-6">
                                         <ul>
-                                            {% if object.status == 'base' %}
-                                                <li><span>Publisher:</span> {{ object.publisher|upper }}</li>
-                                                <li><span>Date released:</span> {{ object.release_date }}</li>
-                                                <li id="game-status-li"><span id="game-status">Status:</span> Loading...</li>
-                                                <li><span>Genre:</span> 
+                                            <li><span>Publisher:</span> {{ object.publisher|upper }}</li>
+                                            <li><span>Date released:</span> {{ object.release_date }}</li>
+                                            <li id="game-status-li"><span id="game-status">Status:</span> Loading...</li>
+                                            <li><span>Genre:</span>
+                                                {% if object.status == 'base' %}
                                                     {% for category in object.categories.all %}
                                                         {{ category.name|upper }} 
                                                         {% if not forloop.last %}, {% endif %}
                                                     {% endfor %}
-                                                </li>                                            
-                                                <li><span>Rating:</span> {{ object.rating|upper }}</li>
-                                            {% else %}
-                                                <li><span>Publisher:</span> {{ object.game.publisher|upper }}</li>
-                                                <li><span>Date released:</span> {{ object.release_date|date:"d/m/Y" }}</li>
-                                                <li id="game-status-li"><span id="game-status">Status:</span> Loading...</li>
-                                                <li><span>Genre:</span> 
-                                                    {% for category in object.game.categories.all %}
+                                                {% else %}
+                                                    {% for category in object.categories.all %}
                                                         {{ category.name|upper }} 
                                                         {% if not forloop.last %}, {% endif %}
                                                     {% endfor %}
-                                                </li>                                            
-                                                <li><span>Rating:</span> {{ object.rating|upper }}</li>
-                                            {% endif %}
+                                                {% endif %}
+                                            </li>                                            
+                                            <li><span>Rating:</span> {{ object.rating|upper }}</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -124,10 +118,10 @@
                             <div class="section-title">
                                 <h5>Reviews</h5>
                             </div>
-                            {% for comment in object.comment.all %}
+                            {% for comment in comments_page %}
                                 <div class="anime__review__item">
                                     <div class="anime__review__item__pic">
-                                        <img src="{{ comment.user.image.url }}" alt="">
+                                        <img style="object-fit: cover;" src="{{ comment.user.image.url }}" alt="">
                                     </div>
                                     <div class="anime__review__item__text">
                                         <div style="display: flex;align-items:center; gap: 10px;" class="comment-info">
@@ -139,6 +133,19 @@
                                     </div>
                                 </div>
                             {% endfor %}
+                            {% if comments_page.paginator.num_pages > 1 %}
+                                <div class="pagination">
+                                    {% if comments_page.has_previous %}
+                                        <a href="?page={{ comments_page.previous_page_number }}">Previous</a>
+                                    {% endif %}
+                                
+                                    <span>Page {{ comments_page.number }} of {{ comments_page.paginator.num_pages }}</span>
+                                
+                                    {% if comments_page.has_next %}
+                                        <a href="?page={{ comments_page.next_page_number }}">Next</a>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
                         </div>
                         {% if request.session.uid %}
                             <div class="anime__details__form">
@@ -167,13 +174,18 @@
                     <div class="col-lg-4 col-md-4">
                         <div class="anime__details__sidebar">
                             <div class="section-title">
-                                <h5>you might like...</h5>
+                                <h5>{{ items.title }}</h5>
                             </div>
-                            <div class="suggest">
-                                {% for game_suggest in games_suggest %}
-                                    <a href="#!">
-                                        <div style="height: 150px;" class="product__sidebar__view__item set-bg" data-setbg="{{ game_suggest.image.url }}"></div>
-                                        <h5 class="suggest-name">{{ game_suggest.name }}</h5>
+                            <div class="suggest-item">
+                                {% for game in items.games %}
+                                    {% if game.status == 'base' %}
+                                        {% url 'base-game-details' game.pk as game_url %}
+                                    {% else %}
+                                        {% url 'dlc-game-details' game.pk as game_url %}
+                                    {% endif %}
+                                    <a href="{{ game_url }}">
+                                        <div style="height: 150px;" class="product__sidebar__view__item set-bg" data-setbg="{{ game.image.url }}"></div>
+                                        <h5 class="suggest-name">{{ game.name|upper }}</h5>
                                     </a>
                                 {% endfor %}
                             </div>
