@@ -97,13 +97,13 @@
 						<a href="#" class="search-switch"><span class="icon_search"></span></a>
 
 						{% if request.session.uid %}
-							<a class="cart" style="display: inline-block;" href="{% url 'cart' %}">
+							<a class="wishlist" style="display: inline-block;" href="{% url 'profile' %}">
 								<i class="fa-solid fa-heart"></i>
-								<span class="cart-badge">0</span>
-							</a>
-							<a class="wishlist" style="display: inline-block;" href="{% url 'cart' %}">
-								<i class="fa-solid fa-cart-plus"></i>
 								<span class="heart-badge">0</span>
+							</a>
+							<a class="cart" style="display: inline-block;" href="{% url 'cart' %}">
+								<i class="fa-solid fa-cart-plus"></i>
+								<span class="cart-badge">0</span>
 							</a>
 						{% endif %}
 
