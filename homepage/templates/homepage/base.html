@@ -99,7 +99,7 @@
 						{% if request.session.uid %}
 							<a class="wishlist" style="display: inline-block;" href="{% url 'profile' %}">
 								<i class="fa-solid fa-heart"></i>
-								<span class="heart-badge">0</span>
+								<span class="wishlist-badge">0</span>
 							</a>
 							<a class="cart" style="display: inline-block;" href="{% url 'cart' %}">
 								<i class="fa-solid fa-cart-plus"></i>
@@ -195,8 +195,25 @@
 					});
 			}
 		}
+		function updateWishlistCount(quantity) {
+			const wishlistBadge = document.querySelector('.wishlist-badge');
+			
+			if (quantity) {
+				wishlistBadge.textContent = quantity;
+			} else {
+				fetch(`/api/wishlist/count/${user_pk}/`)
+					.then(response => response.json())
+					.then(data => {
+						wishlistBadge.textContent = data.wishlist_count;
+					})
+					.catch(error => {
+						console.error('Error fetching cart count:', error);
+					});
+			}
+		}
 		if (user_pk && user_pk !== "None") {
 			window.addEventListener('DOMContentLoaded', () => updateCartCount());
+			window.addEventListener('DOMContentLoaded', () => updateWishlistCount());
 		}
 	</script>
 

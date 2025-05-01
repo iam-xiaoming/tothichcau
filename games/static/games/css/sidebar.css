@@ -8,6 +8,11 @@
     opacity: 0.5;
 }
 
+.follow-btn.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
 .suggest-name {
     color: #fff;
     font-weight: 600;

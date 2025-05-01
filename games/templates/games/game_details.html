@@ -224,6 +224,7 @@
 
         const game_pk = "{{ object.pk }}";
         const gameType = "{{ object.status }}"
+        const in_wishlist = "{{ in_wishlist }}"
 
         let api_gallery_url = null
         let api_key_count_url = null
@@ -276,6 +277,7 @@
         
         document.addEventListener('DOMContentLoaded', function () {
             getKeyCount();
+
             
             // Set initial button state
             document.querySelectorAll('.watch-btn').forEach(btn => {
@@ -283,7 +285,36 @@
                 btn.classList.remove('disabled');
                 btn.querySelector('span').innerHTML = '<i class="fa-solid fa-cart-plus"></i> Add to cart'
             });
-            
+
+            const wishlistBtn = document.querySelector('.follow-btn');
+
+            if (in_wishlist === 'True') {
+                wishlistBtn.classList.add('disabled')
+            } else {
+                wishlistBtn.addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    fetch('/api/add-to-wishlist/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': getCookie('csrftoken')
+                        },
+                        body: JSON.stringify({
+                            type: gameType,
+                            id: game_pk
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            wishlistBtn.classList.add('disabled');
+                            updateWishlistCount();
+                        }
+                    });
+                });
+            }
+
             // Add event listener to each "watch-btn"
             document.querySelectorAll('.watch-btn').forEach(button => {
                 button.addEventListener('click', function (e) {
