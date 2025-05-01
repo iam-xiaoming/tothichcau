@@ -97,6 +97,15 @@ textarea:focus {
     box-shadow: 0 0 0 2px rgba(0, 242, 255, 0.2);
 }
 
+.option {
+    /* color: #fff; */
+    background-color: rgba(0, 0, 0, 0.8) !important;
+}
+
+.option:hover {
+    background: rgba(0, 0, 0, 0.5) !important;
+}
+
 textarea {
     resize: vertical;
     min-height: 100px;

@@ -1,7 +1,14 @@
-from django.shortcuts import render
-from django.views.generic import ListView, DetailView
+from django.shortcuts import render, redirect
+from django.views.generic import ListView, DetailView, CreateView
 from .models import Post, Tag
 from game_features.models import Category
+from django.contrib.auth.mixins import LoginRequiredMixin
+from .forms import PostForm
+from django.contrib import messages
+import logging
+from django.urls import reverse
+
+logger = logging.getLogger(__name__)
 
 
 # Create your views here.
@@ -29,8 +36,35 @@ class PostDetailView(DetailView):
         related_posts = Post.objects.all().order_by('created_at')[:3]
         context['related_posts'] = related_posts
         return context
-    
-    
 
-def create_blog(request):
-    return render(request, 'blog/create-post.html')
+    
+class PostCreateView(LoginRequiredMixin, CreateView):
+    model = Post
+    form_class = PostForm
+    template_name = 'blog/create-post.html'
+
+    def form_valid(self, form):
+        post = form.save(commit=False)
+        post.user = self.request.user
+        post.save()
+        
+        self.object = post
+
+        tag_str = form.cleaned_data.get('tags', '')
+        tag_list = [t.strip().lstrip('#') for t in tag_str.split(' ') if t.strip()]
+        tag_objects = []
+        for tag_name in tag_list:
+            if len(tag_name) < 3:
+                messages.error(self.request, f"Tag '{tag_name}' quá ngắn.")
+                return self.form_invalid(form)
+            tag_obj, _ = Tag.objects.get_or_create(name=tag_name)
+            tag_objects.append(tag_obj)
+
+        post.tags.set(tag_objects)
+
+        messages.success(self.request, "Post created successfully!")
+        return redirect(self.get_success_url())
+    
+    def get_success_url(self):
+        return reverse('post-detail', kwargs={'pk': self.object.pk})
+

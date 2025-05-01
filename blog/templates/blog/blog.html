@@ -54,7 +54,7 @@
                                 <h4>{{ post.user }}</h4>
                                 <span class="post-date">{{ post.created_at|date:"F j, Y"  }}</span>
                             </div>
-                            <div class="post-category pc">{{ post.categories.first|title }}</div>
+                            <div class="post-category pc">{{ post.category|title }}</div>
                         </div>
                         <div class="post-content">
                             <h2 class="post-title">{{ post.title }}</h2>

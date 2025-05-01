@@ -16,7 +16,7 @@
 
     <div class="blog-detail-container">
         <div class="blog-detail-header">
-            <div class="blog-detail-category pc">{{ object.categories.first|upper }}</div>
+            <div class="blog-detail-category pc">{{ object.category|upper }}</div>
             <h1 class="blog-detail-title">{{ object.title }}</h1>
             
             <div class="blog-detail-meta">
@@ -67,30 +67,32 @@
                         </div>
                     </div>
                 </div>
-
+ 
                 <div class="blog-detail-comments">
                     <h3 class="comments-title">Comments <span class="comments-count">(5)</span></h3>
                     
-                    <div class="comment-form-container">
-                        <h4>Leave a Comment</h4>
-                        <form class="comment-form">
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="comment-name">Name <span class="required">*</span></label>
-                                    <input type="text" id="comment-name" name="comment-name" required>
+                    {% if user.is_authenticated %}
+                        <div class="comment-form-container">
+                            <h4>Leave a Comment</h4>
+                            <form class="comment-form">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="comment-name">Name <span class="required">*</span></label>
+                                        <input type="text" id="comment-name" name="comment-name" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="comment-email">Email <span class="required">*</span></label>
+                                        <input type="email" id="comment-email" name="comment-email" required>
+                                    </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="comment-email">Email <span class="required">*</span></label>
-                                    <input type="email" id="comment-email" name="comment-email" required>
+                                    <label for="comment-content">Comment <span class="required">*</span></label>
+                                    <textarea id="comment-content" name="comment-content" rows="5" required></textarea>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="comment-content">Comment <span class="required">*</span></label>
-                                <textarea id="comment-content" name="comment-content" rows="5" required></textarea>
-                            </div>
-                            <button type="submit" class="btn-primary">Post Comment</button>
-                        </form>
-                    </div>
+                                <button type="submit" class="btn-primary">Post Comment</button>
+                            </form>
+                        </div>
+                    {% endif %}
 
                     <div class="comments-list">
                         <div class="comment">
@@ -212,16 +214,16 @@
                     <h3 class="sidebar-title">Related Articles</h3>
                     <div class="related-posts">
                         {% for related_post in related_posts %}
-                        <div class="related-post">
-                                <div class="related-post-image">
-                                    <img src="{{ related_post.user.image.url }}" alt="Related Post">
-                                </div>
-                                <div class="related-post-info">
-                                    <h4><a href="#">{{ related_post.title }}</a></h4>
-                                    <span class="related-post-date">{{ related_post.created_at|date:"F j, Y" }}</span>
-                                </div>
-                            {% endfor %}
-                        </div>
+                            <div class="related-post">
+                                    <div class="related-post-image">
+                                        <img src="{{ related_post.user.image.url }}" alt="Related Post">
+                                    </div>
+                                    <div class="related-post-info">
+                                        <h4><a href="#">{{ related_post.title }}</a></h4>
+                                        <span class="related-post-date">{{ related_post.created_at|date:"F j, Y" }}</span>
+                                    </div>
+                            </div>
+                        {% endfor %}
                     </div>
                 </div>
 
