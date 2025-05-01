@@ -21,36 +21,12 @@
         </div>
 
         <div class="create-post-content">
-            <form id="post-form" class="post-form">
-                <div class="form-group">
-                    <label for="post-title">Post Title <span class="required">*</span></label>
-                    <textarea maxlength="200" id="post-title" name="post-title" placeholder="Enter an engaging title..." required rows="3"></textarea>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="post-category">Category <span class="required">*</span></label>
-                        <select id="post-category" name="post-category" required>
-                            <option value="" disabled selected>Select a category</option>
-                            <option value="pc">PC Gaming</option>
-                            <option value="console">Console Gaming</option>
-                            <option value="retro">Retro Gaming</option>
-                            <option value="mobile">Mobile Gaming</option>
-                            <option value="esports">Esports</option>
-                            <option value="dev">Game Development</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="post-tags">Tags</label>
-                        <input type="text" id="post-tags" name="post-tags" placeholder="Add tags separated by commas...">
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="post-content">Content <span class="required">*</span></label>
-                    <textarea id="post-content" name="post-content" placeholder="Enter your post content..." required rows="10"></textarea>
-                </div>
+            <form method="POST" id="post-form" class="post-form">
+                {% csrf_token %}
+                <div class="form-group">{{ form.title.label_tag }} {{ form.title }}</div>
+                <div class="form-group">{{ form.category.label_tag }} {{ form.category }}</div>
+                <div class="form-group">{{ form.tags.label_tag }} {{ form.tags }}</div>
+                <div class="form-group">{{ form.content.label_tag }} {{ form.content }}</div>
 
                 <div style="display: flex;" class="form-row checkbox-row">
                 <div class="form-actions">
