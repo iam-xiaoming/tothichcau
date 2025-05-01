@@ -103,9 +103,11 @@
                             </div>
                             {% if request.session.uid %}
                                 <div class="anime__details__btn">
-                                    <a href="#" class="follow-btn">Move to wishlist</a>
+                                    <a href="#" class="follow-btn">
+                                        <i class="fa-solid fa-square-plus"></i> Move to wishlist
+                                    </a>
                                     <a href="#" class="watch-btn" data-game-id="{{ object.id }}">
-                                        <span>Loading...</span>
+                                        <span> Loading...</span>
                                     </a>
                                 </div>
                             {% endif %}

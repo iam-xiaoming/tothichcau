@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, redirect
 from .models import Game, DLC
 from django.views.generic import DetailView
 from rest_framework.decorators import api_view

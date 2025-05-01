@@ -1,11 +1,14 @@
 from django.contrib import admin
 from .models import Order, Transaction
 from django.contrib import admin
+from wishlist.admin import WishlistTypeFilter
 
 # Register your models here.
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     list_display = ('user', 'get_object_name', 'get_type', 'key', 'get_object_price', 'get_object_discount_price', 'created_at',)
+    search_fields = ('user', 'game', 'dlc', 'key',)
+    list_filter = (WishlistTypeFilter,)
     
     def get_object_name(self, obj):
         if obj.game:
