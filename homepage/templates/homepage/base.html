@@ -95,12 +95,18 @@
 				<div class="col-lg-2">
 					<div class="header__right">
 						<a href="#" class="search-switch"><span class="icon_search"></span></a>
+
 						{% if request.session.uid %}
 							<a class="cart" style="display: inline-block;" href="{% url 'cart' %}">
-								<i class="fa-solid fa-cart-plus"></i>
+								<i class="fa-solid fa-heart"></i>
 								<span class="cart-badge">0</span>
 							</a>
+							<a class="wishlist" style="display: inline-block;" href="{% url 'cart' %}">
+								<i class="fa-solid fa-cart-plus"></i>
+								<span class="heart-badge">0</span>
+							</a>
 						{% endif %}
+
 						{% if request.session.uid %}
 							<a href="{% url 'logout' %}"><i class="fa-solid fa-right-from-bracket"></i></a>
 						{% else %}

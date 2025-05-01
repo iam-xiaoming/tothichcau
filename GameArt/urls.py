@@ -29,7 +29,7 @@ import keys.urls
 import game_features.urls
 import track.urls
 import blog.urls
-import co_dai_va_hoa_danh_danh.urls
+import wishlist.urls
 
 
 urlpatterns = [
@@ -45,7 +45,7 @@ urlpatterns = [
     path('', include(game_features.urls)),
     path('', include(track.urls)),
     path('', include(blog.urls)),
-    path('', include(co_dai_va_hoa_danh_danh.urls))
+    path('', include(wishlist.urls))
 ]
 
 

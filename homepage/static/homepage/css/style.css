@@ -443,10 +443,13 @@ ol {
 
 .header__right {
 	text-align: right;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
 	padding: 20px 0 15px;
 }
 
-.header__right .cart {
+.header__right .cart, .wishlist {
 	position: relative;
 	display: inline-block;
 	color: #fff;
@@ -454,7 +457,8 @@ ol {
 	margin-right: 30px;
 }
 
-.header__right .cart-badge {
+
+.header__right .cart-badge, .heart-badge {
 	position: absolute;
 	top: -6px;
 	right: -10px;

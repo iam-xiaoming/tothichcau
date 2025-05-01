@@ -3,6 +3,7 @@ from .models import Game, Rating, DLC
 from .forms import GameAdminForm, DLCAdminForm
 from game_features.admin import GameImageReviewInline, GameVideoReviewInline
 from keys.admin import KeyInline
+from wishlist.admin import WishlistTypeFilter
 
 # Register your models here
 @admin.register(Game)  
@@ -38,7 +39,7 @@ class DLCAdmin(admin.ModelAdmin):
 class RatingAdmin(admin.ModelAdmin):
     list_display = ('id', 'user', 'get_object_name', 'get_type', 'comment__title', 'score', 'weighted',)
     search_fields = ('id', 'user__name', 'game', 'dlc', 'comment__title',)
-    list_filter = ('score', 'game', 'dlc', 'comment__title', 'comment__created_at')
+    list_filter = ('score', WishlistTypeFilter, 'comment__title', 'comment__created_at')
     
     def get_object_name(self, obj):
         if obj.game:

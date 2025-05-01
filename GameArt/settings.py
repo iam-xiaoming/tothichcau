@@ -110,7 +110,8 @@ INSTALLED_APPS = [
     'keys.apps.KeysConfig',
     'track.apps.TrackConfig',
     'recommender.apps.RecommenderConfig',
-    'blog.apps.BlogConfig'
+    'blog.apps.BlogConfig',
+    'wishlist.apps.WishlistConfig'
 ]
 
 MIDDLEWARE = [
