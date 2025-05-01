@@ -648,17 +648,6 @@ blockquote cite {
     padding-bottom: 10px;
 }
 
-.sidebar-title::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 50px;
-    height: 3px;
-    background: var(--gradient-primary);
-    box-shadow: 0 0 10px var(--neon-primary);
-}
-
 .author-section {
     padding: 0;
     overflow: hidden;

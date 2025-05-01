@@ -34,12 +34,9 @@
                 <div class="filter-group">
                     <label>Category:</label>
                     <select>
-                        <option>All Categories</option>
-                        <option>PC Gaming</option>
-                        <option>Console Gaming</option>
-                        <option>Mobile Gaming</option>
-                        <option>Esports</option>
-                        <option>Game Development</option>
+                        {% for category in categories %}
+                            <option>{{ category }}</option>
+                        {% endfor %}
                     </select>
                 </div>
                 <button class="btn-filter">
@@ -49,35 +46,37 @@
 
             <div class="blog-posts">
                 <!-- Post 1 -->
-                <article class="blog-post">
-                    <div class="post-author">
-                        <img src="{{ user.image.url }}" alt="User Avatar" class="author-avatar">
-                        <div class="author-info">
-                            <h4>{{ user.username }}</h4>
-                            <span class="post-date">June 18, 2023</span>
-                        </div>
-                        <div class="post-category pc">Action</div>
-                    </div>
-                    <div class="post-content">
-                        <h2 class="post-title">Why PC Gaming Will Always Be Superior to Consoles</h2>
-                        <div class="post-excerpt">
-                            <p>As a long-time gamer who has owned nearly every console since the NES, I've finally settled on PC as my primary gaming platform. Here's why I believe PC gaming offers the ultimate experience that consoles simply can't match...</p>
-                        </div>
-                        <div class="post-meta">
-                            <div class="post-stats">
-                                <span><i class="far fa-eye"></i> 1.2k views</span>
-                                <span><i class="far fa-comment"></i> 48 comments</span>
-                                <span><i class="far fa-heart"></i> 156 likes</span>
+                {% for post in posts %}
+                    <article class="blog-post">
+                        <div class="post-author">
+                            <img src="{{ post.user.image.url }}" alt="User Avatar" class="author-avatar">
+                            <div class="author-info">
+                                <h4>{{ post.user }}</h4>
+                                <span class="post-date">{{ post.created_at|date:"F j, Y"  }}</span>
                             </div>
-                            <a href="{% url 'blog-detail' %}" class="read-more">Read Full Post <i class="fas fa-arrow-right"></i></a>
+                            <div class="post-category pc">{{ post.categories.first|title }}</div>
                         </div>
-                        <div class="post-tags">
-                            <a href="#">#PCMasterRace</a>
-                            <a href="#">#Gaming</a>
-                            <a href="#">#Hardware</a>
+                        <div class="post-content">
+                            <h2 class="post-title">{{ post.title }}</h2>
+                            <div class="post-excerpt line-clamp">
+                                <p>{{ post.content }}</p>
+                            </div>
+                            <div class="post-meta">
+                                <div class="post-stats">
+                                    <span><i class="far fa-eye"></i> 1.2k views</span>
+                                    <span><i class="far fa-comment"></i> 48 comments</span>
+                                    <span><i class="far fa-heart"></i> 156 likes</span>
+                                </div>
+                                <a href="{% url 'post-detail' post.pk %}" class="read-more">Read Full Post <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                            <div class="post-tags">
+                                {% for tag in post.tags.all %}
+                                    <a href="#">#{{ tag }}</a>
+                                {% endfor %}
+                            </div>
                         </div>
-                    </div>
-                </article>
+                    </article>
+                {% endfor %}
             </div>
 
             <div class="pagination">
@@ -105,7 +104,7 @@
                         <img src="{{ user.image.url }}" alt="Popular Author">
                         <div class="author-card-info">
                             <h4>{{ user.username }}</h4>
-                            <p>32 posts</p>
+                            <p>{{ user.posts.count }} posts</p>
                         </div>
                     </div>
                 </div>
@@ -114,48 +113,20 @@
             <div class="sidebar-section">
                 <h3>Popular Categories</h3>
                 <div class="category-list">
-                    <a href="#" class="category-item pc">
-                        <span class="category-name">PC Gaming</span>
-                        <span class="category-count">124</span>
-                    </a>
-                    <a href="#" class="category-item console">
-                        <span class="category-name">Console Gaming</span>
-                        <span class="category-count">98</span>
-                    </a>
-                    <a href="#" class="category-item esports">
-                        <span class="category-name">Esports</span>
-                        <span class="category-count">87</span>
-                    </a>
-                    <a href="#" class="category-item retro">
-                        <span class="category-name">Retro Gaming</span>
-                        <span class="category-count">65</span>
-                    </a>
-                    <a href="#" class="category-item dev">
-                        <span class="category-name">Game Development</span>
-                        <span class="category-count">42</span>
-                    </a>
-                    <a href="#" class="category-item mobile">
-                        <span class="category-name">Mobile Gaming</span>
-                        <span class="category-count">36</span>
-                    </a>
+                    {% for category in categories %}
+                        <a href="#" class="category-item">
+                            <span class="category-name">{{ category }}</span>
+                        </a>
+                    {% endfor %}
                 </div>
             </div>
 
             <div class="sidebar-section">
                 <h3>Trending Tags</h3>
                 <div class="tag-cloud">
-                    <a href="#" class="tag-item">#Valorant</a>
-                    <a href="#" class="tag-item">#PCMasterRace</a>
-                    <a href="#" class="tag-item">#PS5</a>
-                    <a href="#" class="tag-item">#GameDev</a>
-                    <a href="#" class="tag-item">#RetroGaming</a>
-                    <a href="#" class="tag-item">#Minecraft</a>
-                    <a href="#" class="tag-item">#ESports</a>
-                    <a href="#" class="tag-item">#GamingSetup</a>
-                    <a href="#" class="tag-item">#RPG</a>
-                    <a href="#" class="tag-item">#FPS</a>
-                    <a href="#" class="tag-item">#Nintendo</a>
-                    <a href="#" class="tag-item">#Xbox</a>
+                    {% for tag in tags %}
+                        <a href="#" class="tag-item">#{{ tag }}</a>
+                    {% endfor %}
                 </div>
             </div>
         </aside>
