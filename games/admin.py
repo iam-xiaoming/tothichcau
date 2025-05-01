@@ -37,7 +37,7 @@ class DLCAdmin(admin.ModelAdmin):
 @admin.register(Rating)
 class RatingAdmin(admin.ModelAdmin):
     list_display = ('id', 'user', 'get_object_name', 'get_type', 'comment__title', 'score', 'weighted',)
-    search_fields = ('id', 'user', 'game', 'dlc', 'comment__title',)
+    search_fields = ('id', 'user__name', 'game', 'dlc', 'comment__title',)
     list_filter = ('score', 'game', 'dlc', 'comment__title', 'comment__created_at')
     
     def get_object_name(self, obj):
