@@ -229,49 +229,6 @@ document.addEventListener('DOMContentLoaded', function() {
         document.body.style.overflow = '';
     }
     
-    // Form Submission
-    const postForm = document.getElementById('post-form');
-    const publishButton = document.getElementById('publish-post');
-    const saveDraftButton = document.getElementById('save-draft');
-    
-    publishButton.addEventListener('click', function(e) {
-        e.preventDefault();
-        
-        // Update hidden content field
-        updateHiddenContent();
-        
-        // Validate form
-        if (validateForm()) {
-            // In a real application, this would submit the form to the server
-            alert('Your post has been published successfully!');
-            // Redirect to blog page
-            // window.location.href = 'blog.html';
-        }
-    });
-    
-    confirmPublish.addEventListener('click', function() {
-        // Update hidden content field
-        updateHiddenContent();
-        
-        // Validate form
-        if (validateForm()) {
-            // In a real application, this would submit the form to the server
-            alert('Your post has been published successfully!');
-            // Redirect to blog page
-            // window.location.href = 'blog.html';
-        }
-    });
-    
-    saveDraftButton.addEventListener('click', function(e) {
-        e.preventDefault();
-        
-        // Update hidden content field
-        updateHiddenContent();
-        
-        // In a real application, this would save the draft to the server
-        alert('Your draft has been saved successfully!');
-    });
-    
     function validateForm() {
         const title = document.getElementById('post-title').value;
         const category = document.getElementById('post-category').value;

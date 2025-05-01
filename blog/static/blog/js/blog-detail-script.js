@@ -132,22 +132,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Comment Form Submission
-    const commentForm = document.querySelector('.comment-form');
-    
-    if (commentForm) {
-        commentForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // In a real application, this would submit the form to the server
-            alert('Your comment has been submitted and is awaiting moderation.');
-            
-            // Clear form fields
-            document.getElementById('comment-name').value = '';
-            document.getElementById('comment-email').value = '';
-            document.getElementById('comment-content').value = '';
-        });
-    }
     
     // Highlight code blocks (if any)
     const codeBlocks = document.querySelectorAll('pre code');

@@ -1,14 +1,5 @@
 // Wait for DOM to load
 document.addEventListener('DOMContentLoaded', function() {
-    // Filter button functionality
-    const filterButton = document.querySelector('.btn-filter');
-    if (filterButton) {
-        filterButton.addEventListener('click', function() {
-            // In a real application, this would filter the posts based on selected options
-            alert('Filtering functionality would be implemented with backend processing');
-        });
-    }
-    
     // Post hover effect
     const blogPosts = document.querySelectorAll('.blog-post');
     blogPosts.forEach(post => {
@@ -22,15 +13,6 @@ document.addEventListener('DOMContentLoaded', function() {
             this.style.boxShadow = '';
         });
     });
-    
-    // Create post button effect
-    const createPostBtn = document.querySelector('.btn-create-post');
-    if (createPostBtn) {
-        createPostBtn.addEventListener('click', function(e) {
-            // e.preventDefault();
-            // In a real application, this would redirect to a post creation page
-        });
-    }
     
     // Pagination functionality
     const paginationLinks = document.querySelectorAll('.pagination a');

@@ -1,10 +1,19 @@
 from django.db import models
 from users.models import MyUser
 from game_features.models import Category
+from django.utils.text import slugify
 
 # Create your models here.
 class Tag(models.Model):
     name = models.CharField(max_length=128, unique=True)
+    frequency = models.PositiveIntegerField(default=1)
+    slug = models.SlugField(unique=True, blank=True)
+    
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+    
     
     def __str__(self):
         return self.name
