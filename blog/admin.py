@@ -3,7 +3,11 @@ from .models import Tag, Post
 from .forms import PostAdminForm
 
 # Register your models here.
-admin.site.register(Tag)
+@admin.register(Tag)
+class TagAdmin(admin.ModelAdmin):
+    list_display = ('name', 'slug', 'frequency',)
+    search_fields = ('name',)
+    
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):

@@ -23,7 +23,7 @@
                 <div class="blog-detail-author">
                     <img src="{{ object.user.image.url }}" alt="Author Avatar" class="author-avatar">
                     <div class="author-info">
-                        <span class="author-name">{{ object.user }}</span>
+                        <span class="author-name">{{ object.user.username|title }}</span>
                     </div>
                 </div>
                 <div class="blog-detail-date">
@@ -51,7 +51,7 @@
                         <span class="tags-title">Tags:</span>
                         <div class="tags-list">
                             {% for tag in object.tags.all %}
-                                <a href="#" class="tag">#{{ tag }}</a>
+                                <a href="{% url 'tag-post-list' tag.slug %}" class="tag">#{{ tag }}</a>
                             {% endfor %}
                         </div>
                     </div>
@@ -204,7 +204,7 @@
                 <div class="sidebar-section author-section">
                     <div class="author-card">
                         <img src="{{ object.user.image.url }}" alt="Author Avatar" class="author-card-avatar">
-                        <h3 class="author-card-name">{{ object.user.username }}</h3>
+                        <h3 class="author-card-name">{{ object.user.username|title }}</h3>
                         <p class="author-card-posts">{{ object.user.posts.count }} Articles</p>
                         <a href="{% url 'user-post-list' object.user.pk %}" class="author-card-link">View All Posts</a>
                     </div>
@@ -230,15 +230,9 @@
                 <div class="sidebar-section">
                     <h3 class="sidebar-title">Popular Tags</h3>
                     <div class="sidebar-tags">
-                        <a href="#" class="sidebar-tag">#PCGaming</a>
-                        <a href="#" class="sidebar-tag">#OpenWorld</a>
-                        <a href="#" class="sidebar-tag">#RPG</a>
-                        <a href="#" class="sidebar-tag">#Esports</a>
-                        <a href="#" class="sidebar-tag">#GameDesign</a>
-                        <a href="#" class="sidebar-tag">#Indie</a>
-                        <a href="#" class="sidebar-tag">#PlayStation</a>
-                        <a href="#" class="sidebar-tag">#Xbox</a>
-                        <a href="#" class="sidebar-tag">#Nintendo</a>
+                        {% for tag in tags %}
+                            <a href="{% url 'tag-post-list' tag.slug %}" class="sidebar-tag">#{{ tag }}</a>
+                        {% endfor %}
                     </div>
                 </div>
 
