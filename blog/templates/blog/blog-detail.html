@@ -32,7 +32,7 @@
                 </div>
                 <div class="blog-detail-views">
                     <i class="far fa-eye"></i>
-                    <span>3.2K views</span>
+                    <span>{{ object.count_view }} views</span>
                 </div>
             </div>
         </div>
@@ -204,9 +204,9 @@
                 <div class="sidebar-section author-section">
                     <div class="author-card">
                         <img src="{{ object.user.image.url }}" alt="Author Avatar" class="author-card-avatar">
-                        <h3 class="author-card-name">{{ object.user }}</h3>
-                        <p class="author-card-posts">{{ user.posts.count }} Articles</p>
-                        <a href="#" class="author-card-link">View All Posts</a>
+                        <h3 class="author-card-name">{{ object.user.username }}</h3>
+                        <p class="author-card-posts">{{ object.user.posts.count }} Articles</p>
+                        <a href="{% url 'user-post-list' object.user.pk %}" class="author-card-link">View All Posts</a>
                     </div>
                 </div>
 
@@ -219,7 +219,7 @@
                                         <img src="{{ related_post.user.image.url }}" alt="Related Post">
                                     </div>
                                     <div class="related-post-info">
-                                        <h4><a href="#">{{ related_post.title }}</a></h4>
+                                        <h4><a href="{% url 'post-detail' related_post.pk %}">{{ related_post.title }}</a></h4>
                                         <span class="related-post-date">{{ related_post.created_at|date:"F j, Y" }}</span>
                                     </div>
                             </div>

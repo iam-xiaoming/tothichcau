@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, DetailView, CreateView
 from .models import Post, Tag
 from game_features.models import Category
@@ -7,6 +7,7 @@ from .forms import PostForm
 from django.contrib import messages
 import logging
 from django.urls import reverse
+from users.models import MyUser
 
 logger = logging.getLogger(__name__)
 
@@ -24,6 +25,26 @@ class PostListView(ListView):
         context['categories'] = Category.objects.all()
         context['tags'] = Tag.objects.all()
         return context
+    
+
+class UserPostListView(ListView):
+    model = Post
+    template_name = 'blog/blog.html'
+    context_object_name = 'posts'
+    ordering = ['-created_at']
+    paginate_by = 10
+    
+    def get_queryset(self):
+        pk = self.kwargs.get('pk')
+        user = get_object_or_404(MyUser, pk=pk)
+        return Post.objects.filter(user=user).order_by('-created_at')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        context['categories'] = Category.objects.all()
+        context['tags'] = Tag.objects.all()
+        return context
 
 
 class PostDetailView(DetailView):
@@ -32,6 +53,11 @@ class PostDetailView(DetailView):
     
     
     def get_context_data(self, **kwargs):
+        
+        obj = self.get_object()
+        obj.count_view += 1
+        obj.save()
+        
         context = super().get_context_data(**kwargs)
         related_posts = Post.objects.all().order_by('created_at')[:3]
         context['related_posts'] = related_posts

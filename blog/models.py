@@ -17,6 +17,7 @@ class Post(models.Model):
     title = models.CharField(max_length=128)
     content = models.TextField(max_length=1000)
     created_at = models.DateTimeField(auto_now=True)
+    count_view = models.PositiveIntegerField(default=0)
     
     def __str__(self):
         return self.title
