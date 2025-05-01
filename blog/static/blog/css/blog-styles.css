@@ -234,6 +234,7 @@
     color: var(--secondary-text);
     margin-bottom: 20px;
     line-height: 1.6;
+    --line-clamp: 3;
 }
 
 .post-excerpt p {
@@ -411,46 +412,14 @@
     padding: 10px 15px;
     border-radius: 8px;
     transition: all 0.3s ease;
-    border-left: 3px solid;
 }
 
 .category-item:hover {
     transform: translateX(5px);
 }
 
-.category-item.pc {
-    border-color: var(--pc-color);
-}
-
-.category-item.console {
-    border-color: var(--console-color);
-}
-
-.category-item.retro {
-    border-color: var(--retro-color);
-}
-
-.category-item.mobile {
-    border-color: var(--mobile-color);
-}
-
-.category-item.esports {
-    border-color: var(--esports-color);
-}
-
-.category-item.dev {
-    border-color: var(--dev-color);
-}
-
 .category-name {
     font-weight: 500;
-}
-
-.category-count {
-    background-color: rgba(255, 255, 255, 0.1);
-    padding: 3px 8px;
-    border-radius: 10px;
-    font-size: 0.8rem;
 }
 
 /* Tag Cloud */

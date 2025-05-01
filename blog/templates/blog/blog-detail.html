@@ -16,19 +16,19 @@
 
     <div class="blog-detail-container">
         <div class="blog-detail-header">
-            <div class="blog-detail-category pc">Action</div>
-            <h1 class="blog-detail-title">The Future of Open World Gaming: Trends and Innovations</h1>
+            <div class="blog-detail-category pc">{{ object.categories.first|upper }}</div>
+            <h1 class="blog-detail-title">{{ object.title }}</h1>
             
             <div class="blog-detail-meta">
                 <div class="blog-detail-author">
-                    <img src="{{ user.image.url }}" alt="Author Avatar" class="author-avatar">
+                    <img src="{{ object.user.image.url }}" alt="Author Avatar" class="author-avatar">
                     <div class="author-info">
-                        <span class="author-name">Alex Johnson</span>
+                        <span class="author-name">{{ object.user }}</span>
                     </div>
                 </div>
                 <div class="blog-detail-date">
                     <i class="far fa-calendar-alt"></i>
-                    <span>June 15, 2023</span>
+                    <span>{{ object.created_at|date:"F j, Y" }}</span>
                 </div>
                 <div class="blog-detail-views">
                     <i class="far fa-eye"></i>
@@ -41,20 +41,18 @@
             <div class="blog-detail-main">
                 <div class="blog-detail-content">
                     <div class="blog-detail-text">
-                        <h2>The Future of Open World Gaming: Trends and Innovations</h2>
+                        <h2>{{ object.title }}</h2>
                         <p>
-                            When we look back at the early days of open world gaming, titles like <strong>Grand Theft Auto III</strong> and <strong>The Elder Scrolls III: Morrowind</strong> stand out as revolutionary. These games introduced players to vast digital playgrounds with unprecedented freedom. Fast forward to today, and the scale and detail of modern open worlds are simply staggering.
+                            {{ object.content }}
                         </p>
                     </div>
 
                     <div class="blog-detail-tags">
                         <span class="tags-title">Tags:</span>
                         <div class="tags-list">
-                            <a href="#" class="tag">#OpenWorldGames</a>
-                            <a href="#" class="tag">#GameDevelopment</a>
-                            <a href="#" class="tag">#Gaming</a>
-                            <a href="#" class="tag">#PCGaming</a>
-                            <a href="#" class="tag">#GameDesign</a>
+                            {% for tag in object.tags.all %}
+                                <a href="#" class="tag">#{{ tag }}</a>
+                            {% endfor %}
                         </div>
                     </div>
 
@@ -203,9 +201,9 @@
             <div class="blog-detail-sidebar">
                 <div class="sidebar-section author-section">
                     <div class="author-card">
-                        <img src="/placeholder.svg?height=100&width=100" alt="Author Avatar" class="author-card-avatar">
-                        <h3 class="author-card-name">Alex Johnson</h3>
-                        <p class="author-card-posts">125 Articles</p>
+                        <img src="{{ object.user.image.url }}" alt="Author Avatar" class="author-card-avatar">
+                        <h3 class="author-card-name">{{ object.user }}</h3>
+                        <p class="author-card-posts">{{ user.posts.count }} Articles</p>
                         <a href="#" class="author-card-link">View All Posts</a>
                     </div>
                 </div>
@@ -213,32 +211,16 @@
                 <div class="sidebar-section">
                     <h3 class="sidebar-title">Related Articles</h3>
                     <div class="related-posts">
+                        {% for related_post in related_posts %}
                         <div class="related-post">
-                            <div class="related-post-image">
-                                <img src="/placeholder.svg?height=80&width=120" alt="Related Post">
-                            </div>
-                            <div class="related-post-info">
-                                <h4><a href="#">The Evolution of RPG Mechanics in Modern Games</a></h4>
-                                <span class="related-post-date">May 28, 2023</span>
-                            </div>
-                        </div>
-                        <div class="related-post">
-                            <div class="related-post-image">
-                                <img src="/placeholder.svg?height=80&width=120" alt="Related Post">
-                            </div>
-                            <div class="related-post-info">
-                                <h4><a href="#">How Sandbox Games Changed the Industry Forever</a></h4>
-                                <span class="related-post-date">April 15, 2023</span>
-                            </div>
-                        </div>
-                        <div class="related-post">
-                            <div class="related-post-image">
-                                <img src="/placeholder.svg?height=80&width=120" alt="Related Post">
-                            </div>
-                            <div class="related-post-info">
-                                <h4><a href="#">Next-Gen Console Hardware: What It Means for Game Design</a></h4>
-                                <span class="related-post-date">March 3, 2023</span>
-                            </div>
+                                <div class="related-post-image">
+                                    <img src="{{ related_post.user.image.url }}" alt="Related Post">
+                                </div>
+                                <div class="related-post-info">
+                                    <h4><a href="#">{{ related_post.title }}</a></h4>
+                                    <span class="related-post-date">{{ related_post.created_at|date:"F j, Y" }}</span>
+                                </div>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
