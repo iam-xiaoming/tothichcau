@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Game, DLC
 from django.views.generic import DetailView
 from rest_framework.decorators import api_view
@@ -13,6 +13,8 @@ from users.models import Comment
 from .utils import get_game_dlcs
 from recommender.utils import get_aws_recommended_items, aws_validators_recommendation
 from django.conf import settings
+from wishlist.models import Wishlist
+
 
 # Create your views here.
 class GameDetailView(DetailView):
@@ -46,6 +48,12 @@ class GameDetailView(DetailView):
             }
             
         context['items'] = items
+        
+        try:
+            get_object_or_404(Wishlist, game=game)
+            context['in_wishlist'] = True
+        except:
+            context['in_wishlist'] = False
         
         comments = Comment.objects.filter(game=game).order_by('-created_at')
         page = self.request.GET.get('page', 1)
@@ -113,6 +121,12 @@ class DLCDetailView(DetailView):
             
         
         context['items'] = items
+        
+        try:
+            get_object_or_404(Wishlist, dlc=dlc)
+            context['in_wishlist'] = True
+        except:
+            context['in_wishlist'] = False
         
         comments = Comment.objects.filter(dlc=dlc).order_by('-created_at')
         page = self.request.GET.get('page', 1)

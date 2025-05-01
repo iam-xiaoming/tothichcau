@@ -458,7 +458,7 @@ ol {
 }
 
 
-.header__right .cart-badge, .heart-badge {
+.header__right .cart-badge, .wishlist-badge {
 	position: absolute;
 	top: -6px;
 	right: -10px;
