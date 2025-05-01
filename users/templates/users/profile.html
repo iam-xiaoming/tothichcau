@@ -171,7 +171,7 @@
                                         {% for item in user.wishlist.all %}
                                             <div class="col-lg-4 col-md-6">
                                                 {% if item.game %}
-                                                    <div class="wishlist-item">
+                                                    <div item-pk="{{ item.pk }}" type="base" class="wishlist-item">
                                                         <button class="remove-wishlist" data-id="{{ item.game.id }}">
                                                             <i class="fa fa-times"></i>
                                                         </button>
@@ -189,7 +189,7 @@
                                                         </div>
                                                     </div>
                                                 {% else %}
-                                                    <div class="wishlist-item">
+                                                    <div item-pk="{{ item.pk }}" type="dlc" class="wishlist-item">
                                                         <button class="remove-wishlist" data-id="{{ item.dlc.id }}">
                                                             <i class="fa fa-times"></i>
                                                         </button>
@@ -199,11 +199,11 @@
                                                         <div class="wishlist-info">
                                                             <h4>{{ item.dlc.name|title }}</h4>
                                                             <p>Downloadable Content</p>
-                                                            <div class="price-section">
+                                                            <div style="display: flex; gap: 20px;" class="price-section">
                                                                 <div style="text-decoration: line-through;" class="wishlist-price">${{ item.dlc.price }}</div>
-                                                                <div class="wishlist-price">${{ item.dlc.discounted_price|
+                                                                <div class="wishlist-price">${{ item.dlc.discounted_price|floatformat:2 }}
                                                             </div>
-                                                            floatformat:2 }}</div>
+                                                        </div>
                                                             <a href="{% url 'dlc-game-details' item.dlc.pk %}" class="site-btn">View Details</a>
                                                         </div>
                                                     </div>
@@ -231,6 +231,39 @@
     <!-- Profile Content End -->
     <script src="{% static 'users/js/main.js' %}"></script>
     <script>
+
+        document.querySelectorAll('.remove-wishlist').forEach(button => {
+            button.addEventListener('click', function (e) {
+                e.preventDefault();
+        
+                const itemDiv = this.closest('.wishlist-item');
+                const itemPk = itemDiv.getAttribute('item-pk');
+                const type = itemDiv.getAttribute('type');
+        
+                fetch('/api/remove-from-wishlist/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken'),
+                    },
+                    body: JSON.stringify({
+                        item_pk: itemPk,
+                        type: type
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        updateWishlistCount();
+                        itemDiv.remove();
+                    } else {
+                        console.error(data.error);
+                    }
+                });
+            });
+        });
+        
+
         document.addEventListener('DOMContentLoaded', function () {
             const searchInput = document.getElementById('searchInput');
             const purchaseHistoryContainer = document.querySelector('.purchase-history');
