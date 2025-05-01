@@ -53,7 +53,7 @@
 .blog-container {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 40px 20px;
+    padding: 0px 20px 40px 20px;
     display: grid;
     grid-template-columns: 1fr 350px;
     gap: 40px;
@@ -62,64 +62,6 @@
 /* Blog Main Content */
 .blog-main {
     width: 100%;
-}
-
-/* Blog Filters */
-.blog-filters {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    margin-bottom: 30px;
-    background-color: var(--card-bg);
-    padding: 15px 20px;
-    border-radius: 8px;
-    flex-wrap: wrap;
-}
-
-.filter-group {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.filter-group label {
-    font-size: 0.9rem;
-    color: var(--secondary-text);
-}
-
-.filter-group .nice-select {
-    background: none !important;
-}
-
-.filter-group select {
-    background-color: rgba(255, 255, 255, 0.1);
-    border: none;
-    color: var(--primary-text);
-    padding: 8px 12px;
-    border-radius: 4px;
-    font-size: 0.9rem;
-    cursor: pointer;
-}
-
-.filter-group select:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px var(--neon-primary);
-}
-
-.btn-filter {
-    background-color: var(--accent);
-    color: var(--primary-text);
-    border: none;
-    padding: 8px 15px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    transition: all 0.3s ease;
-    margin-left: auto;
-}
-
-.btn-filter:hover {
-    background-color: #8c27ff;
 }
 
 /* Blog Posts */
@@ -145,7 +87,7 @@
 .post-author {
     display: flex;
     align-items: center;
-    padding: 15px 20px;
+    padding: 25px 20px 15px 20px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     position: relative;
 }
