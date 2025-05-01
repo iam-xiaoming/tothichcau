@@ -106,7 +106,7 @@
                                                 {% else %}
                                                     <span class="base-game">Downloadable Content</span>
                                                 {% endif %}
-                                                <h5 class="line-clamp">{{ game.name }}</h5>
+                                                <h5 class="line-clamp">{{ game.name|title }}</h5>
                                                 <span style="font-size: 12px;" class="base-game">{{ game.rating|title }}</span>
                                             </div>
                                             <div class="price-section">
@@ -169,8 +169,8 @@
                                                     {% else %}
                                                         <span class="base-game">Downloadable Content</span>
                                                     {% endif %}
-                                                    <h5 class="line-clamp">{{ game.name }}</h5>
-                                                    <span style="font-size: 11px;" class="base-game">{{ game.rating|title }}</span>
+                                                    <h5 class="line-clamp">{{ game.name|title }}</h5>
+                                                    <span style="font-size: 12px;" class="base-game">{{ game.rating|title }}</span>
                                                 </div>
                                                 <div class="price-section">
                                                     <span style="font-weight: 500;" class="sale">-{{ game.discount }}%</span>

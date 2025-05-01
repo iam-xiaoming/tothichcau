@@ -170,20 +170,44 @@
                                     <div class="row">
                                         {% for item in user.wishlist.all %}
                                             <div class="col-lg-4 col-md-6">
-                                                <div class="wishlist-item">
-                                                    <button class="remove-wishlist" data-id="{{ item.id }}">
-                                                        <i class="fa fa-times"></i>
-                                                    </button>
-                                                    <div class="wishlist-image">
-                                                        <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+                                                {% if item.game %}
+                                                    <div class="wishlist-item">
+                                                        <button class="remove-wishlist" data-id="{{ item.game.id }}">
+                                                            <i class="fa fa-times"></i>
+                                                        </button>
+                                                        <div class="wishlist-image">
+                                                            <img src="{{ item.game.image.url }}" alt="{{ item.game.name }}">
+                                                        </div>
+                                                        <div class="wishlist-info">
+                                                            <h4>{{ item.game.name|title }}</h4>
+                                                            <p>Base Game</p>
+                                                            <div style="display: flex; gap: 20px;" class="price-section">
+                                                                <div style="text-decoration: line-through;" class="wishlist-price">${{ item.game.price }}</div>
+                                                                <div class="wishlist-price">${{ item.game.discounted_price|floatformat:2 }}</div>
+                                                            </div>
+                                                            <a href="{% url 'base-game-details' item.game.pk %}" class="site-btn">View Details</a>
+                                                        </div>
                                                     </div>
-                                                    <div class="wishlist-info">
-                                                        <h4>{{ item.product.name }}</h4>
-                                                        <p>{{ item.product.platform }}</p>
-                                                        <div class="wishlist-price">${{ item.product.price }}</div>
-                                                        <a href="{% url 'product_detail' item.product.id %}" class="site-btn">View Details</a>
+                                                {% else %}
+                                                    <div class="wishlist-item">
+                                                        <button class="remove-wishlist" data-id="{{ item.dlc.id }}">
+                                                            <i class="fa fa-times"></i>
+                                                        </button>
+                                                        <div class="wishlist-image">
+                                                            <img src="{{ item.dlc.image.url }}" alt="{{ item.dlc.name }}">
+                                                        </div>
+                                                        <div class="wishlist-info">
+                                                            <h4>{{ item.dlc.name|title }}</h4>
+                                                            <p>Downloadable Content</p>
+                                                            <div class="price-section">
+                                                                <div style="text-decoration: line-through;" class="wishlist-price">${{ item.dlc.price }}</div>
+                                                                <div class="wishlist-price">${{ item.dlc.discounted_price|
+                                                            </div>
+                                                            floatformat:2 }}</div>
+                                                            <a href="{% url 'dlc-game-details' item.dlc.pk %}" class="site-btn">View Details</a>
+                                                        </div>
                                                     </div>
-                                                </div>
+                                                {% endif %}
                                             </div>
                                         {% endfor %}
                                     </div>
