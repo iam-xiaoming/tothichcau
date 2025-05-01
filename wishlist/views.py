@@ -46,3 +46,28 @@ def add_to_wishlist(request):
 
     except (Game.DoesNotExist, DLC.DoesNotExist):
         return Response({'error': 'Item does not exist'}, status=400)
+    
+    
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def remove_from_wishlist(request):
+    item_type = request.data.get('type')
+    item_pk = request.data.get('item_pk')
+    user = request.user
+
+    if not item_type or not item_pk:
+        return Response({'error': 'Missing parameters.'}, status=400)
+
+    try:
+        if item_type == 'base':
+            wishlist_item = Wishlist.objects.get(user=user, pk=item_pk)
+        elif item_type == 'dlc':
+            wishlist_item = Wishlist.objects.get(user=user, pk=item_pk)
+        else:
+            return Response({'error': 'Invalid type.'}, status=400)
+
+        wishlist_item.delete()
+        return Response({'success': True, 'message': 'Removed from wishlist'}, status=200)
+
+    except Wishlist.DoesNotExist:
+        return Response({'error': 'Wishlist item not found.'}, status=404)

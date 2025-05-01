@@ -23,7 +23,7 @@ class WishlistTypeFilter(SimpleListFilter):
 @admin.register(Wishlist)
 class WishlistAdmin(admin.ModelAdmin):
     autocomplete_fields = ('game', 'dlc', 'user',)
-    list_display = ('user', 'object_name', 'type_name', 'created_at')
+    list_display = ('pk', 'user', 'object_name', 'type_name', 'created_at')
     list_filter = (WishlistTypeFilter,)
     
     def object_name(self, obj):
