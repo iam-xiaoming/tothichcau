@@ -131,6 +131,54 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+
+
+    const likePostButton = document.getElementById('like-post-bottom');
+
+    likePostButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        const icon = this.querySelector('i');
+        
+        if (this.classList.contains('liked')) {
+            this.classList.remove('liked');
+            icon.classList.remove('fas');
+            icon.classList.add('fa-heart');
+            this.style.color = '';
+        } else {
+            this.classList.add('liked');
+            icon.classList.add('fas');
+            
+
+            this.style.setProperty('color', '#ff3366', 'important');
+            
+            const heart = document.createElement('i');
+            heart.className = 'fas fa-heart heart-animation';
+            heart.style.position = 'absolute';
+            heart.style.color = '#ff3366';
+            heart.style.fontSize = '1.5rem';
+            heart.style.opacity = '0';
+            heart.style.transition = 'all 0.5s ease';
+            
+            this.style.position = 'relative';
+            this.appendChild(heart);
+            
+            setTimeout(() => {
+                heart.style.transform = 'translateY(-20px)';
+                heart.style.opacity = '1';
+            }, 10);
+            
+            setTimeout(() => {
+                heart.style.opacity = '0';
+                setTimeout(() => {
+                    this.removeChild(heart);
+                }, 500);
+            }, 800);
+        }
+    });
+    
+    
+
     
     
     // Highlight code blocks (if any)

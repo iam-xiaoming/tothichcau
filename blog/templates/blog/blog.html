@@ -22,27 +22,6 @@
 
     <div class="blog-container">
         <main class="blog-main">
-            <div class="blog-filters">
-                <div class="filter-group">
-                    <label>Sort by:</label>
-                    <select>
-                        <option>Latest</option>
-                        <option>Most Popular</option>
-                        <option>Most Commented</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label>Category:</label>
-                    <select>
-                        {% for category in categories %}
-                            <option>{{ category }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <button class="btn-filter">
-                    <i class="fas fa-filter"></i> Filter
-                </button>
-            </div>
 
             <div class="blog-posts">
                 <!-- Post 1 -->
