@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Tag, Post, PostLike, PostComment
+from .models import Tag, Post, PostLike, PostComment, PostCommentLike
 from .forms import PostAdminForm
 
 # Register your models here.
@@ -30,5 +30,11 @@ class PostLikeAdmin(admin.ModelAdmin):
 
 @admin.register(PostComment)
 class PostCommentAdmin(admin.ModelAdmin):
-    list_display = ('user', 'post', 'created_at',)
+    list_display = ('user', 'post', 'count_like', 'created_at',)
     search_fields = ('user', 'post',)
+    
+    
+@admin.register(PostCommentLike)
+class PostCommentLikeAdmin(admin.ModelAdmin):
+    list_display = ('comment', 'user',)
+    search_fields = ('user',)

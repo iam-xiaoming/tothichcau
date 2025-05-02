@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, DetailView, CreateView
-from .models import Post, Tag, PostLike, PostComment
+from .models import Post, Tag, PostLike, PostComment, PostCommentLike
 from game_features.models import Category
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import PostForm
@@ -113,7 +113,14 @@ class PostDetailView(DetailView):
         context['form'] = PostCommentForm(user=user, post=obj)
         
         if PostLike.objects.filter(user=user).exists():
-            context['liked'] = 'liked'
+            context['post_liked'] = 'post_liked'
+
+        comments = PostComment.objects.filter(post=obj)
+        user_comment_likes = PostCommentLike.objects.filter(user=user, comment__in=comments)
+        
+        liked_comment_ids = set(user_comment_likes.values_list('comment_id', flat=True))
+        
+        context['liked_comment_ids'] = liked_comment_ids
         
         context['comments'] = PostComment.objects.filter(post=obj)
         context['tags'] = Tag.objects.all().order_by('-frequency')[:10]
@@ -199,5 +206,39 @@ def post_reaction(request):
             post_like.delete()
         except Exception as e:
             return Response({'error': 'An exception while deleting PostLike.', 'message': str(e)}, status=200)
+    
+    return Response({'success': True, 'message': f'Do {action} successfully.'}, status=200)
+
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def post_comment_reaction(request):
+    user = request.user
+    comment_pk = request.data.get('comment_pk')
+    action = request.data.get('action')
+    
+    if action not in ['liked', 'unlike']:
+        return Response({'error': 'Invalid action.'}, status=400)
+    
+    try:
+        comment = PostComment.objects.get(pk=comment_pk)
+    except PostComment.DoesNotExist:
+        return Response({'error': 'PostComment does not exits.'}, status=400)
+    
+    if action == 'liked':
+        try:
+            PostCommentLike.objects.create(user=user, comment=comment)
+        except Exception as e:
+            return Response({'error': 'An exception while being like comment.', 'message': str(e)}, status=400)
+    else:
+        try:
+            comment_like = PostCommentLike.objects.get(user=user, comment=comment)
+        except PostCommentLike.DoesNotExist:
+            return Response({'error': 'PostCommentLike does not exists.'}, status=400)
+        try:
+            comment_like.delete()
+        except Exception as e:
+            return Response({'error': 'An exception while deleting PostCommentLike.', 'message': str(e)}, status=200)
     
     return Response({'success': True, 'message': f'Do {action} successfully.'}, status=200)

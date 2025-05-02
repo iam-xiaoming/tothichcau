@@ -574,6 +574,7 @@ blockquote cite {
     margin-bottom: 15px;
 }
 
+
 .comment-text p {
     color: var(--secondary-text) !important;
     font-style: normal;
@@ -584,7 +585,7 @@ blockquote cite {
     gap: 20px;
 }
 
-.share-buttons .liked {
+.share-buttons .post_liked {
     color: #ff3366 !important;
 }
 
@@ -593,6 +594,24 @@ blockquote cite {
     color: var(--secondary-text);
     transition: all 0.3s ease;
 }
+
+/* .liked {
+    color: #ff3366;
+}
+
+.liked i {
+    font-weight: 900;
+} */
+
+.comment-like {
+    color: #999;
+    text-decoration: none;
+}
+
+.comment-like.liked {
+    color: #ff3366;
+}
+
 
 .comment-reply:hover,
 .comment-like:hover {

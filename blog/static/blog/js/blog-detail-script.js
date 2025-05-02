@@ -67,23 +67,51 @@ document.addEventListener('DOMContentLoaded', function() {
     likeButtons.forEach(button => {
         button.addEventListener('click', function(e) {
             e.preventDefault();
-            
+
+
             const likeCount = this.querySelector('span');
             const currentLikes = parseInt(likeCount.textContent);
-            
+
+
+            let action = null;
+            const comment_pk = this.getAttribute('comment-pk')
+
+            if (this.classList.contains('liked')) {
+                action = 'unlike'
+            } else {
+                action = 'liked';
+            }
+
+            fetch('/post/comment/reaction/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    action: action,
+                    comment_pk: comment_pk
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log(data.message);
+                } else {
+                    console.log(data.error);
+                }
+            });
+                        
             // Toggle like state
             if (this.classList.contains('liked')) {
                 this.classList.remove('liked');
                 likeCount.textContent = currentLikes - 1;
+                
             } else {
                 this.classList.add('liked');
                 likeCount.textContent = currentLikes + 1;
                 
                 // Add animation effect
-                this.querySelector('i').classList.remove('far');
-                this.querySelector('i').classList.add('fas');
-                this.querySelector('i').style.color = '#ff3366';
-                
                 const heart = document.createElement('i');
                 heart.className = 'fas fa-heart heart-animation';
                 heart.style.position = 'absolute';
@@ -117,7 +145,7 @@ document.addEventListener('DOMContentLoaded', function() {
         e.preventDefault();
 
         let action = null;
-        if (this.classList.contains('liked')) {
+        if (this.classList.contains('post_liked')) {
             action = 'unlike'
         } else {
             action = 'liked';
@@ -143,11 +171,11 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
         
-        if (this.classList.contains('liked')) {
-            this.classList.remove('liked');
-            this.style.color = '';
+        
+        if (this.classList.contains('post_liked')) {
+            this.classList.remove('post_liked');
         } else {
-            this.classList.add('liked');
+            this.classList.add('post_liked');
             
             // animation
             const heart = document.createElement('i');
