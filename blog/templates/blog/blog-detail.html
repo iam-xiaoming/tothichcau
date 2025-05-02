@@ -72,7 +72,7 @@
                 </div>
  
                 <div class="blog-detail-comments">
-                    <h3 class="comments-title">Comments <span class="comments-count">(5)</span></h3>
+                    <h3 class="comments-title">Comments <span class="comments-count">({{ object.count_comment }})</span></h3>
                     
                     {% if user.is_authenticated %}
                         <div class="comment-form-container">
@@ -99,7 +99,7 @@
                     {% endif %}
 
                     <div class="comments-list">
-                        {% for comment in comments %}
+                        {% for comment in page_obj %}
                             <div class="comment">
                                 <div class="comment-avatar">
                                     <img src="{{ comment.user.image.url }}" alt="User Avatar">
@@ -120,11 +120,34 @@
                         {% endfor %}
                     </div>
 
-                    <div class="comments-pagination">
-                        <span class="current">1</span>
-                        <a href="#">2</a>
-                        <a href="#">→</a>
-                    </div>
+                    {% if page_obj.paginator.num_pages > 1 %}
+                        <div class="comments-pagination">
+                            {% if page_obj.number > 3 %}
+                                <a class="" href="?page=1">1</a>
+                                <span class="">...</span>
+                            {% endif %}
+                
+                            {% for num in page_obj.paginator.page_range %}
+                                {% if num > page_obj.number|add:"-3" and num < page_obj.number|add:'3' %}
+                                    {% if page_obj.number == num %}
+                                        <span class="current">{{ num }}</span>
+                                    {% else %}
+                                        <a class="" href="?page={{ num }}">{{ num }}</a>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                
+                            {% if page_obj.number < page_obj.paginator.num_pages|add:'-2' %}
+                                <span class="">...</span>
+                                <a class="nav-btn" href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+                            {% endif %}
+        
+                            {% if page_obj.number < page_obj.paginator.num_pages %}
+                                <a href="?page={{ page_obj.next_page_number  }}">→</a>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+
                 </div>
             </div>
 

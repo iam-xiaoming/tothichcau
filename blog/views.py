@@ -13,6 +13,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .forms import PostCommentForm
 from django.contrib import messages
+from django.core.paginator import Paginator
 
 logger = logging.getLogger(__name__)
 
@@ -30,7 +31,7 @@ class PostListView(ListView):
         context['categories'] = Category.objects.all()
         context['tags'] = Tag.objects.all().order_by('-frequency')[:10]
         return context
-    
+
 
 class UserPostListView(ListView):
     model = Post
@@ -50,6 +51,7 @@ class UserPostListView(ListView):
         context['categories'] = Category.objects.all()
         context['tags'] = Tag.objects.all().order_by('-frequency')[:10]
         return context
+
 
 class CategoryPostListView(ListView):
     model = Post
@@ -100,7 +102,6 @@ class PostDetailView(DetailView):
     model = Post
     template_name = 'blog/blog-detail.html'
     
-    
     def get_context_data(self, **kwargs):
         user = self.request.user
         obj = self.get_object()
@@ -122,7 +123,15 @@ class PostDetailView(DetailView):
         
         context['liked_comment_ids'] = liked_comment_ids
         
-        context['comments'] = PostComment.objects.filter(post=obj)
+        # paginator
+        paginator = Paginator(comments, 10)
+        page_number = self.request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        
+        print(page_obj)
+        
+        context['page_obj'] = page_obj
+        
         context['tags'] = Tag.objects.all().order_by('-frequency')[:10]
         context['related_posts'] = related_posts
         return context

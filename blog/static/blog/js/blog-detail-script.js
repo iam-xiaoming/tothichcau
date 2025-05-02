@@ -1,4 +1,43 @@
 document.addEventListener('DOMContentLoaded', function() {
+
+    const currentUrl = window.location.href;
+
+    // Hàm mở popup
+    function openSharePopup(url) {
+        window.open(url, 'share-window', 'width=600,height=400');
+    }
+
+    // Facebook
+    document.querySelector('.share-button.facebook').addEventListener('click', function (e) {
+        e.preventDefault();
+        const url = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(currentUrl);
+        openSharePopup(url);
+    });
+
+    // Twitter
+    document.querySelector('.share-button.twitter').addEventListener('click', function (e) {
+        e.preventDefault();
+        const text = document.title;
+        const url = 'https://twitter.com/intent/tweet?url=' + encodeURIComponent(currentUrl) + '&text=' + encodeURIComponent(text);
+        openSharePopup(url);
+    });
+
+    // Reddit
+    document.querySelector('.share-button.reddit').addEventListener('click', function (e) {
+        e.preventDefault();
+        const url = 'https://www.reddit.com/submit?url=' + encodeURIComponent(currentUrl);
+        openSharePopup(url);
+    });
+
+    // LinkedIn
+    document.querySelector('.share-button.linkedin').addEventListener('click', function (e) {
+        e.preventDefault();
+        const title = document.title;
+        const url = 'https://www.linkedin.com/shareArticle?mini=true&url=' + encodeURIComponent(currentUrl) + '&title=' + encodeURIComponent(title);
+        openSharePopup(url);
+    });
+
+
     // Copy Link Functionality
     const copyLinkBtn = document.getElementById('copy-link');
     const copyLinkBtnBottom = document.getElementById('copy-link-bottom');
