@@ -449,7 +449,7 @@ ol {
 	padding: 20px 0 15px;
 }
 
-.header__right .cart, .wishlist {
+.header__right .cart, .wishlist, .notification {
 	position: relative;
 	display: inline-block;
 	color: #fff;
@@ -458,19 +458,20 @@ ol {
 }
 
 
-.header__right .cart-badge, .wishlist-badge {
+.header__right .cart-badge, .wishlist-badge, .notification-badge {
 	position: absolute;
 	top: -6px;
 	right: -10px;
 	background-color: red;
 	color: white;
-	font-size: 12px;
+	font-size: 0.75rem;
 	font-weight: bold;
-	padding: 2px 6px;
 	border-radius: 50%;
-	line-height: 1;
-	min-width: 18px;
-	text-align: center;
+	width: 20px;
+	height: 20px;
+	display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
 .header__right a {
