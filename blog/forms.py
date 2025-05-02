@@ -1,5 +1,5 @@
 from django import forms
-from .models import Post, Category, Tag
+from .models import Post, Category, Tag, PostComment
 from django.forms import CheckboxSelectMultiple
 
 class PostAdminForm(forms.ModelForm):
@@ -39,3 +39,37 @@ class PostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ['title', 'content', 'category', 'tags']
+        
+        
+class PostCommentForm(forms.ModelForm):
+    
+    class Meta:
+        model = PostComment
+        fields = ['name', 'email', 'content']
+    
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        self.post = kwargs.pop('post', None)
+        super().__init__(*args, **kwargs)
+   
+        
+    def clean(self):
+        cleaned_data = super().clean()
+        
+        if not (self.user and self.post):
+            raise forms.ValidationError('User and Post are required.')
+        
+        return cleaned_data
+        
+    def save(self, commit=True):
+        comment = super().save(commit=False)
+        comment.user = self.user
+        comment.post = self.post
+        
+        if commit:
+            comment.save()
+            
+        return comment
+        
+        
+        

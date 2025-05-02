@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, DetailView, CreateView
-from .models import Post, Tag, PostLike
+from .models import Post, Tag, PostLike, PostComment
 from game_features.models import Category
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import PostForm
@@ -11,6 +11,8 @@ from users.models import MyUser
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from .forms import PostCommentForm
+from django.contrib import messages
 
 logger = logging.getLogger(__name__)
 
@@ -108,12 +110,31 @@ class PostDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         related_posts = Post.objects.all().order_by('created_at')[:3]
         
+        context['form'] = PostCommentForm(user=user, post=obj)
+        
         if PostLike.objects.filter(user=user).exists():
             context['liked'] = 'liked'
         
+        context['comments'] = PostComment.objects.filter(post=obj)
         context['tags'] = Tag.objects.all().order_by('-frequency')[:10]
         context['related_posts'] = related_posts
         return context
+    
+    
+    def post(self, request, *args, **kwargs):
+        user = self.request.user
+        post = self.get_object()
+        form = PostCommentForm(request.POST, user=user, post=post)
+        if form.is_valid():
+            form.save()
+            return redirect('post-detail', post.pk)
+        else:
+            print(form.errors)
+            
+        context = self.get_context_data()
+        context['form'] = form
+        messages.error(request, "There was an error with your comment.")
+        return self.render_to_response(context)
 
     
 class PostCreateView(LoginRequiredMixin, CreateView):
