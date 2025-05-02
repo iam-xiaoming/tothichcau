@@ -28,6 +28,7 @@ class Post(models.Model):
     created_at = models.DateTimeField(auto_now=True)
     count_view = models.PositiveIntegerField(default=0)
     count_like = models.PositiveIntegerField(default=0)
+    count_comment = models.PositiveIntegerField(default=0)
     
     def __str__(self):
         return self.title

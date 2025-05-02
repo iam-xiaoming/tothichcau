@@ -11,7 +11,7 @@ class TagAdmin(admin.ModelAdmin):
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    list_display = ('title', 'user', 'count_view', 'count_like', 'tags_list', 'category', 'created_at')
+    list_display = ('title', 'user', 'count_view', 'count_comment', 'count_like', 'tags_list', 'category', 'created_at')
     list_filter = ('user__username', 'tags', 'category')
     search_fields = ('user__username', 'user__email', 'title')
     form = PostAdminForm

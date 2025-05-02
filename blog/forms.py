@@ -42,6 +42,7 @@ class PostForm(forms.ModelForm):
         
         
 class PostCommentForm(forms.ModelForm):
+    content = forms.CharField(widget=forms.Textarea(attrs={'rows': 5}))
     
     class Meta:
         model = PostComment

@@ -14,27 +14,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Pagination functionality
-    const paginationLinks = document.querySelectorAll('.pagination a');
-    paginationLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            // Remove active class from all links
-            paginationLinks.forEach(l => l.classList.remove('active'));
-            
-            // Add active class to clicked link
-            this.classList.add('active');
-            
-            // In a real application, this would load the next page of posts
-            if (this.textContent !== '→') {
-                console.log(`Loading page ${this.textContent}`);
-            } else {
-                console.log('Loading next page');
-            }
-        });
-    });
-    
     // Add animation to elements when they come into view
     const animateOnScroll = function() {
         const elements = document.querySelectorAll('.blog-post, .sidebar-section');
