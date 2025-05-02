@@ -1,0 +1,140 @@
+/* Gaming-style notification CSS */
+  
+  .notification-badge {
+    font-size: 0.75rem;
+    font-weight: bold;
+    color: white;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+  
+  @keyframes pulse {
+    0% {
+      box-shadow: 0 0 0 0 rgba(255, 56, 96, 0.7);
+    }
+    70% {
+      box-shadow: 0 0 0 10px rgba(255, 56, 96, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(255, 56, 96, 0);
+    }
+  }
+  
+  /* Dropdown styling */
+  .notification-dropdown {
+    position: absolute;
+    width: 300px;
+    background-color: #1a1a2e;
+    border: 2px solid #8a2be2;
+    border-radius: 8px;
+    margin-top: 10px;
+    right: 0;
+    z-index: 1000;
+    overflow: hidden;
+    display: none;
+    animation: fadeIn 0.3s ease-out forwards;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+    text-align: left;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .notification-header {
+    background-color: #16213e;
+    padding: 12px 15px;
+    border-bottom: 2px solid #8a2be2;
+  }
+  
+  .notification-header h3 {
+    color: #8a2be2;
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  .notification-body {
+    max-height: 300px;
+    overflow-y: auto;
+  }
+  
+  .notification-body::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .notification-body::-webkit-scrollbar-track {
+    background: #16213e;
+  }
+  
+  .notification-body::-webkit-scrollbar-thumb {
+    background-color: #8a2be2;
+    border-radius: 20px;
+  }
+  
+  .notification-item {
+    padding: 12px 15px;
+    border-bottom: 1px solid #2a2a3d;
+    transition: background-color 0.2s;
+  }
+  
+  .notification-item:hover {
+    background-color: #2a2a3d;
+  }
+  
+  .notification-item-content h4 {
+    color: #e100ff;
+    margin: 0 0 5px 0;
+    font-size: 0.95rem;
+  }
+  
+  .notification-item-content p {
+    color: #e0e0e0;
+    margin: 0 0 5px 0;
+    font-size: 0.85rem;
+  }
+  
+  .notification-item-content span {
+    color: #888;
+    font-size: 0.75rem;
+    display: block;
+  }
+  
+  .notification-footer {
+    padding: 10px;
+    text-align: center;
+    background-color: #16213e;
+    border-top: 1px solid #2a2a3d;
+  }
+  
+  .notification-footer button {
+    background: none;
+    border: none;
+    color: #8a2be2;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+  
+  .notification-footer button:hover {
+    color: #e100ff;
+  }
+  
+  /* Show dropdown when notification has active class */
+  .notification.active + .notification-dropdown {
+    display: block;
+  }
+  
+  /* Position the dropdown correctly if notification is in different positions */
+  .notification-container {
+    position: relative;
+  }

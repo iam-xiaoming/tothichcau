@@ -27,6 +27,7 @@
     <link rel="stylesheet" href="{% static 'homepage/css/slicknav.min.css' %}" type="text/css">
     <link rel="stylesheet" href="{% static 'homepage/css/style.css' %}" type="text/css">
 	<link rel="stylesheet" href="{% static 'homepage/css/search.css' %}">
+	<link rel="stylesheet" href="{% static 'homepage/css/notification.css' %}">
 
 	<script>
 		const user_pk = "{{ user.pk }}";
@@ -80,7 +81,6 @@
 							<ul>
 								<li><a href="#!">Categories <span class="arrow_carrot-down"></span></a>
 									<ul class="dropdown" id="categoryDropdown">
-										<!-- <li><a href="#!">{{ category }}</a></li> -->
 									</ul>
 								</li>
 								<li><a href="{% url 'posts' %}">Our Blog</a></li>
@@ -105,6 +105,42 @@
 								<i class="fa-solid fa-cart-plus"></i>
 								<span class="cart-badge">0</span>
 							</a>
+							<a class="notification" style="display: inline-block;" href="#!">
+								<i class="fa-solid fa-bell"></i>
+								<span class="notification-badge">0</span>
+							</a>
+
+							<div class="notification-dropdown">
+								<div class="notification-header">
+								  <h3>Notifications</h3>
+								</div>
+								<div class="notification-body">
+								  <div class="notification-item">
+									<div class="notification-item-content">
+									  <h4>New Achievement Unlocked!</h4>
+									  <p>You've reached Level 50 in Cyberpunk 2077</p>
+									  <span>2 hours ago</span>
+									</div>
+								  </div>
+								  <div class="notification-item">
+									<div class="notification-item-content">
+									  <h4>Friend Request</h4>
+									  <p>GamerX99 wants to join your squad</p>
+									  <span>5 hours ago</span>
+									</div>
+								  </div>
+								  <div class="notification-item">
+									<div class="notification-item-content">
+									  <h4>Tournament Starting</h4>
+									  <p>The Apex Legends tournament begins in 30 minutes</p>
+									  <span>30 minutes ago</span>
+									</div>
+								  </div>
+								</div>
+								<div class="notification-footer">
+								  <button>Mark all as read</button>
+								</div>
+							  </div>
 						{% endif %}
 
 						{% if request.session.uid %}
@@ -176,6 +212,7 @@
 	<script src="{% static 'homepage/js/jquery.slicknav.js' %}"></script>
 	<script src="{% static 'homepage/js/owl.carousel.min.js' %}"></script>
 	<script src="{% static 'homepage/js/main.js' %}"></script>
+	<script src="{% static 'homepage/js/notification.js' %}"></script>
 
 
 	<script>
