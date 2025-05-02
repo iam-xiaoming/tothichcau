@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, DetailView, CreateView
-from .models import Post, Tag
+from .models import Post, Tag, PostLike
 from game_features.models import Category
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import PostForm
@@ -8,6 +8,9 @@ from django.contrib import messages
 import logging
 from django.urls import reverse
 from users.models import MyUser
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
 logger = logging.getLogger(__name__)
 
@@ -56,8 +59,6 @@ class CategoryPostListView(ListView):
     def get_queryset(self):
         slug = self.kwargs.get('slug')
         
-        print(slug)
-        
         category = get_object_or_404(Category, slug=slug)
         return Post.objects.filter(category=category).order_by('-created_at')
     
@@ -99,13 +100,17 @@ class PostDetailView(DetailView):
     
     
     def get_context_data(self, **kwargs):
-        
+        user = self.request.user
         obj = self.get_object()
         obj.count_view += 1
         obj.save()
         
         context = super().get_context_data(**kwargs)
         related_posts = Post.objects.all().order_by('created_at')[:3]
+        
+        if PostLike.objects.filter(user=user).exists():
+            context['liked'] = 'liked'
+        
         context['tags'] = Tag.objects.all().order_by('-frequency')[:10]
         context['related_posts'] = related_posts
         return context
@@ -143,3 +148,35 @@ class PostCreateView(LoginRequiredMixin, CreateView):
     def get_success_url(self):
         return reverse('post-detail', kwargs={'pk': self.object.pk})
 
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def post_reaction(request):
+    user = request.user
+    post_pk = request.data.get('post_pk')
+    action = request.data.get('action')
+    
+    if action not in ['liked', 'unlike']:
+        return Response({'error': 'Invalid action.'}, status=400)
+    
+    try:
+        post = Post.objects.get(pk=post_pk)
+    except Post.DoesNotExist:
+        return Response({'error': 'Post does not exits.'}, status=400)
+    
+    if action == 'liked':
+        try:
+            PostLike.objects.create(user=user, post=post)
+        except Exception as e:
+            return Response({'error': 'An exception while being like post.', 'message': str(e)}, status=400)
+    else:
+        try:
+            post_like = PostLike.objects.get(user=user, post=post)
+        except PostLike.DoesNotExist:
+            return Response({'error': 'Post Like does not exists.'}, status=400)
+        try:
+            post_like.delete()
+        except Exception as e:
+            return Response({'error': 'An exception while deleting PostLike.', 'message': str(e)}, status=200)
+    
+    return Response({'success': True, 'message': f'Do {action} successfully.'}, status=200)

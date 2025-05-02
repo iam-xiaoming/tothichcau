@@ -1,4 +1,4 @@
-from django.db.models.signals import post_delete, post_save, pre_save, pre_delete
+from django.db.models.signals import post_delete, post_save, pre_save
 from django.dispatch import receiver
 from .models import Game, Rating, DLC
 from .utils import stripe_create, instance_scoring
@@ -27,7 +27,8 @@ def post_save_game(sender, instance, created, **kwargs):
 @receiver(post_delete, sender=DLC)
 def delete_dlc(sender, instance, **kwargs):
     if instance:
-        instance.image.delete(save=False)    
+        instance.image.delete(save=False)
+         
 
 @receiver(pre_save, sender=DLC)
 def pre_save_dlc(sender, instance, **kwargs):

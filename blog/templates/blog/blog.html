@@ -44,7 +44,7 @@
                                 <div class="post-stats">
                                     <span><i class="far fa-eye"></i> {{ post.count_view }} views</span>
                                     <span><i class="far fa-comment"></i> 48 comments</span>
-                                    <span><i class="far fa-heart"></i> 156 likes</span>
+                                    <span><i class="far fa-heart"></i> {{ post.count_like }} likes</span>
                                 </div>
                                 <a href="{% url 'post-detail' post.pk %}" class="read-more">Read Full Post <i class="fas fa-arrow-right"></i></a>
                             </div>
