@@ -65,7 +65,7 @@
                             <a href="#" class="share-button linkedin"><i class="fab fa-linkedin-in"></i></a>
                             <a href="#" class="share-button copy" id="copy-link-bottom"><i class="far fa-copy"></i></a>
                             {% if user.is_authenticated %}
-                                <a href="#" class="share-button copy {{ liked }}" id="like-post-bottom"><i class="fa-solid fa-heart"></i></a>
+                                <a href="#" class="share-button copy {{ post_liked }}" id="like-post-bottom"><i class="fa-solid fa-heart"></i></a>
                             {% endif %}
                         </div>
                     </div>
@@ -113,7 +113,7 @@
                                         <p>{{ comment.content }}</p>
                                     </div>
                                     <div class="comment-actions">
-                                        <a href="#" class="comment-like"><i class="far fa-heart"></i> <span>12</span></a>
+                                        <a comment-pk={{ comment.pk }} href="#" class="comment-like {% if comment.id in liked_comment_ids %}liked{% endif %}"><i class="fas fa-heart"></i> <span>{{ comment.count_like }}</span></a>
                                     </div>
                                 </div>
                             </div>

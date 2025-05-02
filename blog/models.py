@@ -39,6 +39,7 @@ class PostComment(models.Model):
     name = models.CharField(max_length=255)
     email = models.EmailField()
     content = models.TextField()
+    count_like = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now=True)
     
     def __str__(self):
@@ -54,3 +55,15 @@ class PostLike(models.Model):
     
     def __str__(self):
         return f'{self.user} likes {self.post}'
+    
+    
+class PostCommentLike(models.Model):
+    comment = models.ForeignKey(PostComment, on_delete=models.CASCADE, related_name='post_comment_like')
+    user = models.ForeignKey(MyUser, on_delete=models.CASCADE, related_name='post_comment_like')
+    
+    class Meta:
+        unique_together = ('comment', 'user')
+    
+    def __str__(self):
+        return f'{self.user} likes {self.comment}'
+    
