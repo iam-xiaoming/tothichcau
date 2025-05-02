@@ -111,7 +111,8 @@ INSTALLED_APPS = [
     'track.apps.TrackConfig',
     'recommender.apps.RecommenderConfig',
     'blog.apps.BlogConfig',
-    'wishlist.apps.WishlistConfig'
+    'wishlist.apps.WishlistConfig',
+    'notification.apps.NotificationConfig'
 ]
 
 MIDDLEWARE = [

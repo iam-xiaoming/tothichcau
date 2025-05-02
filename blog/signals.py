@@ -1,6 +1,7 @@
 from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
 from .models import PostLike, PostCommentLike, PostComment
+from notification.models import Notification
 
 # post like
 @receiver(post_save, sender=PostLike)
@@ -36,3 +37,21 @@ def save_post_like(sender, instance, created, **kwargs):
 def save_post_like(sender, instance, **kwargs):
     instance.comment.count_like -= 1
     instance.comment.save()
+    
+
+# notification
+@receiver(post_save, sender=PostComment)
+def create_comment_notification(sender, instance, created, **kwargs):
+    if created:
+        post = instance.post
+        recipient = post.user
+        sender_user = instance.user
+        
+        if recipient != sender_user:
+            Notification.objects.create(
+                recipient=recipient,
+                sender=sender_user,
+                post=post,
+                comment=instance,
+                message=f"{sender_user.username} has commented on your post."
+            )
