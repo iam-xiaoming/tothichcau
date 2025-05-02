@@ -195,21 +195,16 @@
 					});
 			}
 		}
-		function updateWishlistCount(quantity) {
+		function updateWishlistCount() {
 			const wishlistBadge = document.querySelector('.wishlist-badge');
-			
-			if (quantity) {
-				wishlistBadge.textContent = quantity;
-			} else {
-				fetch(`/api/wishlist/count/${user_pk}/`)
-					.then(response => response.json())
-					.then(data => {
-						wishlistBadge.textContent = data.wishlist_count;
-					})
-					.catch(error => {
-						console.error('Error fetching cart count:', error);
-					});
-			}
+			fetch(`/api/wishlist/count/${user_pk}/`)
+				.then(response => response.json())
+				.then(data => {
+					wishlistBadge.textContent = data.wishlist_count;
+				})
+				.catch(error => {
+					console.error('Error fetching cart count:', error);
+				});
 		}
 		if (user_pk && user_pk !== "None") {
 			window.addEventListener('DOMContentLoaded', () => updateCartCount());

@@ -137,21 +137,41 @@ document.addEventListener('DOMContentLoaded', function() {
 
     likePostButton.addEventListener('click', function(e) {
         e.preventDefault();
-        
-        const icon = this.querySelector('i');
+
+        let action = null;
+        if (this.classList.contains('liked')) {
+            action = 'unlike'
+        } else {
+            action = 'liked';
+        }
+
+        fetch('/post/reaction/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            body: JSON.stringify({
+                action: action,
+                post_pk: post_pk
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log(data.message);
+            } else {
+                console.log(data.error);
+            }
+        });
         
         if (this.classList.contains('liked')) {
             this.classList.remove('liked');
-            icon.classList.remove('fas');
-            icon.classList.add('fa-heart');
             this.style.color = '';
         } else {
             this.classList.add('liked');
-            icon.classList.add('fas');
             
-
-            this.style.setProperty('color', '#ff3366', 'important');
-            
+            // animation
             const heart = document.createElement('i');
             heart.className = 'fas fa-heart heart-animation';
             heart.style.position = 'absolute';

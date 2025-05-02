@@ -579,6 +579,10 @@ blockquote cite {
     gap: 20px;
 }
 
+.share-buttons .liked {
+    color: #ff3366 !important;
+}
+
 .comment-reply,
 .comment-like {
     font-size: 0.9rem;

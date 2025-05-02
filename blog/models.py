@@ -27,6 +27,18 @@ class Post(models.Model):
     content = models.TextField(max_length=1000)
     created_at = models.DateTimeField(auto_now=True)
     count_view = models.PositiveIntegerField(default=0)
+    count_like = models.PositiveIntegerField(default=0)
     
     def __str__(self):
         return self.title
+    
+    
+class PostLike(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='post_like')
+    user = models.ForeignKey(MyUser, on_delete=models.CASCADE, related_name='post_like')
+    
+    class Meta:
+        unique_together = ('post', 'user')
+    
+    def __str__(self):
+        return f'{self.user} likes {self.post}'
