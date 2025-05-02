@@ -77,20 +77,21 @@
                     {% if user.is_authenticated %}
                         <div class="comment-form-container">
                             <h4>Leave a Comment</h4>
-                            <form class="comment-form">
+                            <form method="POST" class="comment-form">
+                                {% csrf_token %}
                                 <div class="form-row">
                                     <div class="form-group">
                                         <label for="comment-name">Name <span class="required">*</span></label>
-                                        <input type="text" id="comment-name" name="comment-name" required>
+                                        {{ form.name }}
                                     </div>
                                     <div class="form-group">
                                         <label for="comment-email">Email <span class="required">*</span></label>
-                                        <input type="email" id="comment-email" name="comment-email" required>
+                                        {{ form.email }}
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="comment-content">Comment <span class="required">*</span></label>
-                                    <textarea id="comment-content" name="comment-content" rows="5" required></textarea>
+                                    {{ form.content }}
                                 </div>
                                 <button type="submit" class="btn-primary">Post Comment</button>
                             </form>
@@ -98,101 +99,25 @@
                     {% endif %}
 
                     <div class="comments-list">
-                        <div class="comment">
-                            <div class="comment-avatar">
-                                <img src="/placeholder.svg?height=60&width=60" alt="User Avatar">
-                            </div>
-                            <div class="comment-content">
-                                <div class="comment-meta">
-                                    <span class="comment-author">Sarah Parker</span>
-                                    <span class="comment-date">June 16, 2023 at 10:45 AM</span>
+                        {% for comment in comments %}
+                            <div class="comment">
+                                <div class="comment-avatar">
+                                    <img src="{{ comment.user.image.url }}" alt="User Avatar">
                                 </div>
-                                <div class="comment-text">
-                                    <p>Great article! I think the most exciting development in open world games is definitely the AI improvements. Games like Red Dead Redemption 2 really showed what's possible when NPCs have complex routines and behaviors.</p>
-                                </div>
-                                <div class="comment-actions">
-                                    <a href="#" class="comment-reply">Reply</a>
-                                    <a href="#" class="comment-like"><i class="far fa-heart"></i> <span>12</span></a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="comment">
-                            <div class="comment-avatar">
-                                <img src="/placeholder.svg?height=60&width=60" alt="User Avatar">
-                            </div>
-                            <div class="comment-content">
-                                <div class="comment-meta">
-                                    <span class="comment-author">Mike Reynolds</span>
-                                    <span class="comment-date">June 16, 2023 at 2:30 PM</span>
-                                </div>
-                                <div class="comment-text">
-                                    <p>I'm still not convinced about procedural generation. Sure, No Man's Sky has improved a lot since launch, but handcrafted worlds still feel more meaningful to me. I'd rather have a smaller map with more attention to detail than an infinite one that feels repetitive.</p>
-                                </div>
-                                <div class="comment-actions">
-                                    <a href="#" class="comment-reply">Reply</a>
-                                    <a href="#" class="comment-like"><i class="far fa-heart"></i> <span>8</span></a>
+                                <div class="comment-content">
+                                    <div class="comment-meta">
+                                        <span class="comment-author">{{ comment.name }}</span>
+                                        <span class="comment-date">{{ comment.created_at|date:"F d, Y H:i"|title }}</span>
+                                    </div>
+                                    <div class="comment-text">
+                                        <p>{{ comment.content }}</p>
+                                    </div>
+                                    <div class="comment-actions">
+                                        <a href="#" class="comment-like"><i class="far fa-heart"></i> <span>12</span></a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="comment reply">
-                            <div class="comment-avatar">
-                                <img src="/placeholder.svg?height=60&width=60" alt="User Avatar">
-                            </div>
-                            <div class="comment-content">
-                                <div class="comment-meta">
-                                    <span class="comment-author">Alex Johnson</span>
-                                    <span class="comment-author-badge">Author</span>
-                                    <span class="comment-date">June 16, 2023 at 3:15 PM</span>
-                                </div>
-                                <div class="comment-text">
-                                    <p>@Mike - That's a fair point! I think the future is probably a hybrid approach, where procedural techniques are used as a starting point but then designers come in and add the handcrafted touches that make places memorable.</p>
-                                </div>
-                                <div class="comment-actions">
-                                    <a href="#" class="comment-reply">Reply</a>
-                                    <a href="#" class="comment-like"><i class="far fa-heart"></i> <span>5</span></a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="comment">
-                            <div class="comment-avatar">
-                                <img src="/placeholder.svg?height=60&width=60" alt="User Avatar">
-                            </div>
-                            <div class="comment-content">
-                                <div class="comment-meta">
-                                    <span class="comment-author">Lisa Chen</span>
-                                    <span class="comment-date">June 17, 2023 at 9:20 AM</span>
-                                </div>
-                                <div class="comment-text">
-                                    <p>I'm really excited about the potential for VR in open world games. Imagine exploring these massive worlds in full immersion! The technology isn't quite there yet for comfortable long sessions, but I think that's where we're headed eventually.</p>
-                                </div>
-                                <div class="comment-actions">
-                                    <a href="#" class="comment-reply">Reply</a>
-                                    <a href="#" class="comment-like"><i class="far fa-heart"></i> <span>3</span></a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="comment">
-                            <div class="comment-avatar">
-                                <img src="/placeholder.svg?height=60&width=60" alt="User Avatar">
-                            </div>
-                            <div class="comment-content">
-                                <div class="comment-meta">
-                                    <span class="comment-author">David Wilson</span>
-                                    <span class="comment-date">June 17, 2023 at 11:05 AM</span>
-                                </div>
-                                <div class="comment-text">
-                                    <p>One thing I think you missed is how cloud gaming might impact open world design. If processing power isn't limited to what's in the player's home, we could see some truly massive simulations that wouldn't be possible otherwise.</p>
-                                </div>
-                                <div class="comment-actions">
-                                    <a href="#" class="comment-reply">Reply</a>
-                                    <a href="#" class="comment-like"><i class="far fa-heart"></i> <span>7</span></a>
-                                </div>
-                            </div>
-                        </div>
+                        {% endfor %}
                     </div>
 
                     <div class="comments-pagination">

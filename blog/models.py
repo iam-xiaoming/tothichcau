@@ -31,6 +31,18 @@ class Post(models.Model):
     
     def __str__(self):
         return self.title
+
+
+class PostComment(models.Model):
+    user = models.ForeignKey(MyUser, on_delete=models.CASCADE, related_name='post_comment')
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='post_comment')
+    name = models.CharField(max_length=255)
+    email = models.EmailField()
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return self.name
     
     
 class PostLike(models.Model):

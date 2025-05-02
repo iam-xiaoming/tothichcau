@@ -61,28 +61,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Comment Reply Functionality
-    const replyButtons = document.querySelectorAll('.comment-reply');
-    
-    replyButtons.forEach(button => {
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            const commentAuthor = this.closest('.comment').querySelector('.comment-author').textContent;
-            const commentForm = document.querySelector('.comment-form');
-            const commentTextarea = document.getElementById('comment-content');
-            
-            // Scroll to comment form
-            commentForm.scrollIntoView({ behavior: 'smooth' });
-            
-            // Focus on textarea and add @username
-            setTimeout(() => {
-                commentTextarea.focus();
-                commentTextarea.value = `@${commentAuthor} `;
-            }, 500);
-        });
-    });
-    
     // Comment Like Functionality
     const likeButtons = document.querySelectorAll('.comment-like');
     
@@ -196,10 +174,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 800);
         }
     });
-    
-    
-
-    
     
     // Highlight code blocks (if any)
     const codeBlocks = document.querySelectorAll('pre code');

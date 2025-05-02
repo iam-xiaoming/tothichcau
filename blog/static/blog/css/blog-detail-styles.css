@@ -574,6 +574,11 @@ blockquote cite {
     margin-bottom: 15px;
 }
 
+.comment-text p {
+    color: var(--secondary-text) !important;
+    font-style: normal;
+}
+
 .comment-actions {
     display: flex;
     gap: 20px;
@@ -583,7 +588,6 @@ blockquote cite {
     color: #ff3366 !important;
 }
 
-.comment-reply,
 .comment-like {
     font-size: 0.9rem;
     color: var(--secondary-text);
