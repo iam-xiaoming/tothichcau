@@ -15,7 +15,36 @@ document.addEventListener('DOMContentLoaded', function() {
       container.appendChild(notificationBell);
       container.appendChild(notificationDropdown);
     }
+
+    function loadNotifications() {
+      fetch('/api/notifications/')
+        .then(response => response.json())
+        .then(data => {
+          const body = document.querySelector('.notification-body');
+          if (!body) return;
     
+          body.innerHTML = '';
+    
+          data.notifications.forEach(n => {
+            const item = document.createElement('div');
+            item.className = 'notification-item';
+            item.innerHTML = `
+              <div class="notification-item-content">
+                <h4>${n.title || 'New Notification'}</h4>
+                <p>${n.message}</p>
+                <span>${n.timestamp}</span>
+              </div>`;
+            body.appendChild(item);
+          });
+    
+          updateNotificationCount(data.notifications.length);
+        })
+        .catch(err => console.error('Error loading notifications:', err));
+    }
+
+    loadNotifications();
+    
+
     // Toggle dropdown on click
     notificationBell.addEventListener('click', function(e) {
       e.preventDefault(); // Prevent the default anchor behavior
@@ -61,15 +90,25 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     }
     
-    // Example: Set notification count to 3
-    updateNotificationCount(3);
-    
     // Example: Mark all as read button
     const markAllReadBtn = document.querySelector('.notification-footer button');
     if (markAllReadBtn) {
       markAllReadBtn.addEventListener('click', function() {
-        updateNotificationCount(0);
-        // You would typically call an API here to mark notifications as read
+
+        fetch('/api/notifications/mark-read/', {
+          method: 'POST',
+          headers: {
+            'X-CSRFToken': getCookie('csrftoken'),
+          }
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            updateNotificationCount(0);
+            loadNotifications();
+          }
+        })
+        .catch(err => console.error('Mark as read failed:', err));
       });
     }
   });
