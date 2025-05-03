@@ -97,10 +97,10 @@
 						<a style="{% if user.is_authenticated %}margin-right: 30px;{% endif %}" href="#" class="search-switch"><span class="icon_search"></span></a>
 
 						{% if request.session.uid %}
-							<a class="wishlist" style="display: inline-block;" href="{% url 'profile' %}">
+							<!-- <a class="wishlist" style="display: inline-block;" href="{% url 'profile' %}">
 								<i class="fa-solid fa-heart"></i>
 								<span class="wishlist-badge">0</span>
-							</a>
+							</a> -->
 							<a class="cart" style="display: inline-block;" href="{% url 'cart' %}">
 								<i class="fa-solid fa-cart-plus"></i>
 								<span class="cart-badge">0</span>
@@ -217,20 +217,20 @@
 					});
 			}
 		}
-		function updateWishlistCount() {
-			const wishlistBadge = document.querySelector('.wishlist-badge');
-			fetch(`/api/wishlist/count/${user_pk}/`)
-				.then(response => response.json())
-				.then(data => {
-					wishlistBadge.textContent = data.wishlist_count;
-				})
-				.catch(error => {
-					console.error('Error fetching cart count:', error);
-				});
-		}
+		//function updateWishlistCount() {
+		//	const wishlistBadge = document.querySelector('.wishlist-badge');
+		//	fetch(`/api/wishlist/count/${user_pk}/`)
+		//		.then(response => response.json())
+		//		.then(data => {
+		//			wishlistBadge.textContent = data.wishlist_count;
+		//		})
+		//		.catch(error => {
+		//			console.error('Error fetching cart count:', error);
+		//		});
+		//}
 		if (user_pk && user_pk !== "None") {
 			window.addEventListener('DOMContentLoaded', () => updateCartCount());
-			window.addEventListener('DOMContentLoaded', () => updateWishlistCount());
+		//	window.addEventListener('DOMContentLoaded', () => updateWishlistCount());
 		}
 	</script>
 

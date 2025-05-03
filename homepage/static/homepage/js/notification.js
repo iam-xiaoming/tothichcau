@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
               </div>`;
             body.appendChild(item);
           });
-    
+          
           updateNotificationCount(data.notifications.length);
         })
         .catch(err => console.error('Error loading notifications:', err));
@@ -80,13 +80,7 @@ document.addEventListener('DOMContentLoaded', function() {
       const badge = notificationBell.querySelector('.notification-badge');
       if (badge) {
         badge.textContent = count;
-        
-        // Hide badge if count is 0
-        if (count === 0) {
-          badge.style.display = 'none';
-        } else {
-          badge.style.display = 'flex';
-        }
+        badge.style.display = 'flex';
       }
     }
     
@@ -104,8 +98,8 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
           if (data.success) {
-            updateNotificationCount(0);
             loadNotifications();
+            updateNotificationCount(0);
           }
         })
         .catch(err => console.error('Mark as read failed:', err));

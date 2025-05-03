@@ -11,8 +11,6 @@ from games.forms import UserRating
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from users.models import Comment
 from .utils import get_game_dlcs
-from recommender.utils import get_aws_recommended_items, aws_validators_recommendation
-from django.conf import settings
 from wishlist.models import Wishlist
 
 
@@ -35,17 +33,10 @@ class GameDetailView(DetailView):
         items = dict()
         
         dlcs = get_game_dlcs(game)
-        if len(dlcs) > 0:
-            items = {
-                'title': 'Downloadable Content',
-                'games': dlcs
-            }
-        else:
-            recommended = get_aws_recommended_items(settings.RECOMMENDER, user.id, 5, settings.FILTERING)
-            items = {
-                'title': 'You may like',
-                'games': aws_validators_recommendation(list(map(lambda x: int(x['itemId']), recommended)))
-            }
+        items = {
+            'title': 'Downloadable Content',
+            'games': dlcs
+        }
             
         context['items'] = items
         
@@ -113,12 +104,7 @@ class DLCDetailView(DetailView):
         context['scoring_form'] = scoring_form
         
         items = {'title': 'You may like'}
-        recommended = get_aws_recommended_items(settings.RECOMMENDER, user.id, 5, settings.FILTERING)
-        if len(recommended) > 0:
-            items['games'] = aws_validators_recommendation(list(map(lambda x: int(x['itemId']), recommended)))
-        else:
-            items['games'] = DLC.objects.all()[:5]
-            
+        items['games'] = Game.objects.all()[:10]
         
         context['items'] = items
         
