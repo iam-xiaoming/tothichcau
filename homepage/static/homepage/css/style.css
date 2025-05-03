@@ -445,7 +445,7 @@ ol {
 	text-align: right;
 	display: flex;
 	align-items: center;
-	justify-content: space-between;
+	justify-content: space-evenly;
 	padding: 20px 0 15px;
 }
 
@@ -478,7 +478,7 @@ ol {
 	display: inline-block;
 	font-size: 18px;
 	color: #ffffff;
-	margin-right: 30px;
+	/* margin-right: 30px; */
 }
 
 .header__right a:last-child {

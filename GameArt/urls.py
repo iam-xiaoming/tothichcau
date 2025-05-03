@@ -30,6 +30,7 @@ import game_features.urls
 import track.urls
 import blog.urls
 import wishlist.urls
+import notification.urls
 
 
 urlpatterns = [
@@ -45,7 +46,8 @@ urlpatterns = [
     path('', include(game_features.urls)),
     path('', include(track.urls)),
     path('', include(blog.urls)),
-    path('', include(wishlist.urls))
+    path('', include(wishlist.urls)),
+    path('', include(notification.urls))
 ]
 
 

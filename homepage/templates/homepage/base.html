@@ -94,7 +94,7 @@
 				</div>
 				<div class="col-lg-2">
 					<div class="header__right">
-						<a href="#" class="search-switch"><span class="icon_search"></span></a>
+						<a style="{% if user.is_authenticated %}margin-right: 30px;{% endif %}" href="#" class="search-switch"><span class="icon_search"></span></a>
 
 						{% if request.session.uid %}
 							<a class="wishlist" style="display: inline-block;" href="{% url 'profile' %}">
@@ -115,27 +115,12 @@
 								  <h3>Notifications</h3>
 								</div>
 								<div class="notification-body">
+
 								  <div class="notification-item">
 									<div class="notification-item-content">
-									  <h4>New Achievement Unlocked!</h4>
-									  <p>You've reached Level 50 in Cyberpunk 2077</p>
-									  <span>2 hours ago</span>
 									</div>
 								  </div>
-								  <div class="notification-item">
-									<div class="notification-item-content">
-									  <h4>Friend Request</h4>
-									  <p>GamerX99 wants to join your squad</p>
-									  <span>5 hours ago</span>
-									</div>
-								  </div>
-								  <div class="notification-item">
-									<div class="notification-item-content">
-									  <h4>Tournament Starting</h4>
-									  <p>The Apex Legends tournament begins in 30 minutes</p>
-									  <span>30 minutes ago</span>
-									</div>
-								  </div>
+								  
 								</div>
 								<div class="notification-footer">
 								  <button>Mark all as read</button>
