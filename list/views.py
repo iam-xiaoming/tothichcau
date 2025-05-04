@@ -4,6 +4,7 @@ from django.views.generic import ListView
 from game_features.models import Category
 from django.http import HttpResponse
 from homepage.utils import get_trendings, get_sales
+from django.core.paginator import Paginator
 
 # Create your views here.
 genres = Category.objects.all()[:4]
@@ -26,10 +27,15 @@ def category_view(request, slug):
     games = list(Game.objects.filter(categories=category))
     dlcs = list(DLC.objects.filter(categories=category))
 
+    game_list = games + dlcs
     context = {
         'genres': genres,
         'games': games + dlcs 
     }
+    paginator = Paginator(game_list, 21)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    context['page_obj'] = page_obj
 
     return render(request, 'list/games-list.html', context)
 
@@ -45,6 +51,12 @@ def action_view(request, action):
     if action == 'trending':
         context['games'] = get_trendings()
     elif action == 'sale':
-        context['games'] = get_sales()  
+        context['games'] = get_sales()
+        
+    game_list = context['games']
+    paginator = Paginator(game_list, 21)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    context['page_obj'] = page_obj
     
     return render(request, 'list/games-list.html', context)
