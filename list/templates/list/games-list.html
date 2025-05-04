@@ -1,0 +1,167 @@
+{% extends "homepage/base.html" %}
+{% load static %}
+
+{% block title %}
+    <title>Game Collection - NeonGamer</title>
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'blog/css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'list/css/games-list-styles.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="cursor-glow"></div>
+    
+    <div class="games-hero">
+        <div class="games-hero-content">
+            <h1>Game Collection</h1>
+            <p>Discover the best gaming experiences across all platforms</p>
+        </div>
+    </div>
+
+    <div class="games-container">
+        <div class="games-sidebar">
+
+            <div class="filter-section">
+                <h3>Filters</h3>
+
+                <div class="filter-group">
+                    <h4>Genres</h4>
+                    <div class="filter-options">
+                        <label class="filter-option">
+                            <input type="checkbox" value="action" checked>
+                            <span class="checkmark"></span>
+                            Action
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" value="adventure">
+                            <span class="checkmark"></span>
+                            Adventure
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" value="rpg">
+                            <span class="checkmark"></span>
+                            RPG
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" value="strategy">
+                            <span class="checkmark"></span>
+                            Strategy
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" value="simulation">
+                            <span class="checkmark"></span>
+                            Simulation
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" value="sports">
+                            <span class="checkmark"></span>
+                            Sports
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" value="racing">
+                            <span class="checkmark"></span>
+                            Racing
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" value="indie">
+                            <span class="checkmark"></span>
+                            Indie
+                        </label>
+                    </div>
+                </div>
+
+                <div class="filter-actions">
+                    <button id="apply-filters" class="btn-primary">Apply Filters</button>
+                    <button id="reset-filters" class="btn-secondary">Reset</button>
+                </div>
+            </div>
+
+            <div class="popular-tags">
+                <h3>Popular Tags</h3>
+                <div class="tags-cloud">
+                    <a href="#" class="tag">Open World</a>
+                    <a href="#" class="tag">Multiplayer</a>
+                    <a href="#" class="tag">FPS</a>
+                    <a href="#" class="tag">Survival</a>
+                    <a href="#" class="tag">Battle Royale</a>
+                    <a href="#" class="tag">Roguelike</a>
+                    <a href="#" class="tag">Souls-like</a>
+                    <a href="#" class="tag">Horror</a>
+                    <a href="#" class="tag">Cyberpunk</a>
+                    <a href="#" class="tag">Fantasy</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="games-content">
+            <div class="games-header">
+                <div class="games-count">
+                    <span id="games-total">24</span> games found
+                </div>
+                <div class="view-toggle">
+                    <button class="view-btn grid active" data-view="grid"><i class="fas fa-th"></i></button>
+                    <button class="view-btn list" data-view="list"><i class="fas fa-list"></i></button>
+                </div>
+            </div>
+
+            <div class="popular-genres">
+                <h3>Popular Genres</h3>
+                <div class="genre-cards">
+                    {% for game in games|slice:"4" %}
+                        <a href="#" class="genre-card" data-genre="action">
+                            <div class="genre-image">
+                                <img src="{{ game.image.url }}" alt="Action Games">
+                            </div>
+                            <div class="genre-name">Action Games</div>
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="games-grid" id="games-grid">
+                <!-- Game Card -->
+                {% for game in games %}
+                    <div class="game-card" data-genres="action rpg" data-platforms="pc playstation xbox" data-rating="9.5" data-year="2023">
+                        <div class="game-card-image">
+                            <img src="{{ game.image.url }}" alt="Cyberpunk 2077: Phantom Liberty">
+                            <div class="game-platforms">
+                                <span class="platform pc"><i class="fas fa-desktop"></i></span>
+                                <span class="platform playstation"><i class="fab fa-playstation"></i></span>
+                                <span class="platform xbox"><i class="fab fa-xbox"></i></span>
+                            </div>
+                        </div>
+                        <div class="game-card-content">
+                            <div class="game-rating">{{ average_score }}</div>
+                            <h3 class="game-title">{{ game.name }}</h3>
+                            <div class="game-genres">
+                                {% for genre in game.categories.all %}
+                                    <span class="genre">{{ genre }}</span>
+                                {% endfor %}
+                            </div>
+                            <div class="game-release">{{ game.release_date }}</div>
+                            <p class="game-description">{{ game.description }}</p>
+                            <div class="game-actions">
+                                <a href="#" class="btn-primary">View Details</a>
+                                <button class="btn-wishlist"><i class="far fa-heart"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="pagination">
+                <a href="#" class="active">1</a>
+                <a href="#">2</a>
+                <a href="#">3</a>
+                <a href="#">4</a>
+                <a href="#">5</a>
+                <a href="#" class="next">Next <i class="fas fa-chevron-right"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'blog/js/script.js' %}"></script>
+    <!-- <script src="{% static 'list/js/games-list-script.js' %}"></script> -->
+{% endblock %}
