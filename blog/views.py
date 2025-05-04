@@ -113,7 +113,7 @@ class PostDetailView(DetailView):
         
         context['form'] = PostCommentForm(user=user, post=obj)
         
-        if PostLike.objects.filter(user=user).exists():
+        if PostLike.objects.filter(user=user, post=obj).exists():
             context['post_liked'] = 'post_liked'
 
         comments = PostComment.objects.filter(post=obj)

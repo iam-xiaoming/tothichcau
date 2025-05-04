@@ -97,7 +97,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='user')
     created_at = models.DateTimeField(default=timezone.now)
-    image = models.ImageField(default='donate.jpg', upload_to='users/')
+    image = models.ImageField(default='users/donate.jpg', upload_to='users/')
     
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
@@ -112,9 +112,6 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
         return self.email
 
 
-# class Profile(models.Model):
-#     user = models.OneToOneField(MyUser, on_delete=models.CASCADE, related_name='profile')
-#     image = 
 
 class UserGame(models.Model):    
     user = models.ForeignKey(MyUser, on_delete=models.CASCADE, related_name='owned_games')
