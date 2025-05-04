@@ -376,61 +376,16 @@
     min-height: 800px;
 }
 
-.games-header {
+.games-content .upper {
     display: flex;
+    align-items: center;
     justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
-    flex-wrap: wrap;
-    gap: 15px;
-}
-
-.games-count {
-    font-size: 1.1rem;
-    color: var(--secondary-text);
-}
-
-.games-count span {
-    font-weight: 700;
-    color: var(--primary-text);
-}
-
-.games-sort {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.games-sort label {
-    color: var(--secondary-text);
-}
-
-.games-sort select {
-    padding: 8px 12px;
-    background-color: var(--secondary-bg);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 5px;
-    color: var(--primary-text);
-    font-size: 0.9rem;
-    cursor: pointer;
-}
-
-.games-sort select:focus {
-    outline: none;
-    border-color: var(--neon-primary);
-}
-
-.view-toggle {
-    display: flex;
-    gap: 5px;
+    margin-bottom: 15px;
 }
 
 .view-btn {
     width: 40px;
     height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     background-color: var(--secondary-bg);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 5px;
@@ -439,13 +394,20 @@
     transition: all 0.3s ease;
 }
 
+.next-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+}
+
 .view-btn:hover, .view-btn.active {
     background-color: var(--neon-primary);
     color: var(--primary-bg);
 }
 
 .popular-genres {
-    margin-bottom: 40px;
+    margin-bottom: 50px;
 }
 
 .popular-genres h3 {
@@ -597,23 +559,6 @@
     flex-direction: column;
 }
 
-.game-rating {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--neon-primary);
-    color: var(--primary-bg);
-    font-weight: 700;
-    font-size: 1.1rem;
-    border-radius: 50%;
-    box-shadow: 0 0 10px var(--neon-primary);
-}
-
 .game-title {
     font-size: 1.3rem;
     margin-bottom: 10px;
@@ -647,6 +592,7 @@
     line-height: 1.5;
     margin-bottom: 20px;
     flex: 1;
+    -webkit-line-clamp: var(--line-clamp, 1);
 }
 
 .game-actions {

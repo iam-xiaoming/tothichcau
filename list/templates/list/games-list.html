@@ -11,7 +11,7 @@
 {% endblock %}
 
 {% block content %}
-    <div class="cursor-glow"></div>
+    <!-- <div class="cursor-glow"></div> -->
     
     <div class="games-hero">
         <div class="games-hero-content">
@@ -87,34 +87,27 @@
                     <a href="#" class="tag">Survival</a>
                     <a href="#" class="tag">Battle Royale</a>
                     <a href="#" class="tag">Roguelike</a>
-                    <a href="#" class="tag">Souls-like</a>
-                    <a href="#" class="tag">Horror</a>
-                    <a href="#" class="tag">Cyberpunk</a>
-                    <a href="#" class="tag">Fantasy</a>
                 </div>
             </div>
         </div>
 
         <div class="games-content">
-            <div class="games-header">
-                <div class="games-count">
-                    <span id="games-total">24</span> games found
-                </div>
-                <div class="view-toggle">
-                    <button class="view-btn grid active" data-view="grid"><i class="fas fa-th"></i></button>
-                    <button class="view-btn list" data-view="list"><i class="fas fa-list"></i></button>
-                </div>
-            </div>
-
             <div class="popular-genres">
-                <h3>Popular Genres</h3>
+                <div class="upper">
+                    <h3>Popular Genres</h3>
+                    <div class="view-toggle">
+                        <button class="view-btn grid active" data-view="grid"><i class="fas fa-th"></i></button>
+                        <button class="view-btn list" data-view="list"><i class="fas fa-list"></i></button>
+                    </div>
+                </div>
+               
                 <div class="genre-cards">
-                    {% for game in games|slice:"4" %}
+                    {% for category in categories %}
                         <a href="#" class="genre-card" data-genre="action">
                             <div class="genre-image">
-                                <img src="{{ game.image.url }}" alt="Action Games">
+                                <img src="{{ category.image.url }}" alt="{{ category.name }} Games">
                             </div>
-                            <div class="genre-name">Action Games</div>
+                            <div class="genre-name">{{ category.name }} Games</div>
                         </a>
                     {% endfor %}
                 </div>
@@ -123,9 +116,9 @@
             <div class="games-grid" id="games-grid">
                 <!-- Game Card -->
                 {% for game in games %}
-                    <div class="game-card" data-genres="action rpg" data-platforms="pc playstation xbox" data-rating="9.5" data-year="2023">
+                    <div class="game-card" data-genres="{% for category in game.categories.all %}{{ category }},{% endfor %}" data-platforms="pc playstation xbox" data-rating="{{ game.average_score }}" data-year="2023">
                         <div class="game-card-image">
-                            <img src="{{ game.image.url }}" alt="Cyberpunk 2077: Phantom Liberty">
+                            <img src="{{ game.image.url }}" alt="{{ game.name }}">
                             <div class="game-platforms">
                                 <span class="platform pc"><i class="fas fa-desktop"></i></span>
                                 <span class="platform playstation"><i class="fab fa-playstation"></i></span>
@@ -133,15 +126,14 @@
                             </div>
                         </div>
                         <div class="game-card-content">
-                            <div class="game-rating">{{ average_score }}</div>
                             <h3 class="game-title">{{ game.name }}</h3>
                             <div class="game-genres">
                                 {% for genre in game.categories.all %}
                                     <span class="genre">{{ genre }}</span>
                                 {% endfor %}
                             </div>
-                            <div class="game-release">{{ game.release_date }}</div>
-                            <p class="game-description">{{ game.description }}</p>
+                            <div class="game-release">{{ game.release_date|date:"F j, Y" }}</div>
+                            <p class="game-description line-clamp">{{ game.description }}</p>
                             <div class="game-actions">
                                 <a href="#" class="btn-primary">View Details</a>
                                 <button class="btn-wishlist"><i class="far fa-heart"></i></button>
@@ -151,13 +143,39 @@
                 {% endfor %}
             </div>
 
+
+
             <div class="pagination">
-                <a href="#" class="active">1</a>
+                {% if page_obj.number > 3 %}
+                    <a class="" href="?page=1">1</a>
+                    <span class="">...</span>
+                {% endif %}  
+    
+                {% for num in page_obj.paginator.page_range %}
+                    {% if num > page_obj.number|add:"-3" and num < page_obj.number|add:'3' %}
+                        {% if page_obj.number == num %}
+                            <a class="active">{{ num }}</a>
+                        {% else %}
+                            <a class="" href="?page={{ num }}">{{ num }}</a>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+    
+                {% if page_obj.number < page_obj.paginator.num_pages|add:'-2' %}
+                    <span class="">...</span>
+                    <a class="nav-btn" href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+                {% endif %}
+
+                {% if page_obj.number < page_obj.paginator.num_pages %}
+                    <a class="next-btn" href="?page={{ page_obj.next_page_number  }}">Next <i class="fas fa-chevron-right"></i></a>
+                {% endif %}
+                
+                <!-- <a href="#" class="active">1</a>
                 <a href="#">2</a>
                 <a href="#">3</a>
                 <a href="#">4</a>
-                <a href="#">5</a>
-                <a href="#" class="next">Next <i class="fas fa-chevron-right"></i></a>
+                <a href="#">5</a> -->
+                <!-- <a href="#" class="next">Next <i class="fas fa-chevron-right"></i></a> -->
             </div>
         </div>
     </div>

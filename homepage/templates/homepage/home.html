@@ -76,7 +76,7 @@
                                 <i class="fa-solid fa-arrow-left"></i>
                             </button>
                             <div class="product-list" id="trending-product-list">
-                                {% for game in most_view %}
+                                {% for game in trendings %}
                                     {% if game.status == 'base' %}
                                         {% url 'base-game-details' game.pk as game_url %}
                                     {% else %}
@@ -145,7 +145,7 @@
                                 <i class="fa-solid fa-arrow-left"></i>
                             </button>
                             <div class="product-list" id="sale-product-list">
-                                {% for game in recommended %}
+                                {% for game in sales %}
                                     {% if game.status == 'base' %}
                                         {% url 'base-game-details' game.pk as game_url %}
                                     {% else %}
