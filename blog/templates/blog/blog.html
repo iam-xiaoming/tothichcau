@@ -58,31 +58,33 @@
                 {% endfor %}
             </div>
 
-            <div class="pagination">
-                {% if page_obj.number > 3 %}
-                    <a class="" href="?page=1">1</a>
-                    <span class="">...</span>
-                {% endif %}
-    
-                {% for num in page_obj.paginator.page_range %}
-                    {% if num > page_obj.number|add:"-3" and num < page_obj.number|add:'3' %}
-                        {% if page_obj.number == num %}
-                            <a href="" class="active">{{ num }}</a>
-                        {% else %}
-                            <a class="" href="?page={{ num }}">{{ num }}</a>
-                        {% endif %}
+            {% if page_obj.paginator.count > 0 %}
+                <div class="pagination">
+                    {% if page_obj.number > 3 %}
+                        <a class="" href="?page=1">1</a>
+                        <span class="">...</span>
                     {% endif %}
-                {% endfor %}
-    
-                {% if page_obj.number < page_obj.paginator.num_pages|add:'-2' %}
-                    <span class="">...</span>
-                    <a class="nav-btn" href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
-                {% endif %}
+        
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if num > page_obj.number|add:"-3" and num < page_obj.number|add:'3' %}
+                            {% if page_obj.number == num %}
+                                <a href="" class="active">{{ num }}</a>
+                            {% else %}
+                                <a class="" href="?page={{ num }}">{{ num }}</a>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+        
+                    {% if page_obj.number < page_obj.paginator.num_pages|add:'-2' %}
+                        <span class="">...</span>
+                        <a class="nav-btn" href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+                    {% endif %}
 
-                {% if page_obj.number < page_obj.paginator.num_pages %}
-                    <a href="?page={{ page_obj.next_page_number  }}"><i class="fas fa-chevron-right"></i></a>
-                {% endif %}
-            </div>
+                    {% if page_obj.number < page_obj.paginator.num_pages %}
+                        <a href="?page={{ page_obj.next_page_number  }}"><i class="fas fa-chevron-right"></i></a>
+                    {% endif %}
+                </div>
+            {% endif %}
         </main>
 
         <aside class="blog-sidebar">

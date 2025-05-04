@@ -29,46 +29,13 @@
                 <div class="filter-group">
                     <h4>Genres</h4>
                     <div class="filter-options">
-                        <label class="filter-option">
-                            <input type="checkbox" value="action" checked>
-                            <span class="checkmark"></span>
-                            Action
-                        </label>
-                        <label class="filter-option">
-                            <input type="checkbox" value="adventure">
-                            <span class="checkmark"></span>
-                            Adventure
-                        </label>
-                        <label class="filter-option">
-                            <input type="checkbox" value="rpg">
-                            <span class="checkmark"></span>
-                            RPG
-                        </label>
-                        <label class="filter-option">
-                            <input type="checkbox" value="strategy">
-                            <span class="checkmark"></span>
-                            Strategy
-                        </label>
-                        <label class="filter-option">
-                            <input type="checkbox" value="simulation">
-                            <span class="checkmark"></span>
-                            Simulation
-                        </label>
-                        <label class="filter-option">
-                            <input type="checkbox" value="sports">
-                            <span class="checkmark"></span>
-                            Sports
-                        </label>
-                        <label class="filter-option">
-                            <input type="checkbox" value="racing">
-                            <span class="checkmark"></span>
-                            Racing
-                        </label>
-                        <label class="filter-option">
-                            <input type="checkbox" value="indie">
-                            <span class="checkmark"></span>
-                            Indie
-                        </label>
+                        {% for genre in genres %}
+                            <label class="filter-option">
+                                <input type="checkbox" value="{{ genre.slug }}" {% if forloop.first %}checked{% endif %}>
+                                <span class="checkmark"></span>
+                                {{ genre|title }}
+                            </label>
+                        {% endfor %}
                     </div>
                 </div>
 
@@ -102,12 +69,12 @@
                 </div>
                
                 <div class="genre-cards">
-                    {% for category in categories %}
-                        <a href="#" class="genre-card" data-genre="action">
+                    {% for genre in genres %}
+                        <a href="{% url 'category-list' genre.slug %}" class="genre-card" data-genre="action">
                             <div class="genre-image">
-                                <img src="{{ category.image.url }}" alt="{{ category.name }} Games">
+                                <img src="{{ genre.image.url }}" alt="{{ genre.name }} Games">
                             </div>
-                            <div class="genre-name">{{ category.name }} Games</div>
+                            <div class="genre-name">{{ genre.name }} Games</div>
                         </a>
                     {% endfor %}
                 </div>
@@ -116,7 +83,7 @@
             <div class="games-grid" id="games-grid">
                 <!-- Game Card -->
                 {% for game in games %}
-                    <div class="game-card" data-genres="{% for category in game.categories.all %}{{ category }},{% endfor %}" data-platforms="pc playstation xbox" data-rating="{{ game.average_score }}" data-year="2023">
+                    <div class="game-card" data-genres="{% for category in object.categories.all %}{{ category.name }}{% if not forloop.last %}, {% endif %}{% endfor %}" data-platforms="pc playstation xbox" data-rating="{{ game.average_score }}" data-year="2023">
                         <div class="game-card-image">
                             <img src="{{ game.image.url }}" alt="{{ game.name }}">
                             <div class="game-platforms">
@@ -135,7 +102,12 @@
                             <div class="game-release">{{ game.release_date|date:"F j, Y" }}</div>
                             <p class="game-description line-clamp">{{ game.description }}</p>
                             <div class="game-actions">
-                                <a href="#" class="btn-primary">View Details</a>
+                                    {% if game.status == 'base' %}
+                                        {% url 'base-game-details' game.pk as game_url %}
+                                    {% else %}
+                                        {% url 'dlc-game-details' game.pk as game_url %}
+                                    {% endif %}
+                                <a href="{{ game_url }}" class="btn-primary">View Details</a>
                                 <button class="btn-wishlist"><i class="far fa-heart"></i></button>
                             </div>
                         </div>
@@ -143,40 +115,40 @@
                 {% endfor %}
             </div>
 
-
-
-            <div class="pagination">
-                {% if page_obj.number > 3 %}
-                    <a class="" href="?page=1">1</a>
-                    <span class="">...</span>
-                {% endif %}  
-    
-                {% for num in page_obj.paginator.page_range %}
-                    {% if num > page_obj.number|add:"-3" and num < page_obj.number|add:'3' %}
-                        {% if page_obj.number == num %}
-                            <a class="active">{{ num }}</a>
-                        {% else %}
-                            <a class="" href="?page={{ num }}">{{ num }}</a>
+            {% if page_obj.paginator.count > 0 %}
+                <div class="pagination">
+                    {% if page_obj.number > 3 %}
+                        <a class="" href="?page=1">1</a>
+                        <span class="">...</span>
+                    {% endif %}  
+        
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if num > page_obj.number|add:"-3" and num < page_obj.number|add:'3' %}
+                            {% if page_obj.number == num %}
+                                <a class="active">{{ num }}</a>
+                            {% else %}
+                                <a class="" href="?page={{ num }}">{{ num }}</a>
+                            {% endif %}
                         {% endif %}
+                    {% endfor %}
+        
+                    {% if page_obj.number < page_obj.paginator.num_pages|add:'-2' %}
+                        <span class="">...</span>
+                        <a class="nav-btn" href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
                     {% endif %}
-                {% endfor %}
-    
-                {% if page_obj.number < page_obj.paginator.num_pages|add:'-2' %}
-                    <span class="">...</span>
-                    <a class="nav-btn" href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
-                {% endif %}
 
-                {% if page_obj.number < page_obj.paginator.num_pages %}
-                    <a class="next-btn" href="?page={{ page_obj.next_page_number  }}">Next <i class="fas fa-chevron-right"></i></a>
-                {% endif %}
-                
-                <!-- <a href="#" class="active">1</a>
-                <a href="#">2</a>
-                <a href="#">3</a>
-                <a href="#">4</a>
-                <a href="#">5</a> -->
-                <!-- <a href="#" class="next">Next <i class="fas fa-chevron-right"></i></a> -->
-            </div>
+                    {% if page_obj.number < page_obj.paginator.num_pages %}
+                        <a class="next-btn" href="?page={{ page_obj.next_page_number  }}">Next <i class="fas fa-chevron-right"></i></a>
+                    {% endif %}
+                    
+                    <!-- <a href="#" class="active">1</a>
+                    <a href="#">2</a>
+                    <a href="#">3</a>
+                    <a href="#">4</a>
+                    <a href="#">5</a> -->
+                    <!-- <a href="#" class="next">Next <i class="fas fa-chevron-right"></i></a> -->
+                </div>
+            {% endif %}
         </div>
     </div>
 
