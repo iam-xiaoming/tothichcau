@@ -111,6 +111,11 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
 
+
+# class Profile(models.Model):
+#     user = models.OneToOneField(MyUser, on_delete=models.CASCADE, related_name='profile')
+#     image = 
+
 class UserGame(models.Model):    
     user = models.ForeignKey(MyUser, on_delete=models.CASCADE, related_name='owned_games')
     

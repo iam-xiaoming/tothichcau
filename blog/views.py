@@ -196,6 +196,8 @@ def post_reaction(request):
     
     try:
         post = Post.objects.get(pk=post_pk)
+        
+        print(post)
     except Post.DoesNotExist:
         return Response({'error': 'Post does not exits.'}, status=400)
     
@@ -203,7 +205,7 @@ def post_reaction(request):
         try:
             PostLike.objects.create(user=user, post=post)
         except Exception as e:
-            return Response({'error': 'An exception while being like post.', 'message': str(e)}, status=400)
+            return Response({'error': f'An exception while being like post({str(e)})', 'message': str(e)}, status=400)
     else:
         try:
             post_like = PostLike.objects.get(user=user, post=post)
