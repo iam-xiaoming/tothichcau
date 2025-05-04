@@ -85,6 +85,7 @@
 					<div class="header__nav">
 						<nav class="header__menu mobile-menu">
 							<ul>
+								<li><a href="{% url 'game-list' %}">Browse</a></li>
 								<li><a href="#!">Categories <span class="arrow_carrot-down"></span></a>
 									<ul class="dropdown" id="categoryDropdown">
 									</ul>
@@ -321,7 +322,7 @@
 						data.categories.forEach(category => {
 							const li = document.createElement('li');
 							const a = document.createElement('a');
-							a.href = `#!`;
+							a.href = `/category-list/${category.slug}/`;
 							a.textContent = category.name;
 							li.appendChild(a);
 							dropdown.appendChild(li);

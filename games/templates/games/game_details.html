@@ -75,7 +75,7 @@
                                     <div class="col-lg-6 col-md-6">
                                         <ul>
                                             <li><span>Publisher:</span> {{ object.publisher|upper }}</li>
-                                            <li><span>Date released:</span> {{ object.release_date }}</li>
+                                            <li><span>Date released:</span> {{ object.release_date|date:"F j, Y" }}</li>
                                             <li id="game-status-li"><span id="game-status">Status:</span> Loading...</li>
                                             <li><span>Genre:</span>
                                                 {% if object.status == 'base' %}
