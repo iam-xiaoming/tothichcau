@@ -107,7 +107,8 @@ INSTALLED_APPS = [
     'recommender.apps.RecommenderConfig',
     'blog.apps.BlogConfig',
     'wishlist.apps.WishlistConfig',
-    'notification.apps.NotificationConfig'
+    'notification.apps.NotificationConfig',
+    'list.apps.ListConfig'
 ]
 
 MIDDLEWARE = [
