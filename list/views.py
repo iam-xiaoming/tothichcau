@@ -1,7 +1,9 @@
 from django.shortcuts import render, get_object_or_404
 from games.models import Game, DLC
-from django.views.generic import ListView, View
+from django.views.generic import ListView
 from game_features.models import Category
+from django.http import HttpResponse
+from homepage.utils import get_trendings, get_sales
 
 # Create your views here.
 genres = Category.objects.all()[:4]
@@ -29,4 +31,20 @@ def category_view(request, slug):
         'games': games + dlcs 
     }
 
+    return render(request, 'list/games-list.html', context)
+
+
+def action_view(request, action):
+    if action not in ['trending', 'sale']:
+        return HttpResponse('<h1>404</h1>')
+    
+    context = {
+        'genres': genres, 
+    }
+    
+    if action == 'trending':
+        context['games'] = get_trendings()
+    elif action == 'sale':
+        context['games'] = get_sales()  
+    
     return render(request, 'list/games-list.html', context)
