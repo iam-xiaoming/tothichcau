@@ -58,103 +58,41 @@
         <div class="container">
             <div class="row">
                 <div class="col-12">
-                    <div class="trending__product">
-                        <div class="row">
-                            <div class="col-lg-8 col-md-8 col-sm-8">
-                                <div class="section-title">
-                                    <h4>Trending Now</h4>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4">
-                                <div class="btn__all">
-                                    <a href="#" class="primary-btn">View All <span class="arrow_right"></span></a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="scroll-wrapper" id="trending-wrapper">
-                            <button class="scroll-btn left-btn" onclick="customScrollLeft('trending')">
-                                <i class="fa-solid fa-arrow-left"></i>
-                            </button>
-                            <div class="product-list" id="trending-product-list">
-                                {% for game in trendings %}
-                                    {% if game.status == 'base' %}
-                                        {% url 'base-game-details' game.pk as game_url %}
-                                    {% else %}
-                                        {% url 'dlc-game-details' game.pk as game_url %}
-                                    {% endif %}
-                                    <div class="col-lg-3 col-md-4 col-sm-6 col-12 product-card">
-                                        <a class="item-click" game-pk="{{ game.pk }}" href="{{ game_url }}">
-                                            <div class="product__item">
-                                                <!-- <div class="rating-section">
-                                                    <div class="rating-wrapper">
-                                                        <i class="fa-solid fa-star">
-                                                            <span class="score-text">5.5</span>
-                                                        </i>
-                                                    </div>
-                                                </div> -->
-                                                {% if game.quantity > 0 %}
-                                                    <div class="product__item__pic set-bg" data-setbg="{{ game.image.url }}"></div>
-                                                {% else %}
-                                                    <div class="product__item__pic set-bg sold-out" data-setbg="{{ game.image.url }}">
-                                                        <div class="overplay"></div>
-                                                    </div>
-                                                {% endif %}
-                                            </div>
-                                            <div class="product__item__text">
-                                                {% if game.status == 'base' %}
-                                                    <span class="base-game">Base Game</span>
-                                                {% else %}
-                                                    <span class="base-game">Downloadable Content</span>
-                                                {% endif %}
-                                                <h5 class="line-clamp">{{ game.name|title }}</h5>
-                                                <span style="font-size: 12px;" class="base-game">{{ game.rating|title }}</span>
-                                            </div>
-                                            <div class="price-section">
-                                                {% if game.discount > 0 %}
-                                                    <span style="font-weight: 500;" class="sale">-{{ game.discount }}%</span>
-                                                    <span class="origin-price">${{ game.price }}</span>
-                                                {% endif %}
-                                                <span style="font-weight: 600;" class="current-price">${{ game.discounted_price|floatformat:2 }}</span>
-                                            </div>
-                                        </a>                                       
+                    {% for section in sections %}
+                        <div class="{{ section.name }}">
+                            <div class="row">
+                                <div class="col-lg-8 col-md-8 col-sm-8">
+                                    <div class="section-title">
+                                        <h4>{{ section.display_name }}</h4>
                                     </div>
-                                {% endfor %}
-                            </div>
-                            <button class="scroll-btn right-btn" onclick="customScrollRight('trending')">
-                                <i class="fa-solid fa-arrow-right"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                     <!-- Sale Section Begin -->
-                    <div class="sale__product mt-5">
-                        <div class="row">
-                            <div class="col-lg-8 col-md-8 col-sm-8">
-                                <div class="section-title">
-                                    <h4>Sale</h4>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4">
+                                    <div class="btn__all">
+                                        <a href="/action/list/{{ section.id }}/" class="primary-btn">View All <span class="arrow_right"></span></a>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4">
-                                <div class="btn__all">
-                                    <a href="#" class="primary-btn">View All <span class="arrow_right"></span></a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="scroll-wrapper" id="sale-wrapper">
-                            <button class="scroll-btn left-btn" onclick="customScrollLeft('sale')">
-                                <i class="fa-solid fa-arrow-left"></i>
-                            </button>
-                            <div class="product-list" id="sale-product-list">
-                                {% for game in sales %}
-                                    {% if game.status == 'base' %}
-                                        {% url 'base-game-details' game.pk as game_url %}
-                                    {% else %}
-                                        {% url 'dlc-game-details' game.pk as game_url %}
-                                    {% endif %}
-                                    {% if game.discount > 0 %}
+                            <div class="scroll-wrapper" id="{{ section.id }}-wrapper">
+                                <button class="scroll-btn left-btn" onclick="customScrollLeft('{{ onclick }}')">
+                                    <i class="fa-solid fa-arrow-left"></i>
+                                </button>
+                                <div class="product-list" id="-product-list">
+                                    {% for game in section.games %}
+                                        {% if game.status == 'base' %}
+                                            {% url 'base-game-details' game.pk as game_url %}
+                                        {% else %}
+                                            {% url 'dlc-game-details' game.pk as game_url %}
+                                        {% endif %}
                                         <div class="col-lg-3 col-md-4 col-sm-6 col-12 product-card">
-                                            <a href="{{ game_url }}">
+                                            <a class="item-click" game-pk="{{ game.pk }}" href="{{ game_url }}">
                                                 <div class="product__item">
+                                                    <!-- <div class="rating-section">
+                                                        <div class="rating-wrapper">
+                                                            <i class="fa-solid fa-star">
+                                                                <span class="score-text">5.5</span>
+                                                            </i>
+                                                        </div>
+                                                    </div> -->
                                                     {% if game.quantity > 0 %}
                                                         <div class="product__item__pic set-bg" data-setbg="{{ game.image.url }}"></div>
                                                     {% else %}
@@ -173,21 +111,22 @@
                                                     <span style="font-size: 12px;" class="base-game">{{ game.rating|title }}</span>
                                                 </div>
                                                 <div class="price-section">
-                                                    <span style="font-weight: 500;" class="sale">-{{ game.discount }}%</span>
-                                                    <span class="origin-price">${{ game.price }}</span>
+                                                    {% if game.discount > 0 %}
+                                                        <span style="font-weight: 500;" class="sale">-{{ game.discount }}%</span>
+                                                        <span class="origin-price">${{ game.price }}</span>
+                                                    {% endif %}
                                                     <span style="font-weight: 600;" class="current-price">${{ game.discounted_price|floatformat:2 }}</span>
                                                 </div>
-                                            </a>
+                                            </a>                                       
                                         </div>
-                                    {% endif %}
-                                {% endfor %}
+                                    {% endfor %}
+                                </div>
+                                <button class="scroll-btn right-btn" onclick="customScrollRight('{{ onclick }}')">
+                                    <i class="fa-solid fa-arrow-right"></i>
+                                </button>
                             </div>
-                            <button class="scroll-btn right-btn" onclick="customScrollRight('sale')">
-                                <i class="fa-solid fa-arrow-right"></i>
-                            </button>
                         </div>
-                    </div>
-                    <!-- Sale Section End -->
+                    {% endfor %}
                 </div>
             </div>
         </div>
