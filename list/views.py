@@ -18,6 +18,7 @@ class GameListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['genres'] = genres
+        context['games'] = list(context['games']) + list(DLC.objects.all())
         return context
         
         
