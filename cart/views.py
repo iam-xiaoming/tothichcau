@@ -288,7 +288,7 @@ def webhook_view(request):
                         item_id = order.game.id
                         trx = create_transaction(user, status, session_id, total_amount, customer_email, brand, last4, phone, exp_month, exp_year, order.key, order.game, None)
                         
-                        create_user_game(user, order.key, trx, order.game)
+                        create_user_game(user, order.key, trx, order.game, None)
                     else:
                         item_id = order.dlc.id
                         trx = create_transaction(user, status, session_id, total_amount, customer_email, brand, last4, phone, exp_month, exp_year, order.key, None, order.dlc)
