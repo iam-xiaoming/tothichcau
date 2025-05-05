@@ -70,9 +70,13 @@ class DLC(BaseGame):
     def save(self, *args, **kwargs):
         if self.game:
             self.publisher = self.game.publisher
-            self.categories.set(self.game.categories.all())
             self.status = 'dlc'
-        return super().save(*args, **kwargs)
+
+        super().save(*args, **kwargs)
+
+        if self.game:
+            self.categories.set(self.game.categories.all())
+
 
 
 class Rating(models.Model):
