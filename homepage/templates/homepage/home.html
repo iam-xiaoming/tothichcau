@@ -133,6 +133,199 @@
     </section>
     <!-- Product Section End -->
 
+    <!-- Stats Section Begin -->
+    <section class="stats-section spad">
+        <div class="container">
+            <div class="row">
+
+                <!-- Top Sellers -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="stats-column">
+                        <div class="section-title d-flex justify-content-between align-items-center">
+                            <h5>Top Sellers</h5>
+                            <a href="action/list/sale" class="arrow-link">›</a>
+                        </div>
+                        {% for game in top_sellers %}
+                            <a class="item-click" game-pk="{{ game.pk }}" href="{% if game.status == 'base' %}{% url 'base-game-details' game.pk %}{% else %}{% url 'dlc-game-details' game.pk %}{% endif %}">
+                                <div class="stats-item d-flex mb-3">
+                                    <img src="{{ game.image.url }}" alt="{{ game.name }}" class="stats-thumb me-3" width="60">
+                                    <div>
+                                        <h6 class="mb-1">{{ game.name }}</h6>
+                                        {% if game.status == 'base' %}
+                                            <span class="base-game">Base Game</span><br>
+                                        {% else %}
+                                            <span class="base-game">Downloadable Content</span><br>
+                                        {% endif %}
+                                        {% if game.discount > 0 %}
+                                            <span style="background: rgb(38, 187, 255) !important;" class="badge bg-primary">-{{ game.discount }}%</span>
+                                            <del class="text-muted small">${{ game.price }}</del>
+                                            <span class="fw-bold ms-1">${{ game.discounted_price|floatformat:2 }}</span>
+                                        {% else %}
+                                            <span class="fw-bold">${{ game.price }}</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Most Played -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="stats-column">
+                        <div class="section-title d-flex justify-content-between align-items-center">
+                            <h5>Most Played</h5>
+                            <a href="/most-played/" class="arrow-link">›</a>
+                        </div>
+                        {% for game in most_played %}
+                        <a class="item-click" game-pk="{{ game.pk }}" href="{% if game.status == 'base' %}{% url 'base-game-details' game.pk %}{% else %}{% url 'dlc-game-details' game.pk %}{% endif %}">
+                            <div class="stats-item d-flex mb-3">
+                                <img src="{{ game.image.url }}" alt="{{ game.name }}" class="stats-thumb me-3" width="60">
+                                <div>
+                                    <h6 class="mb-1">{{ game.name }}</h6>
+                                    {% if game.status == 'base' %}
+                                        <span class="base-game">Base Game</span><br>
+                                    {% else %}
+                                        <span class="base-game">Downloadable Content</span><br>
+                                    {% endif %}
+                                    {% if game.price == 0 %}
+                                        <span class="fw-bold text-success">Free</span>
+                                    {% else %}
+                                        <span class="fw-bold">${{ game.price }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Top Upcoming Wishlisted -->
+                <div class="col-lg-4 col-md-12">
+                    <div class="stats-column">
+                        <div class="section-title d-flex justify-content-between align-items-center">
+                            <h5>Coming Soon</h5>
+                            <a href="/upcoming/" class="arrow-link">›</a>
+                        </div>
+                        {% for game in upcoming_games %}
+                            <a class="item-click" game-pk="{{ game.pk }}" href="{% if game.status == 'base' %}{% url 'base-game-details' game.pk %}{% else %}{% url 'dlc-game-details' game.pk %}{% endif %}">
+                                <div class="stats-item d-flex mb-3 {% if not game.release_date %}bg-dark text-white p-2 rounded{% endif %}">
+                                    {% if game.image %}
+                                        <img src="{{ game.image.url }}" alt="{{ game.name }}" class="stats-thumb me-3" width="60">
+                                    {% endif %}
+                                    <div>
+                                        <h6 class="mb-1">{{ game.name }}</h6>
+                                        {% if game.status == 'base' %}
+                                            <span class="base-game">Base Game</span><br>
+                                        {% else %}
+                                            <span class="base-game">Downloadable Content</span><br>
+                                        {% endif %}
+                                        {% if game.release_date %}
+                                            <span class="date-time">Available {{ game.release_date|date:"d/m/Y" }}</span>
+                                        {% else %}
+                                            <span class="date-time">Coming Soon</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+    <!-- Stats Section End -->
+
+    <!-- Featured Stories Begin -->
+    <section class="featured-stories spad">
+        <div class="container">
+            <h3 class="section-title">Featured Stories</h3>
+            <div class="row">
+                <!-- Story Item 1 -->
+                <div class="col-lg-4 col-md-6 col-12">
+                    <div class="story-item">
+                        <img src="https://www.vpesports.com/wp-content/uploads/2025/02/Call-of-Duty-WWII-Review-Free-Download-on-Steam.png" alt="Terminated" class="story-img">
+                        <div class="story-content">
+                            <h5>No fate, just pixels</h5>
+                            <p>A look at the new, lovingly pixelated Terminator 2 game.</p>
+                            <a href="#" class="read-more-btn">Read More</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Story Item 2 -->
+                <div class="col-lg-4 col-md-6 col-12">
+                    <div class="story-item">
+                        <img src="https://www.vpesports.com/wp-content/uploads/2025/02/Call-of-Duty-WWII-Review-Free-Download-on-Steam.png" alt="Blades of Fire" class="story-img">
+                        <div class="story-content">
+                            <h5>Forging ahead</h5>
+                            <p>Our deep cut preview of sword-crafting action adventure Blades of Fire.</p>
+                            <a href="#" class="read-more-btn">Read More</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Story Item 3 -->
+                <div class="col-lg-4 col-md-12 col-12">
+                    <div class="story-item">
+                        <img src="https://www.vpesports.com/wp-content/uploads/2025/02/Call-of-Duty-WWII-Review-Free-Download-on-Steam.png" alt="F1" class="multi-img-top">
+                        <div class="story-content">
+                            <h5>A wealth of stories</h5>
+                            <p>Plug into our drip feed of exclusives, features, interviews, and guides.</p>
+                            <a href="#" class="read-more-btn">Read More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Featured Stories End -->
+
+    <!-- Explore Section Begin -->
+    <section class="explore-section spad">
+    <div class="container">
+        <div class="row">
+        <!-- Box 1 -->
+        <div class="col-lg-4 col-md-6 col-12">
+            <div class="explore-box">
+            <img src="https://www.vpesports.com/wp-content/uploads/2025/02/Call-of-Duty-WWII-Review-Free-Download-on-Steam.png" alt="Sales" class="explore-img">
+            <div class="explore-content">
+                <h5>Sales & Specials</h5>
+                <p class="line-clamp">Save big on hit titles and hidden gems. There's always something on sale at the Epic Games Store!</p>
+                <a href="action/list/sale" class="explore-btn">Browse</a>
+            </div>
+            </div>
+        </div>
+
+        <!-- Box 2 -->
+        <div class="col-lg-4 col-md-6 col-12">
+            <div class="explore-box">
+            <img src="https://www.vpesports.com/wp-content/uploads/2025/02/Call-of-Duty-WWII-Review-Free-Download-on-Steam.png" alt="Free Games" class="explore-img">
+            <div class="explore-content">
+                <h5>Free Games</h5>
+                <p class="line-clamp">Explore free and free-to-play games from our collection. Come back every Thursday for a new free game!</p>
+                <a href="#" class="explore-btn">Play Now</a>
+            </div>
+            </div>
+        </div>
+
+        <!-- Box 3 -->
+        <div class="col-lg-4 col-md-12 col-12">
+            <div class="explore-box">
+            <img src="https://www.vpesports.com/wp-content/uploads/2025/02/Call-of-Duty-WWII-Review-Free-Download-on-Steam.png" alt="Apps" class="explore-img">
+            <div class="explore-content">
+                <h5>Apps</h5>
+                <p class="line-clamp">Enjoy some of the best Apps for music, gaming, creating, and more!</p>
+                <a href="#" class="explore-btn">Browse</a>
+            </div>
+            </div>
+        </div>
+        </div>
+    </div>
+    </section>
+    <!-- Explore Section End -->
+
+
+
     <script>
         function getProductWidth(card) {
             const style = window.getComputedStyle(card);

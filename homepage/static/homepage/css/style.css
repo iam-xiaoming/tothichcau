@@ -2350,3 +2350,166 @@ footer {
     color: var(--secondary-text);
     font-size: 0.9rem;
 }
+
+
+/* Stats Section */
+.stats-section {
+	padding-top: 40px;
+}
+
+.stats-section .stats-thumb {
+	height: 120px;
+	width: 100px;
+	border-radius: 5px;
+    object-fit: cover;
+}
+
+.stats-section .stats-item {
+	display: flex;
+	align-items: center;
+	gap: 20px;
+}
+
+.stats-section h6 {
+	font-size: 1.1rem;
+}
+
+.stats-section a {
+	text-decoration: none;
+	color: inherit;
+}
+
+.stats-section a:hover {
+    color: inherit;
+}
+
+.stats-section .fw-bold, .date-time, .base-game {
+	color: #fff;
+}
+
+.stats-section .base-game {
+	font-size: 13px;
+}
+
+.stats-section .arrow-link {
+	color: rgb(38, 187, 255);
+	display: block;
+	margin-bottom: 1rem;
+}
+
+/* story feature */
+.featured-stories {
+	padding-top: 0;
+    color: #fff;
+}
+
+.section-title {
+    font-weight: bold;
+    font-size: 24px;
+    margin-bottom: 30px;
+}
+
+.story-item {
+    background-color: #1e1e1e;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 30px;
+}
+
+.story-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-bottom: 1px solid #333;
+}
+
+.bottom-img {
+    flex: 1;
+    border-radius: 5px;
+    object-fit: cover;
+}
+
+.story-content {
+    padding: 15px;
+}
+
+.story-content h5 {
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.story-content p {
+    color: #aaa;
+    font-size: 14px;
+}
+
+.read-more-btn {
+    display: inline-block;
+    margin-top: 10px;
+    background-color: #333;
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 13px;
+    transition: background-color 0.3s ease;
+}
+
+.read-more-btn:hover {
+    background-color: #555;
+}
+
+
+/* explore session */
+.explore-section {
+	padding-top: 0;
+    color: #fff;
+}
+
+.explore-section .line-clamp {
+	-webkit-line-clamp: var(--line-clamp, 2)
+}
+
+.explore-box {
+    background-color: #1e1e1e;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 30px;
+    transition: transform 0.3s ease;
+}
+
+.explore-img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.explore-content {
+    padding: 15px;
+}
+
+.explore-content h5 {
+    font-weight: bold;
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+.explore-content p {
+    color: #aaa;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+.explore-btn {
+    display: inline-block;
+    background-color: #333;
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 13px;
+}
+
+.explore-btn:hover {
+    background-color: #555;
+}
