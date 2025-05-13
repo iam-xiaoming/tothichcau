@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect
-from .utils import get_trendings, get_sales
+from .utils import get_trendings, get_sales, get_mostplay, get_coming_soon
 from game_features.models import FeatureHighlight, GameStory
 from admin_manager.models import GameHero
 
 
 # Create your views here.
 def home(request):
+    sales = get_sales()
     context = {
         'game_heros': GameHero.objects.all(),
         'sections': [
@@ -18,13 +19,13 @@ def home(request):
             {
                 'name': 'sale__product',
                 'display_name': 'Sale',
-                'games': get_sales(),
+                'games': sales,
                 'id': 'sale'
             }
         ],
-        'top_sellers': get_sales(),
-        'most_played': get_sales(),
-        'upcoming_games': get_sales(),
+        'top_sellers': sorted(sales, key=lambda x: -x.discount),
+        'most_played': get_mostplay(),
+        'upcoming_games': get_coming_soon(),
         'highlights': FeatureHighlight.objects.all(),
         'stories': GameStory.objects.all()
     }
