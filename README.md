@@ -11,6 +11,12 @@ Kênh chơi game với mục đích đem lại niềm vui cho mọi người: ht
 
 <!-- find . -path "*/migrations/*.py" -not -name "__init__.py" -delete -->
 
+## Thành viên:
+- **Trần Thái Nguyên** - *22697051*
+- **Nguyễn Ngọc Minh** - *22685841*
+- **Phan Công Chiến** - *22685651*
+- **Trần Khắc Liêm** - *22685251*
+
 ### Bí kiếp cua gái
 0. chạy là lỗi gì liên quan tới aws hay trong app recommender thì là do chưa xác thực aws cli, cách xác thực aws cli thế nào thì hỏi chat gpt, xong nó yêu cầu nhập acccess key và secret key và region thì nó trong file env. mấy các khác thì enter để bỏ qua.
 0. `pull origin main` không đc thì chạy `git reset --hard HEAD`, xong pull lại. nếu không thấy cập nhật gì thì đóng hết mấy file đang mở.
