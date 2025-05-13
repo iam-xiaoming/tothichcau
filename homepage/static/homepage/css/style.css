@@ -2513,3 +2513,46 @@ footer {
 .explore-btn:hover {
     background-color: #555;
 }
+
+
+/* free game */
+.free-games-section {
+	padding-top: 0;;
+}
+
+.free-games-section .container {
+	background-color: #1e1e1e;
+	padding: 30px;
+	border-radius: 12px;
+}
+
+.game-card {
+    border-radius: 10px;
+    overflow: hidden;
+}
+ 
+
+.game-card img {
+	width: 100%;
+	height: 360px;
+	object-fit: cover;
+	box-shadow: 12px -4px 0px rgba(0, 0, 0, 0.3);
+}
+
+.game-card:hover img {
+	opacity: 0.8;
+}
+
+.game-status {
+    font-weight: bold;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+	border-radius: 0 0 6px 6px;
+	padding: 6px 0;
+	background: rgb(38, 187, 255);
+}
+
+.free-games-section h6 {
+	margin-top: 15px;
+	font-size: 1.2rem;
+}
