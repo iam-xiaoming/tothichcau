@@ -67,3 +67,22 @@ class GameVideoReview(models.Model):
         super().clean()
         if not (self.game or self.dlc):
             raise ValidationError('Game or DLC must be not none.')
+        
+        
+class GameStory(models.Model):
+    title = models.CharField(max_length=255)
+    description = models.CharField(max_length=1000)
+    image = models.ImageField(upload_to='game_story/')
+    url = models.URLField()
+    
+    def __str__(self):
+        return self.title
+    
+    
+class FeatureHighlight(models.Model):
+    title = models.CharField(max_length=255)
+    image = models.ImageField(upload_to='feature_highlight/img/')
+    video = models.FileField(upload_to='feature_highlight/video/')
+    
+    def __str__(self):
+        return self.title
