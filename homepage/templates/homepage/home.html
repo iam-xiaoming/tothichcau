@@ -144,7 +144,7 @@
                     <div class="stats-column">
                         <div class="section-title d-flex justify-content-between align-items-center">
                             <h5>Top Sellers</h5>
-                            <a href="action/list/sale" class="arrow-link">›</a>
+                            <a href="/action/list/sale/" class="arrow-link">›</a>
                         </div>
                         {% for game in top_sellers %}
                             <a class="item-click" game-pk="{{ game.pk }}" href="{% if game.status == 'base' %}{% url 'base-game-details' game.pk %}{% else %}{% url 'dlc-game-details' game.pk %}{% endif %}">
@@ -176,7 +176,7 @@
                     <div class="stats-column">
                         <div class="section-title d-flex justify-content-between align-items-center">
                             <h5>Most Played</h5>
-                            <a href="/most-played/" class="arrow-link">›</a>
+                            <a href="/action/list/most-played/" class="arrow-link">›</a>
                         </div>
                         {% for game in most_played %}
                         <a class="item-click" game-pk="{{ game.pk }}" href="{% if game.status == 'base' %}{% url 'base-game-details' game.pk %}{% else %}{% url 'dlc-game-details' game.pk %}{% endif %}">
@@ -206,7 +206,7 @@
                     <div class="stats-column">
                         <div class="section-title d-flex justify-content-between align-items-center">
                             <h5>Coming Soon</h5>
-                            <a href="/upcoming/" class="arrow-link">›</a>
+                            <a href="/action/list/upcoming/" class="arrow-link">›</a>
                         </div>
                         {% for game in upcoming_games %}
                             <a class="item-click" game-pk="{{ game.pk }}" href="{% if game.status == 'base' %}{% url 'base-game-details' game.pk %}{% else %}{% url 'dlc-game-details' game.pk %}{% endif %}">
