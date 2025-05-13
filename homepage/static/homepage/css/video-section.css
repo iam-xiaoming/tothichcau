@@ -1,0 +1,47 @@
+.video-highlight-section {
+  background-color: #111;
+  color: white;
+  padding-top: 0;
+}
+
+.main-video {
+  height: 450px;
+  background-color: #000;
+}
+
+.video-thumbnails {
+    height: 450px;
+    gap: 10px;
+}
+
+.video-overlay {
+  bottom: 0;
+  left: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+  width: 100%;
+}
+
+.thumbnail-item {
+  background-color: #1f1f1f;
+  cursor: pointer;
+  transition: background 0.3s;
+  height: calc(25% - 10px + 0.5rem);
+  width: 100%;
+  gap: 10px;
+}
+
+.thumbnail-item span {
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.thumbnail-item:hover,
+.thumbnail-item.active {
+  background-color: #333;
+}
+
+.video-highlight-section img {
+    width: 70px;
+    height: 100%;
+    object-fit: cover;
+}
