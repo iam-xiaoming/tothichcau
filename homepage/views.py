@@ -18,6 +18,9 @@ def home(request):
                 'games': get_sales(),
                 'id': 'sale'
             }
-        ]
+        ],
+        'top_sellers': get_sales(),
+        'most_played': get_sales(),
+        'upcoming_games': get_sales()
     }
     return render(request, 'homepage/home.html', context)
