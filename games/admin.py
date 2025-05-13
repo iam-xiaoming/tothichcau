@@ -8,7 +8,7 @@ from wishlist.admin import WishlistTypeFilter
 # Register your models here
 @admin.register(Game)  
 class GameAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'publisher', 'price', 'discount', 'quantity', 'category_list', 'average_score', 'rating', 'release_date',)
+    list_display = ('id', 'name', 'publisher', 'price', 'discount', 'quantity', 'number_of_buy', 'category_list', 'average_score', 'rating', 'release_date',)
     list_filter = ('price', 'categories', 'rating', 'release_date',)
     search_fields = ('name', 'publisher', 'categories__name', 'rating',)
     ordering = ('-release_date',)

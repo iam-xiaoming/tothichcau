@@ -46,6 +46,7 @@ class BaseGame(models.Model):
     publisher = models.CharField(max_length=255)
     categories = models.ManyToManyField(Category, related_name='%(class)s_set')
     status = models.CharField(default='base', choices=GAME_TYPES)
+    number_of_buy = models.PositiveIntegerField(default=0)
     
     
     class Meta:
@@ -62,7 +63,7 @@ class BaseGame(models.Model):
 
 class Game(BaseGame):
     pass
-    
+
 
 class DLC(BaseGame):
     game = models.ForeignKey(Game, on_delete=models.CASCADE, related_name='dlc')

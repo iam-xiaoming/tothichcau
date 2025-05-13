@@ -36,8 +36,8 @@
     <section class="hero">
         <div class="container">
             <div class="hero__slider owl-carousel">
-                {% for game_hero in items.game_heros %}
-                    <div class="hero__items set-bg" data-setbg="{{ gamehero.image.url }}">
+                {% for game_hero in game_heros %}
+                    <div class="hero__items set-bg" data-setbg="{{ game_hero.image.url }}">
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="hero__text">
@@ -244,38 +244,18 @@
             <h3 class="section-title">Featured Stories</h3>
             <div class="row">
                 <!-- Story Item 1 -->
-                <div class="col-lg-4 col-md-6 col-12">
-                    <div class="story-item">
-                        <img src="https://www.vpesports.com/wp-content/uploads/2025/02/Call-of-Duty-WWII-Review-Free-Download-on-Steam.png" alt="Terminated" class="story-img">
-                        <div class="story-content">
-                            <h5>No fate, just pixels</h5>
-                            <p>A look at the new, lovingly pixelated Terminator 2 game.</p>
-                            <a href="#" class="read-more-btn">Read More</a>
+                {% for story in stories %}
+                    <div class="col-lg-4 col-md-6 col-12">
+                        <div class="story-item">
+                            <img src="{{ story.image.url }}" alt="{{ story.title }}" class="story-img">
+                            <div class="story-content">
+                                <h5 class="line-clamp">{{ story.title }}</h5>
+                                <p class="line-clamp">{{ story.description }}</p>
+                                <a href="{{ story.url }}" class="read-more-btn">Read More</a>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <!-- Story Item 2 -->
-                <div class="col-lg-4 col-md-6 col-12">
-                    <div class="story-item">
-                        <img src="https://www.vpesports.com/wp-content/uploads/2025/02/Call-of-Duty-WWII-Review-Free-Download-on-Steam.png" alt="Blades of Fire" class="story-img">
-                        <div class="story-content">
-                            <h5>Forging ahead</h5>
-                            <p>Our deep cut preview of sword-crafting action adventure Blades of Fire.</p>
-                            <a href="#" class="read-more-btn">Read More</a>
-                        </div>
-                    </div>
-                </div>
-                <!-- Story Item 3 -->
-                <div class="col-lg-4 col-md-12 col-12">
-                    <div class="story-item">
-                        <img src="https://www.vpesports.com/wp-content/uploads/2025/02/Call-of-Duty-WWII-Review-Free-Download-on-Steam.png" alt="F1" class="multi-img-top">
-                        <div class="story-content">
-                            <h5>A wealth of stories</h5>
-                            <p>Plug into our drip feed of exclusives, features, interviews, and guides.</p>
-                            <a href="#" class="read-more-btn">Read More</a>
-                        </div>
-                    </div>
-                </div>
+                {% endfor %}
             </div>
         </div>
     </section>
@@ -297,22 +277,12 @@
                 <!-- Danh sách game bên phải -->
                 <div class="col-md-3">
                     <div class="video-thumbnails d-flex flex-column gap-2">
-                        <div data-src="media/game_video_reviews/LoveChoice/videos/trailer2.mp4" class="thumbnail-item d-flex align-items-center gap-2 p-2 rounded active">
-                            <img src="https://www.vpesports.com/wp-content/uploads/2025/02/Call-of-Duty-WWII-Review-Free-Download-on-Steam.png" alt="..." class="rounded" width="50">
-                            <span>Game Title 1</span>
-                        </div>
-                        <div data-src="media/game_video_reviews/LoveChoice/videos/trailer2.mp4" class="thumbnail-item d-flex align-items-center gap-2 p-2 rounded">
-                            <img src="https://www.vpesports.com/wp-content/uploads/2025/02/Call-of-Duty-WWII-Review-Free-Download-on-Steam.png" alt="..." class="rounded" width="50">
-                            <span>Game Title 2</span>
-                        </div>
-                        <div data-src="media/game_video_reviews/LoveChoice/videos/trailer2.mp4" class="thumbnail-item d-flex align-items-center gap-2 p-2 rounded">
-                            <img src="https://www.vpesports.com/wp-content/uploads/2025/02/Call-of-Duty-WWII-Review-Free-Download-on-Steam.png" alt="..." class="rounded" width="50">
-                            <span>Game Title 3</span>
-                        </div>
-                        <div data-src="media/game_video_reviews/LoveChoice/videos/trailer2.mp4" class="thumbnail-item d-flex align-items-center gap-2 p-2 rounded">
-                            <img src="https://www.vpesports.com/wp-content/uploads/2025/02/Call-of-Duty-WWII-Review-Free-Download-on-Steam.png" alt="..." class="rounded" width="50">
-                            <span>Game Title 4</span>
-                        </div>
+                        {% for game in highlights %}
+                            <div data-src="{{ game.video.url }}" class="thumbnail-item d-flex align-items-center gap-2 p-2 rounded active">
+                                <img src="{{ game.image.url }}" alt="{{ game.title }}" class="rounded" width="50">
+                                <span>{{ game.title }}</span>
+                            </div>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
@@ -387,11 +357,11 @@
                 <!-- Game 1: Apex Legends -->
                 <div class="col-lg-6 col-md-6 col-12">
                     <div class="game-box">
-                        <img src="https://i.ytimg.com/vi/ZXPMt1ygPLc/maxresdefault.jpg" alt="Apex Legends" class="game-img">
+                        <img src="{% static 'game_features/img/apex.avif' %}" alt="Apex Legends" class="game-img">
                         <div class="game-content">
                             <h5>Apex Legends™</h5>
                             <p class="line-clamp">Target greatness as new Legend, Sparrow - show the Outlands that you are the one to watch. Set your sights on glory!</p>
-                            <a href="#" class="game-btn">Play for Free</a>
+                            <a href="https://www.ea.com/games/apex-legends/apex-legends" class="game-btn">Play for Free</a>
                         </div>
                     </div>
                 </div>
@@ -399,11 +369,11 @@
                 <!-- Game 2: Off the Grid -->
                 <div class="col-lg-6 col-md-6 col-12">
                     <div class="game-box">
-                        <img src="https://i.ytimg.com/vi/ZXPMt1ygPLc/maxresdefault.jpg" alt="Off the Grid" class="game-img">
+                        <img src="{% static 'game_features/img/otg.avif' %}" alt="Off the Grid" class="game-img">
                         <div class="game-content">
                             <h5>Off the Grid</h5>
                             <p class="line-clamp">Reign victorious as the Hopper Pilot & Cleanup Crew in OTG's first lore-driven Battle Pass!</p>
-                            <a href="#" class="game-btn">Play for Free</a>
+                            <a href="https://gameoffthegrid.com/#about" class="game-btn">Play for Free</a>
                         </div>
                     </div>
                 </div>
