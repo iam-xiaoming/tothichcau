@@ -41,7 +41,7 @@
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="hero__text">
-                                    <h2>Fate / Stay Night: Unlimited Blade Works</h2>
+                                    <h2>{{ game_hero }}</h2>
                                     <p>After 30 days of travel across the world...</p>
                                     <a href="#"><span>Buy Now</span></a>
                                 </div>
@@ -298,54 +298,22 @@
         <div class="container">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h4 class="text-white"><i class="fa-solid fa-gift"></i> Free Games</h4>
-                <a href="#" class="btn btn-outline-light btn-sm">View More</a>
+                <a href="/action/list/free-games/" class="btn btn-outline-light btn-sm">View More</a>
             </div>
 
             <div class="row g-2">
                 <!-- Game Card 1 -->
                 <div class="col-lg-3 col-md-4 col-6">
-                    <a href="#!" style="display: block; text-decoration: none;">
-                        <div class="game-card">
-                            <img src="https://i.ytimg.com/vi/ZXPMt1ygPLc/maxresdefault.jpg" class="img-fluid rounded" alt="Game 1">
-                            <div class="game-status text-white text-center">FREE NOW</div>
-                            <h6 class="text-white">Deadtime Defenders</h6>
-                            <p class="text-muted small">Free Now - May 15 at 10:00 PM</p>
-                        </div>
-                    </a>
-                </div>
-
-
-                <!-- Game Card 2 -->
-                <div class="col-lg-3 col-md-4 col-6">
-                    <a href="#!" style="display: block; text-decoration: none;">
-                        <div class="game-card">
-                            <img src="https://i.ytimg.com/vi/ZXPMt1ygPLc/maxresdefault.jpg" class="img-fluid rounded" alt="Game 1">
-                            <div class="game-status text-white text-center">FREE NOW</div>
-                            <h6 class="text-white">Deadtime Defenders</h6>
-                            <p class="text-muted small">Free Now - May 15 at 10:00 PM</p>
-                        </div>
-                    </a>
-                </div>
-
-
-                <!-- Mystery Game -->
-                <div class="col-lg-3 col-md-4 col-6">
-                    <div class="game-card">
-                        <img src="https://i.ytimg.com/vi/ZXPMt1ygPLc/maxresdefault.jpg" class="img-fluid rounded" alt="Mystery Game">
-                        <div class="game-status bg-dark text-white text-center">MYSTERY GAME</div>
-                        <h6 class="text-white">Mystery Game</h6>
-                        <p class="text-muted small">Unlocking in 02:09:42:59</p>
-                    </div>
-                </div>
-
-                <!-- Mystery Game 2 -->
-                <div class="col-lg-3 col-md-4 col-6">
-                    <div class="game-card">
-                        <img src="https://i.ytimg.com/vi/ZXPMt1ygPLc/maxresdefault.jpg" class="img-fluid rounded" alt="Game 2">
-                        <div class="game-status bg-dark text-white text-center">MYSTERY GAME</div>
-                        <h6 class="text-white">Mystery Game</h6>
-                        <p class="text-muted small">Unlocking in 02:09:42:59</p>
-                    </div>
+                    {% for game in free_games %}
+                        <a class="item-click" game-pk="{{ game.pk }}" href="{% if game.status == 'base' %}{% url 'base-game-details' game.pk %}{% else %}{% url 'dlc-game-details' game.pk %}{% endif %}" style="display: block; text-decoration: none;">
+                            <div class="game-card">
+                                <img src="{{ game.image.url }}" class="img-fluid rounded" alt="Game 1">
+                                <div class="game-status text-white text-center">FREE NOW</div>
+                                <h6 class="text-white">{{ game.name }}</h6>
+                                <p class="text-muted small line-clamp">{{ game.description }}</p>
+                            </div>
+                        </a>
+                    {% endfor %}
                 </div>
             </div>
         </div>

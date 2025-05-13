@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .utils import get_trendings, get_sales, get_mostplay, get_coming_soon
+from .utils import get_trendings, get_sales, get_mostplay, get_coming_soon, get_free_games
 from game_features.models import FeatureHighlight, GameStory
 from admin_manager.models import GameHero
 
@@ -27,6 +27,7 @@ def home(request):
         'most_played': get_mostplay(),
         'upcoming_games': get_coming_soon(),
         'highlights': FeatureHighlight.objects.all(),
-        'stories': GameStory.objects.all()
+        'stories': GameStory.objects.all(),
+        'free_games': get_free_games()
     }
     return render(request, 'homepage/home.html', context)
