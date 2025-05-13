@@ -319,6 +319,68 @@
         </div>
     </section>    
 
+
+    <!-- Free Games Section Begin -->
+    <section class="free-games-section spad">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="text-white"><i class="fa-solid fa-gift"></i> Free Games</h4>
+                <a href="#" class="btn btn-outline-light btn-sm">View More</a>
+            </div>
+
+            <div class="row g-3">
+                <!-- Game Card 1 -->
+                <div class="col-lg-3 col-md-4 col-6">
+                    <a href="#!" style="display: block; text-decoration: none;">
+                        <div class="game-card">
+                            <img src="https://i.ytimg.com/vi/ZXPMt1ygPLc/maxresdefault.jpg" class="img-fluid rounded" alt="Game 1">
+                            <div class="game-status text-white text-center">FREE NOW</div>
+                            <h6 class="text-white">Deadtime Defenders</h6>
+                            <p class="text-muted small">Free Now - May 15 at 10:00 PM</p>
+                        </div>
+                    </a>
+                </div>
+
+
+                <!-- Game Card 2 -->
+                <div class="col-lg-3 col-md-4 col-6">
+                    <a href="#!" style="display: block; text-decoration: none;">
+                        <div class="game-card">
+                            <img src="https://i.ytimg.com/vi/ZXPMt1ygPLc/maxresdefault.jpg" class="img-fluid rounded" alt="Game 1">
+                            <div class="game-status text-white text-center">FREE NOW</div>
+                            <h6 class="text-white">Deadtime Defenders</h6>
+                            <p class="text-muted small">Free Now - May 15 at 10:00 PM</p>
+                        </div>
+                    </a>
+                </div>
+
+
+                <!-- Mystery Game -->
+                <div class="col-lg-3 col-md-4 col-6">
+                    <div class="game-card">
+                        <img src="https://i.ytimg.com/vi/ZXPMt1ygPLc/maxresdefault.jpg" class="img-fluid rounded" alt="Mystery Game">
+                        <div class="game-status bg-dark text-white text-center">MYSTERY GAME</div>
+                        <h6 class="text-white">Mystery Game</h6>
+                        <p class="text-muted small">Unlocking in 02:09:42:59</p>
+                    </div>
+                </div>
+
+                <!-- Mystery Game 2 -->
+                <div class="col-lg-3 col-md-4 col-6">
+                    <div class="game-card">
+                        <img src="https://i.ytimg.com/vi/ZXPMt1ygPLc/maxresdefault.jpg" class="img-fluid rounded" alt="Game 2">
+                        <div class="game-status bg-dark text-white text-center">MYSTERY GAME</div>
+                        <h6 class="text-white">Mystery Game</h6>
+                        <p class="text-muted small">Unlocking in 02:09:42:59</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Free Games Section End -->
+
+
+
     <!-- Explore Section Begin -->
     <section class="explore-section spad">
         <div class="container">
@@ -326,7 +388,7 @@
             <!-- Box 1 -->
             <div class="col-lg-4 col-md-6 col-12">
                 <div class="explore-box">
-                <img src="https://www.vpesports.com/wp-content/uploads/2025/02/Call-of-Duty-WWII-Review-Free-Download-on-Steam.png" alt="Sales" class="explore-img">
+                <img src="{% static 'homepage/img/explore1.avif' %}" alt="Sales" class="explore-img">
                 <div class="explore-content">
                     <h5>Sales & Specials</h5>
                     <p class="line-clamp">Save big on hit titles and hidden gems. There's always something on sale at the Epic Games Store!</p>
@@ -338,7 +400,7 @@
             <!-- Box 2 -->
             <div class="col-lg-4 col-md-6 col-12">
                 <div class="explore-box">
-                <img src="https://www.vpesports.com/wp-content/uploads/2025/02/Call-of-Duty-WWII-Review-Free-Download-on-Steam.png" alt="Free Games" class="explore-img">
+                <img src="{% static 'homepage/img/explore2.avif' %}" alt="Free Games" class="explore-img">
                 <div class="explore-content">
                     <h5>Free Games</h5>
                     <p class="line-clamp">Explore free and free-to-play games from our collection. Come back every Thursday for a new free game!</p>
@@ -350,11 +412,11 @@
             <!-- Box 3 -->
             <div class="col-lg-4 col-md-12 col-12">
                 <div class="explore-box">
-                <img src="https://www.vpesports.com/wp-content/uploads/2025/02/Call-of-Duty-WWII-Review-Free-Download-on-Steam.png" alt="Apps" class="explore-img">
+                <img src="{% static 'homepage/img/explore3.avif' %}" alt="Apps" class="explore-img">
                 <div class="explore-content">
                     <h5>Apps</h5>
                     <p class="line-clamp">Enjoy some of the best Apps for music, gaming, creating, and more!</p>
-                    <a href="#" class="explore-btn">Browse</a>
+                    <a href="{% url 'game-list' %}" class="explore-btn">Browse</a>
                 </div>
                 </div>
             </div>
