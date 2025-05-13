@@ -4,6 +4,10 @@
   padding-top: 0;
 }
 
+.video-highlight-section .container {
+  padding: 0;
+}
+
 .main-video {
   height: 450px;
   background-color: #000;
