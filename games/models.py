@@ -31,7 +31,7 @@ class BaseGame(models.Model):
     
     quantity = models.PositiveIntegerField(default=0)
     name = models.CharField(max_length=255)
-    description = models.TextField()
+    description = models.TextField(null=True, blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     discount = models.PositiveIntegerField(default=0, validators=[
         MinValueValidator(0),
