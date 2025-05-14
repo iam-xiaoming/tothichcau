@@ -11,12 +11,148 @@ Kênh chơi game với mục đích đem lại niềm vui cho mọi người: ht
 
 <!-- find . -path "*/migrations/*.py" -not -name "__init__.py" -delete -->
 
-## Thành viên:
-- **Trần Thái Nguyên** - *22697051*
-- **Nguyễn Ngọc Minh** - *22685841*
-- **Phan Công Chiến** - *22685651*
-- **Trần Khắc Liêm** - *22685251*
-- **Trần Thị Huyền** - *22657821*
+
+## 🎮 XÂY DỰNG TRANG WEB BÁN KEY GAME TRỰC TUYẾN
+
+**Tích hợp thanh toán và xác thực người dùng**
+
+**Nhóm thực hiện:**
+
+**Trần Thị Huyền** – **MSSV**: *22657821*
+**Nguyễn Ngọc Minh** – **MSSV**: *22685841*
+**Phan Công Chiến** – **MSSV**: *22685651*
+**Trần Thái Nguyên** – **MSSV**: *22697051*
+**Trần Khắc Liêm** – **MSSV**: *22685251*
+
+---
+
+## 📑 MỤC LỤC
+
+1. Giới thiệu công cụ & công nghệ
+2. Tính năng chính
+3. Hướng dẫn cài đặt & link code
+4. Kiến trúc hệ thống
+5. Demo & triển khai
+6. Kết luận & hướng mở rộng
+
+---
+
+## 🔧 GIỚI THIỆU CÔNG NGHỆ
+
+| Công cụ                     | Mô tả                                                                                 |
+| --------------------------- | ------------------------------------------------------------------------------------- |
+| **Django**                  | Framework Python mạnh mẽ, tích hợp ORM, admin, routing. Cộng đồng lớn, dễ triển khai. |
+| **PostgreSQL + Aiven**      | CSDL quan hệ mạnh mẽ, backup tự động, sẵn sàng cao.                                   |
+| **Stripe**                  | Thanh toán quốc tế qua API REST, hỗ trợ webhook gửi key.                              |
+| **Amazon S3**               | Lưu trữ media (ảnh, video review), tích hợp qua `django-storages`.                    |
+| **Firebase Authentication** | Đăng nhập OAuth2, OTP, email, triển khai nhanh, gói free.                             |
+| **Elasticsearch**           | Tìm kiếm toàn văn, autocomplete, tùy chỉnh analyzer.                                  |
+| **Crisp Chat**              | Hỗ trợ live chat, email bot, phân tích hành vi người dùng.                            |
+| **AWS Personalize**         | Gợi ý game theo hành vi, không cần build ML từ đầu.                                   |
+| **AWS CloudFront**          | CDN toàn cầu, tăng tốc S3, hỗ trợ cache, SSL.                                         |
+
+---
+
+## 🧩 TÍNH NĂNG CHÍNH
+
+* **Đồng bộ dữ liệu**: Quản lý game, DLC, danh mục (CRUD)
+* **Thanh toán & Giỏ hàng**: Stripe Checkout, xử lý webhook nhận key
+* **Xác thực người dùng**: Firebase login, quản trị bằng Django admin
+* **Đánh giá & Bình luận**: User comment, điểm số trung bình
+* **Review Media**: Hình ảnh, video minh họa cho game
+
+---
+
+## 🖥️ DEMO GIAO DIỆN
+
+* **Trang chủ**: Logo thương hiệu rõ ràng, giao diện dễ điều hướng
+* **Trang chi tiết game**: Thông tin chi tiết, ảnh, video review
+* **Giỏ hàng**: Quản lý đơn hàng, xác nhận thanh toán
+* **Đánh giá người dùng**: Gửi comment, rating, hiển thị điểm trung bình
+
+---
+
+## ⚙️ HƯỚNG DẪN CÀI ĐẶT
+
+**Repo GitHub:**
+🔗 [https://github.com/xiaoMing-04/CoDaiVaHoaDanhDanh](https://github.com/xiaoMing-04/CoDaiVaHoaDanhDanh)
+
+**Cấu trúc thư mục:**
+`games/`, `users/`, `cart/`, ...
+
+### Cài đặt local:
+
+```bash
+git clone ...
+cd project/
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py runserver
+```
+
+### Docker Compose (tuỳ chọn):
+
+* Cho PostgreSQL, Redis, Elasticsearch
+* File `docker-compose.yml`
+
+```bash
+docker-compose up -d
+```
+
+---
+
+## 🏗️ KIẾN TRÚC HỆ THỐNG
+
+**Luồng hoạt động:**
+
+1. User đăng nhập qua Firebase
+2. Giao diện frontend chọn game → thêm vào giỏ
+3. Gửi thanh toán qua Stripe
+4. Webhook trả key game → hiển thị/gửi mail
+
+**Tổ chức Django:**
+
+* `models.py`: Game, DLC, Rating
+* `serializers.py`: Chuẩn hóa API
+* `views.py`: API & Web (CBV/FBV)
+* `signals.py`: Stripe webhook, tự động tính điểm
+
+---
+
+## 🚀 TRIỂN KHAI & DEMO
+
+**Deploy tại:** \[Render.com]
+
+* Tự động deploy từ GitHub
+* Domain HTTPS
+* Thiết lập môi trường `.env`
+
+### Demo quy trình:
+
+1. Đăng ký user
+2. Chọn game → Thêm vào giỏ
+3. Thanh toán bằng Stripe (test card)
+4. Hệ thống trả key → hiển thị/sent email
+
+---
+
+## ✅ KẾT LUẬN
+
+* Hoàn thành MVP hệ thống bán key game
+* Dễ dàng triển khai, tích hợp dịch vụ hiện đại
+* Hỗ trợ mở rộng cả backend và frontend
+
+---
+
+## 🔮 HƯỚNG MỞ RỘNG
+
+* Tích hợp API nhà cung cấp key tự động
+* Gợi ý game theo sở thích người dùng (AWS Personalize)
+* Giao diện mobile bằng **React Native**
+* Phát triển cộng đồng user: comment, vote, review
+
 
 ### Cách chạy và lỗi hay gặp
 0. chạy là lỗi gì liên quan tới aws hay trong app recommender thì là do chưa xác thực aws cli, cách xác thực aws cli thế nào thì hỏi chat gpt, xong nó yêu cầu nhập acccess key và secret key và region thì nó trong file env. mấy các khác thì enter để bỏ qua.
