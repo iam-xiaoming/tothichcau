@@ -75,7 +75,7 @@
                                     <div class="col-lg-6 col-md-6">
                                         <ul>
                                             <li><span>Publisher:</span> {{ object.publisher|upper }}</li>
-                                            <li><span>Date released:</span> {{ object.release_date|date:"F j, Y" }}</li>
+                                            <li><span>Date released:</span> {{ object.release_date|date:"F j, Y"|upper }}</li>
                                             <li id="game-status-li"><span id="game-status">Status:</span> Loading...</li>
                                             <li><span>Genre:</span>
                                                 {% if object.status == 'base' %}
@@ -257,7 +257,7 @@
                                 btn.querySelector('span').innerHTML = '<i class="fa-solid fa-cart-plus"></i> Add to cart'
                             } else {
                                 btn.classList.add('disabled');
-                                btn.querySelector('span').textContent = 'Stock out';
+                                btn.querySelector('span').innerHTML = '<i class="fa-solid fa-arrow-trend-down"></i> Stock out';
                             }
                         });
 
@@ -351,7 +351,7 @@
                             } else {
                                 btn.classList.remove('loading');
                                 btn.classList.add('disabled');
-                                btn.querySelector('span').textContent = 'Stock out';
+                                btn.querySelector('span').innerHTML = '<i class="fa-solid fa-arrow-trend-down"></i> Stock out';
                                 liElement.innerHTML = `<span id="game-status">Status</span> STOCK OUT`;
                             }
 
@@ -364,7 +364,7 @@
                         } else {
                             btn.classList.remove('loading');
                             btn.classList.add('disabled');
-                            btn.querySelector('span').textContent = 'Stock out';
+                            btn.querySelector('span').innerHTML = '<i class="fa-solid fa-arrow-trend-down"></i> Stock out';
                             liElement.innerHTML = `<span id="game-status">Status</span> STOCK OUT`;
                         }
                     })
