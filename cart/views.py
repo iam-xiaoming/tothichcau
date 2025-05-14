@@ -23,6 +23,7 @@ from rest_framework.response import Response
 from datetime import datetime
 import numpy as np
 from .utils import create_transaction, create_user_game, create_user_interaction
+from .mailjet import send_mailjet_email_purchase_success
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -287,12 +288,12 @@ def webhook_view(request):
                     if order.game:
                         item_id = order.game.id
                         trx = create_transaction(user, status, session_id, total_amount, customer_email, brand, last4, phone, exp_month, exp_year, order.key, order.game, None)
-                        
+                        send_mailjet_email_purchase_success(customer_email, order.game.name, order.id, order.key)
                         create_user_game(user, order.key, trx, order.game, None)
                     else:
                         item_id = order.dlc.id
                         trx = create_transaction(user, status, session_id, total_amount, customer_email, brand, last4, phone, exp_month, exp_year, order.key, None, order.dlc)
-                        
+                        send_mailjet_email_purchase_success(customer_email, order.dlc.name, order.id, order.key)
                         create_user_game(user, order.key, trx, None, order.dlc)
 
                     create_user_interaction(user_id, item_id, timestamp)
