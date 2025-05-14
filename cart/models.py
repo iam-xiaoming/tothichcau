@@ -11,7 +11,7 @@ class Order(models.Model):
     dlc = models.ForeignKey(DLC, on_delete=models.CASCADE, related_name='orders', blank=True, null=True, editable=False)
     
     created_at = models.DateTimeField(auto_now_add=True)
-    key = models.OneToOneField(Key, models.CASCADE, related_name='orders')
+    key = models.OneToOneField(Key, models.CASCADE, related_name='orders', null=True)
     
     def __str__(self):
         if self.game:

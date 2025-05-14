@@ -30,7 +30,6 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 # Create your views here.
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-@transaction.atomic
 def add_game_to_cart(request, pk, game_pk):
     try:
         user = MyUser.objects.get(pk=pk)
@@ -40,17 +39,8 @@ def add_game_to_cart(request, pk, game_pk):
     except Game.DoesNotExist:
         return Response({'error': 'Game not found.'}, status=404)
     
-    key = Key.objects.select_for_update().filter(game=game, status='available').first()
-    
-    if not key:
-        return Response({'success': False, 'message': 'Stock out'}, status=200)
-    
     try:
-        # update key status
-        key.status = 'reserved'
-        key.save()
-        
-        order = Order.objects.create(user=user, game=game, key=key)
+        Order.objects.create(user=user, game=game)
         
         # get total order count of specific user
         order_count = user.orders.count()
@@ -71,7 +61,6 @@ def add_game_to_cart(request, pk, game_pk):
     
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-@transaction.atomic
 def add_dlc_to_cart(request, pk, game_pk):
     try:
         user = MyUser.objects.get(pk=pk)
@@ -81,17 +70,8 @@ def add_dlc_to_cart(request, pk, game_pk):
     except DLC.DoesNotExist:
         return Response({'error': 'DLC not found.'}, status=404)
     
-    key = Key.objects.select_for_update().filter(dlc=dlc, status='available').first()
-    
-    if not key:
-        return Response({'success': False, 'message': 'Stock out'}, status=200)
-    
     try:
-        # update key status
-        key.status = 'reserved'
-        key.save()
-        
-        order = Order.objects.create(user=user, dlc=dlc, key=key)
+        Order.objects.create(user=user, dlc=dlc)
         
         # get total order count of specific user
         order_count = user.orders.count()
@@ -154,17 +134,8 @@ class CartDeleteView(LoginRequiredMixin, View):
     login_url = '/login/'
     
     def post(self, request, pk, *args, **kwargs):
-        with transaction.atomic():
-            order = get_object_or_404(Order.objects.select_for_update(), pk=pk, user=request.user)
-            key = order.key
-            
-            if not key or key.status != 'reserved':
-                return HttpResponseForbidden("This key is no longer reserved or already available.")
-            
-            key.status = 'available'
-            key.save()
-
-            order.delete()
+        order = get_object_or_404(Order, pk=pk, user=request.user)
+        order.delete()
 
         return redirect('cart')
     
