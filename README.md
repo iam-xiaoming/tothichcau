@@ -189,3 +189,8 @@ crontab -l
 */3 * * * * echo "Cron job ran at $(date)" >> /Users/nguyenminh/Mac/CoDaiVaHoaDanhDanh/logs/test_cron.log 2>&1
 
 api/dlc/3/media/review/
+
+redis-server
+redis-cli ping
+python manage.py migrate django_celery_beat
+celery -A GameArt worker -B --loglevel=info
