@@ -189,6 +189,3 @@ crontab -l
 */3 * * * * echo "Cron job ran at $(date)" >> /Users/nguyenminh/Mac/CoDaiVaHoaDanhDanh/logs/test_cron.log 2>&1
 
 api/dlc/3/media/review/
-
-
-haah
