@@ -16,6 +16,6 @@ urlpatterns = [
     path('api/cart/game/add/<str:pk>/<int:game_pk>/', views.add_game_to_cart, name='add_to_cart'),
     path('api/cart/dlc/add/<str:pk>/<int:game_pk>/', views.add_dlc_to_cart, name='add_to_cart'),
     
-    path('cart/delete/<int:pk>/', views.CartDeleteView.as_view(), name='cart-delete')
-
+    path('cart/delete/<int:pk>/', views.CartDeleteView.as_view(), name='cart-delete'),
+    path('api/check-stock/', views.check_stock, name='check_stock'),
 ]
