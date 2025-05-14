@@ -28,6 +28,7 @@
         }
     </style>
     <!-- <link rel="stylesheet" href="{% static 'homepage/css/rating_badge.css' %}"> -->
+    <link rel="stylesheet" href="{% static 'homepage/css/video-section.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -35,14 +36,13 @@
     <section class="hero">
         <div class="container">
             <div class="hero__slider owl-carousel">
-                {% for game_hero in items.game_heros %}
-                    <div class="hero__items set-bg" data-setbg="{{ gamehero.image.url }}">
+                {% for game_hero in game_heros %}
+                    <div class="hero__items set-bg" data-setbg="{{ game_hero.image.url }}">
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="hero__text">
-                                    <h2>Fate / Stay Night: Unlimited Blade Works</h2>
+                                    <h2>{{ game_hero }}</h2>
                                     <p>After 30 days of travel across the world...</p>
-                                    <a href="#"><span>Buy Now</span></a>
                                 </div>
                             </div>
                         </div>
@@ -133,6 +133,270 @@
     </section>
     <!-- Product Section End -->
 
+    <!-- Stats Section Begin -->
+    <section class="stats-section spad">
+        <div class="container">
+            <div class="row">
+
+                <!-- Top Sellers -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="stats-column">
+                        <div class="section-title d-flex justify-content-between align-items-center">
+                            <h5>Top Sellers</h5>
+                            <a href="/action/list/sale/" class="arrow-link">›</a>
+                        </div>
+                        {% for game in top_sellers %}
+                            <a class="item-click" game-pk="{{ game.pk }}" href="{% if game.status == 'base' %}{% url 'base-game-details' game.pk %}{% else %}{% url 'dlc-game-details' game.pk %}{% endif %}">
+                                <div class="stats-item d-flex mb-3">
+                                    <img src="{{ game.image.url }}" alt="{{ game.name }}" class="stats-thumb me-3" width="60">
+                                    <div>
+                                        <h6 class="mb-1">{{ game.name }}</h6>
+                                        {% if game.status == 'base' %}
+                                            <span class="base-game">Base Game</span><br>
+                                        {% else %}
+                                            <span class="base-game">Downloadable Content</span><br>
+                                        {% endif %}
+                                        {% if game.discount > 0 %}
+                                            <span style="background: rgb(38, 187, 255) !important;" class="badge bg-primary">-{{ game.discount }}%</span>
+                                            <del class="text-muted small">${{ game.price }}</del>
+                                            <span class="fw-bold ms-1">${{ game.discounted_price|floatformat:2 }}</span>
+                                        {% else %}
+                                            <span class="fw-bold">${{ game.price }}</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Most Played -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="stats-column">
+                        <div class="section-title d-flex justify-content-between align-items-center">
+                            <h5>Most Played</h5>
+                            <a href="/action/list/most-played/" class="arrow-link">›</a>
+                        </div>
+                        {% for game in most_played %}
+                        <a class="item-click" game-pk="{{ game.pk }}" href="{% if game.status == 'base' %}{% url 'base-game-details' game.pk %}{% else %}{% url 'dlc-game-details' game.pk %}{% endif %}">
+                            <div class="stats-item d-flex mb-3">
+                                <img src="{{ game.image.url }}" alt="{{ game.name }}" class="stats-thumb me-3" width="60">
+                                <div>
+                                    <h6 class="mb-1">{{ game.name }}</h6>
+                                    {% if game.status == 'base' %}
+                                        <span class="base-game">Base Game</span><br>
+                                    {% else %}
+                                        <span class="base-game">Downloadable Content</span><br>
+                                    {% endif %}
+                                    {% if game.price == 0 %}
+                                        <span class="fw-bold text-success">Free</span>
+                                    {% else %}
+                                        <span class="fw-bold">${{ game.price }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Top Upcoming Wishlisted -->
+                <div class="col-lg-4 col-md-12">
+                    <div class="stats-column">
+                        <div class="section-title d-flex justify-content-between align-items-center">
+                            <h5>Coming Soon</h5>
+                            <a href="/action/list/upcoming/" class="arrow-link">›</a>
+                        </div>
+                        {% for game in upcoming_games %}
+                            <a class="item-click" game-pk="{{ game.pk }}" href="{% if game.status == 'base' %}{% url 'base-game-details' game.pk %}{% else %}{% url 'dlc-game-details' game.pk %}{% endif %}">
+                                <div class="stats-item d-flex mb-3 {% if not game.release_date %}bg-dark text-white p-2 rounded{% endif %}">
+                                    {% if game.image %}
+                                        <img src="{{ game.image.url }}" alt="{{ game.name }}" class="stats-thumb me-3" width="60">
+                                    {% endif %}
+                                    <div>
+                                        <h6 class="mb-1">{{ game.name }}</h6>
+                                        {% if game.status == 'base' %}
+                                            <span class="base-game">Base Game</span><br>
+                                        {% else %}
+                                            <span class="base-game">Downloadable Content</span><br>
+                                        {% endif %}
+                                        {% if game.release_date %}
+                                            <span class="date-time">Available {{ game.release_date|date:"d/m/Y" }}</span>
+                                        {% else %}
+                                            <span class="date-time">Coming Soon</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+    <!-- Stats Section End -->
+
+    <!-- Featured Stories Begin -->
+    <section class="featured-stories spad">
+        <div class="container">
+            <div class="section-title">
+                <h4>Featured Stories</h4>
+            </div>
+            <div class="row">
+                <!-- Story Item 1 -->
+                {% for story in stories %}
+                    <div class="col-lg-4 col-md-6 col-12">
+                        <div class="story-item">
+                            <img src="{{ story.image.url }}" alt="{{ story.title }}" class="story-img">
+                            <div class="story-content">
+                                <h5 class="line-clamp">{{ story.title }}</h5>
+                                <p class="line-clamp">{{ story.description }}</p>
+                                <a href="{{ story.url }}" class="read-more-btn">Read More</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    <!-- Featured Stories End -->
+
+
+    <section class="video-highlight-section spad">
+        <div class="container">
+            <div class="section-title">
+                <h4>Featured Highlight</h4>
+            </div>
+            <div class="row">
+                <!-- Video chính bên trái -->
+                <div class="col-md-9">
+                    <div class="main-video position-relative rounded overflow-hidden">
+                        <video src="media/game_video_reviews/LoveChoice/videos/trailer2.mp4" controls class="w-100 h-100 rounded"></video>
+                    </div>
+                </div>
+
+                <!-- Danh sách game bên phải -->
+                <div class="col-md-3">
+                    <div class="video-thumbnails d-flex flex-column gap-2">
+                        {% for game in highlights %}
+                            <div data-src="{{ game.video.url }}" class="thumbnail-item d-flex align-items-center gap-2 p-2 rounded active">
+                                <img src="{{ game.image.url }}" alt="{{ game.title }}" class="rounded" width="50">
+                                <span>{{ game.title }}</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>    
+
+
+    <!-- Free Games Section Begin -->
+    <section class="free-games-section spad">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="text-white"><i class="fa-solid fa-gift"></i> Free Games</h4>
+                <a href="/action/list/free-games/" class="btn btn-outline-light btn-sm">View More</a>
+            </div>
+
+            <div class="row g-2">
+                <!-- Game Card 1 -->
+                <div class="col-lg-3 col-md-4 col-6">
+                    {% for game in free_games %}
+                        <a class="item-click" game-pk="{{ game.pk }}" href="{% if game.status == 'base' %}{% url 'base-game-details' game.pk %}{% else %}{% url 'dlc-game-details' game.pk %}{% endif %}" style="display: block; text-decoration: none;">
+                            <div class="game-card">
+                                <img src="{{ game.image.url }}" class="img-fluid rounded" alt="Game 1">
+                                <div class="game-status text-white text-center">FREE NOW</div>
+                                <h6 class="text-white">{{ game.name }}</h6>
+                                <p class="text-muted small line-clamp">{{ game.description }}</p>
+                            </div>
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Free Games Section End -->
+
+
+    <!-- Game session -->
+    <section class="game-section spad">
+        <div class="container">
+            <div class="row">
+                <!-- Game 1: Apex Legends -->
+                <div class="col-lg-6 col-md-6 col-12">
+                    <div class="game-box">
+                        <img src="{% static 'game_features/img/apex.avif' %}" alt="Apex Legends" class="game-img">
+                        <div class="game-content">
+                            <h5>Apex Legends™</h5>
+                            <p class="line-clamp">Target greatness as new Legend, Sparrow - show the Outlands that you are the one to watch. Set your sights on glory!</p>
+                            <a href="https://www.ea.com/games/apex-legends/apex-legends" class="game-btn">Play for Free</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Game 2: Off the Grid -->
+                <div class="col-lg-6 col-md-6 col-12">
+                    <div class="game-box">
+                        <img src="{% static 'game_features/img/otg.avif' %}" alt="Off the Grid" class="game-img">
+                        <div class="game-content">
+                            <h5>Off the Grid</h5>
+                            <p class="line-clamp">Reign victorious as the Hopper Pilot & Cleanup Crew in OTG's first lore-driven Battle Pass!</p>
+                            <a href="https://gameoffthegrid.com/#about" class="game-btn">Play for Free</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>>
+
+
+
+    <!-- Explore Section Begin -->
+    <section class="explore-section spad">
+        <div class="container">
+            <div class="row">
+            <!-- Box 1 -->
+            <div class="col-lg-4 col-md-6 col-12">
+                <div class="explore-box">
+                <img src="{% static 'homepage/img/explore1.avif' %}" alt="Sales" class="explore-img">
+                <div class="explore-content">
+                    <h5>Sales & Specials</h5>
+                    <p class="line-clamp">Save big on hit titles and hidden gems. There's always something on sale at the Epic Games Store!</p>
+                    <a href="action/list/sale" class="explore-btn">Browse</a>
+                </div>
+                </div>
+            </div>
+
+            <!-- Box 2 -->
+            <div class="col-lg-4 col-md-6 col-12">
+                <div class="explore-box">
+                <img src="{% static 'homepage/img/explore2.avif' %}" alt="Free Games" class="explore-img">
+                <div class="explore-content">
+                    <h5>Free Games</h5>
+                    <p class="line-clamp">Explore free and free-to-play games from our collection. Come back every Thursday for a new free game!</p>
+                    <a href="#" class="explore-btn">Play Now</a>
+                </div>
+                </div>
+            </div>
+
+            <!-- Box 3 -->
+            <div class="col-lg-4 col-md-12 col-12">
+                <div class="explore-box">
+                <img src="{% static 'homepage/img/explore3.avif' %}" alt="Apps" class="explore-img">
+                <div class="explore-content">
+                    <h5>Apps</h5>
+                    <p class="line-clamp">Enjoy some of the best Apps for music, gaming, creating, and more!</p>
+                    <a href="{% url 'game-list' %}" class="explore-btn">Browse</a>
+                </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </section>
+    <!-- Explore Section End -->
+
     <script>
         function getProductWidth(card) {
             const style = window.getComputedStyle(card);
@@ -216,4 +480,8 @@
             });
         });
     </script>
+
+    {% block extra_js %}
+        <script src="{% static 'homepage/js/video-thumbnail.js' %}"></script>
+    {% endblock %}
 {% endblock %}

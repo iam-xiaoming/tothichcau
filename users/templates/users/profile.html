@@ -254,7 +254,7 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        updateWishlistCount();
+                        // updateWishlistCount();
                         itemDiv.remove();
                     } else {
                         console.error(data.error);

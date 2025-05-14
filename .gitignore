@@ -29,3 +29,4 @@ venv/
 !**/migrations/__init__.py
 
 .python-version
+media

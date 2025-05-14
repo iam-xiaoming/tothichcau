@@ -3,7 +3,7 @@ from games.models import Game, DLC
 from django.views.generic import ListView
 from game_features.models import Category
 from django.http import HttpResponse
-from homepage.utils import get_trendings, get_sales
+from homepage.utils import get_trendings, get_sales, get_mostplay, get_coming_soon, get_free_games
 from django.core.paginator import Paginator
 
 # Create your views here.
@@ -42,7 +42,7 @@ def category_view(request, slug):
 
 
 def action_view(request, action):
-    if action not in ['trending', 'sale']:
+    if action not in ['trending', 'sale', 'most-played', 'upcoming', 'free-games']:
         return HttpResponse('<h1>404</h1>')
     
     context = {
@@ -50,9 +50,15 @@ def action_view(request, action):
     }
     
     if action == 'trending':
-        context['games'] = get_trendings()
+        context['games'] = get_trendings(status='all')
     elif action == 'sale':
-        context['games'] = get_sales()
+        context['games'] = get_sales(status='all')
+    elif action == 'most-played':
+        context['games'] = get_mostplay(status='all')
+    elif action == 'upcoming':
+        context['games'] = get_coming_soon(status='all')
+    else:
+        context['games'] = get_free_games(status='all')
         
     game_list = context['games']
     paginator = Paginator(game_list, 21)
