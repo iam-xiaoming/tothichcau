@@ -104,6 +104,7 @@ INSTALLED_APPS = [
     # storages
     'storages',
     'django_extensions',
+    'django_celery_beat',
     
     'game_features.apps.GameFeaturesConfig',
     'keys.apps.KeysConfig',
@@ -231,3 +232,9 @@ LOGIN_URL = 'login'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
