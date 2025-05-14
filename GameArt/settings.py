@@ -101,6 +101,7 @@ INSTALLED_APPS = [
     
     # storages
     'storages',
+    'django_extensions',
     
     'game_features.apps.GameFeaturesConfig',
     'keys.apps.KeysConfig',
