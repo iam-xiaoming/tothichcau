@@ -1,6 +1,6 @@
 <!-- localhost:8000/api/search/games/?query=elden&offset=0&limit=10 -->
 ### Link donate đây nha ae
-![Alt text](donate.jpg){ width=300px }
+<img src="donate.jpg" alt="Alt text" width="300">
 
 Kênh chơi game với mục đích đem lại niềm vui cho mọi người: https://www.facebook.com/profile.php?id=100027733654960&mibextid=LQQJ4d
 
