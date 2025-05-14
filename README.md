@@ -18,11 +18,12 @@ Kênh chơi game với mục đích đem lại niềm vui cho mọi người: ht
 
 **Nhóm thực hiện:**
 
-**Trần Thị Huyền** – **MSSV**: *22657821*
-**Nguyễn Ngọc Minh** – **MSSV**: *22685841*
-**Phan Công Chiến** – **MSSV**: *22685651*
-**Trần Thái Nguyên** – **MSSV**: *22697051*
-**Trần Khắc Liêm** – **MSSV**: *22685251*
+**Trần Thị Huyền** – **MSSV**: *22657821*  
+
+**Nguyễn Ngọc Minh** – **MSSV**: *22685841*  
+**Phan Công Chiến** – **MSSV**: *22685651*  
+**Trần Thái Nguyên** – **MSSV**: *22697051*  
+**Trần Khắc Liêm** – **MSSV**: *22685251*  
 
 ---
 
