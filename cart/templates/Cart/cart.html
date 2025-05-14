@@ -3,8 +3,7 @@
 
 
 {% block extra_css %}
-	<link rel="stylesheet" href="{% static 'cart/css/checkout.css' %}" />
-	<link rel="stylesheet" href="{% static 'cart/css/nothing.css' %}" />
+	<link rel="stylesheet" href="{% static 'cart/css/cart.css' %}" />
 {% endblock %}
 
 {% block content %}
@@ -154,33 +153,4 @@
             }
         });        
     </script>
-
-    <!-- <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const checkoutBtn = document.getElementById('checkout-btn');
-            
-            if (checkoutBtn) {
-                checkoutBtn.addEventListener('click', function() {
-                    const selectedItems = [];
-                
-                    document.querySelectorAll('.cart-item').forEach(item => {
-                        const gamePk = item.getAttribute('data-game-pk');
-                        if (gamePk) {
-                            selectedItems.push({
-                                item_id: gamePk,
-                                event_type: 'buy',
-                                timestamp: Math.floor(Date.now() / 1000),
-                            });
-                        }
-                    });
-                
-                    console.log('Selected game PKs:', selectedItems);
-                
-                    sendInteractions(user_pk, selectedItems);
-                });
-            } else {
-                console.log('No products in cart, checkout button not found.');
-            }
-        });
-    </script> -->
 {% endblock %}
