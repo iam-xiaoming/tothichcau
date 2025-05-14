@@ -4,24 +4,23 @@ from datetime import timedelta
 from cart.models import Order
 
 class Command(BaseCommand):
-    help = 'Release reserved keys for orders not paid after timeout'
+    help = 'Release expired orders after 1 hour of inactivity'
 
     def handle(self, *args, **kwargs):
-        timeout_minutes = 2
-        timeout_threshold = timezone.now() - timedelta(minutes=timeout_minutes)
-
+        expired_time = timezone.now() - timedelta(hours=1)
         expired_orders = Order.objects.filter(
-            created_at__lt=timeout_threshold,
-            key__status='reserved'
+            key__isnull=False,
+            created_at__lt=expired_time
         )
 
+        count = 0
         for order in expired_orders:
-            self.stdout.write(f"Releasing order {order.pk}...")
+            key = order.key
+            if key:
+                key.status = 'available'
+                key.save()
+                order.key = None
+                order.save()
+                count += 1
 
-            if order.key:
-                order.key.status = 'available'
-                order.key.save()
-
-            order.delete()
-
-        self.stdout.write(self.style.SUCCESS('Successfully released expired orders!'))
+        self.stdout.write(f"Released {count} expired order(s)")

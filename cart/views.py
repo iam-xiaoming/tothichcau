@@ -15,17 +15,69 @@ from .models import Transaction
 import logging
 from django.db import transaction
 from django.urls import reverse
-
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-
+from rest_framework import status
 from datetime import datetime
 import numpy as np
 from .utils import create_transaction, create_user_game, create_user_interaction
 from .mailjet import send_mailjet_email_purchase_success
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
+
+
+def reserve_key(item_model, item_id, order_id, out_of_stock):
+    try:
+        item = item_model.objects.get(pk=item_id)
+        if not item.keys.filter(status='available').exists():
+            out_of_stock.append({'orderId': order_id, 'name': item.name})
+        else:
+            with transaction.atomic():
+                order = Order.objects.get(pk=order_id)
+                key = item.keys.select_for_update().filter(status='available').first()
+                if key:
+                    order.key = key
+                    key.status = 'reserved'
+                    key.save()
+                    order.save()
+                else:
+                    out_of_stock.append({'orderId': order_id, 'name': item.name})
+    except item_model.DoesNotExist:
+        pass
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def check_stock(request):
+    try:
+        items = request.data.get('items', [])
+        out_of_stock = []
+        
+        if not isinstance(items, list):
+            return Response({'error': 'Invalid format for items.'}, status=400)
+
+        for item in items:
+            item_id = item.get('item_id')
+            order_id = item.get('orderId')
+            data_type = item.get('dataType')
+
+            if not (item_id and order_id and data_type):
+                continue
+            
+            if data_type == 'base':
+                reserve_key(Game, item_id, order_id, out_of_stock)
+            else:
+                reserve_key(DLC, item_id, order_id, out_of_stock)
+            
+        return Response({
+            'out_of_stock': out_of_stock,
+            'reserved': len(items) - len(out_of_stock)
+        })
+    except Exception as e:
+        return Response({'error': f'An error occurred while checking stock - {e}.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
 
 # Create your views here.
 @api_view(['POST'])
@@ -94,7 +146,7 @@ def add_dlc_to_cart(request, pk, game_pk):
 @permission_classes([IsAuthenticated])
 def get_cart_count(request, pk):
     try:
-        order_count =  Order.objects.filter(user__pk=pk).count()
+        order_count = Order.objects.filter(user__pk=pk).count()
     except MyUser.DoesNotExist:
         return Response({'error': 'User not found.'}, status=404)
     
@@ -135,8 +187,11 @@ class CartDeleteView(LoginRequiredMixin, View):
     
     def post(self, request, pk, *args, **kwargs):
         order = get_object_or_404(Order, pk=pk, user=request.user)
+        if order.key:
+            key = order.key
+            key.status = 'available'
+            order.key = None
         order.delete()
-
         return redirect('cart')
     
 
@@ -178,6 +233,13 @@ def success(request):
 
 @login_required
 def cancel(request):
+    orders = Order.objects.filter(user=request.user)
+    for order in orders:
+        key = order.key
+        if key:
+            key.status = 'available'
+            key.save()
+        order.delete()
     return render(request, "cart/cancel.html")
 
 
