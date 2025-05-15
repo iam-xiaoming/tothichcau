@@ -209,3 +209,4 @@ docker pull babyshark04/gameart-django:latest
 docker pull babyshark04/gameart-celery:latest
 
 docker compose up
+tranthihuyenaaaaa@gmail.com
