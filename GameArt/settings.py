@@ -191,7 +191,7 @@ DATABASES = {
 ELASTICSEARCH_DSL = {
     'default': {
         'hosts': 'https://d59efb21a62f446b903ba467b11cf9fb.asia-southeast1.gcp.elastic-cloud.com:443',
-        'api_key': 'ZXd6TzFKWUJkTnNkNnVuWUJQUUw6VHhYVjdWZHB1aE9kX2p6R0lUek5ydw==',
+        'api_key': config('ELASTICSEARCH_DSL'),
         'verify_certs': True,
     },
 }
