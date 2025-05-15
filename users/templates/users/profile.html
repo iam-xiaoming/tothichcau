@@ -302,13 +302,16 @@
                                         <img src="${item.game.image}" alt="${item.game.name}">
                                     </div>
                                     <div class="product-info">
-                                        <a style="display: block;" href="/transaction/${item.transaction.id}/"><h5>${item.game.name}</h5></a>
+                                        <a style="display: block;" href="/transaction/${item.transaction.id}/">
+                                            <h5>${item.game.name}</h5>
+                                        </a>
                                         <div class="product-key">
                                             <span class="key-label">Game Key:</span>
                                             <span class="key-value">${item.key.key}</span>
-                                            <button class="copy-key" data-key="hidden">
+                                            <button class="copy-key" data-key="${item.key.key}">
                                                 <i class="fa fa-copy"></i>
                                             </button>
+                                            <a href="https://store.steampowered.com/account/registerkey?key=${item.key.key}" class="redeem-button" target="_blank" rel="noopener noreferrer">Redeem</a>
                                         </div>
                                     </div>
                                 </div>

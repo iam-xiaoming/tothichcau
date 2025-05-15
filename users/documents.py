@@ -45,5 +45,5 @@ class UserGameDocument(Document):
 
     def get_instances_from_related(self, related_instance):
         if isinstance(related_instance, Game):
-            return related_instance.owned_by_users.all()
+            return related_instance.game_owned_by_users.all()
         return UserGame.objects.none()
