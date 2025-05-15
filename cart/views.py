@@ -174,7 +174,7 @@ class CartView(LoginRequiredMixin, ListView):
         total_price = np.sum(game.price for game in games) + np.sum(dlc.price for dlc in dlcs)
         total_discounted_price = np.sum(game.discounted_price for game in games) + np.sum(dlc.discounted_price for dlc in dlcs)
         
-        context['orders'] = Order.objects.select_related('game', 'dlc').all()
+        context['orders'] = Order.objects.select_related('game', 'dlc').filter(user=self.request.user)
         context['total_price'] = total_price
         context['total_discounted_price'] = total_discounted_price
         context['discount'] = total_price - total_discounted_price
