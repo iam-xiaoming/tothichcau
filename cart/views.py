@@ -15,21 +15,73 @@ from .models import Transaction
 import logging
 from django.db import transaction
 from django.urls import reverse
-
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-
+from rest_framework import status
 from datetime import datetime
 import numpy as np
 from .utils import create_transaction, create_user_game, create_user_interaction
+from .mailjet import send_mailjet_email_purchase_success
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
+
+
+def reserve_key(item_model, item_id, order_id, out_of_stock):
+    try:
+        item = item_model.objects.get(pk=item_id)
+        if not item.keys.filter(status='available').exists():
+            out_of_stock.append({'orderId': order_id, 'name': item.name})
+        else:
+            with transaction.atomic():
+                order = Order.objects.get(pk=order_id)
+                key = item.keys.select_for_update().filter(status='available').first()
+                if key:
+                    order.key = key
+                    key.status = 'reserved'
+                    key.save()
+                    order.save()
+                else:
+                    out_of_stock.append({'orderId': order_id, 'name': item.name})
+    except item_model.DoesNotExist:
+        pass
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def check_stock(request):
+    try:
+        items = request.data.get('items', [])
+        out_of_stock = []
+        
+        if not isinstance(items, list):
+            return Response({'error': 'Invalid format for items.'}, status=400)
+
+        for item in items:
+            item_id = item.get('item_id')
+            order_id = item.get('orderId')
+            data_type = item.get('dataType')
+
+            if not (item_id and order_id and data_type):
+                continue
+            
+            if data_type == 'base':
+                reserve_key(Game, item_id, order_id, out_of_stock)
+            else:
+                reserve_key(DLC, item_id, order_id, out_of_stock)
+            
+        return Response({
+            'out_of_stock': out_of_stock,
+            'reserved': len(items) - len(out_of_stock)
+        })
+    except Exception as e:
+        return Response({'error': f'An error occurred while checking stock - {e}.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
 
 # Create your views here.
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-@transaction.atomic
 def add_game_to_cart(request, pk, game_pk):
     try:
         user = MyUser.objects.get(pk=pk)
@@ -39,17 +91,8 @@ def add_game_to_cart(request, pk, game_pk):
     except Game.DoesNotExist:
         return Response({'error': 'Game not found.'}, status=404)
     
-    key = Key.objects.select_for_update().filter(game=game, status='available').first()
-    
-    if not key:
-        return Response({'success': False, 'message': 'Stock out'}, status=200)
-    
     try:
-        # update key status
-        key.status = 'reserved'
-        key.save()
-        
-        order = Order.objects.create(user=user, game=game, key=key)
+        Order.objects.create(user=user, game=game)
         
         # get total order count of specific user
         order_count = user.orders.count()
@@ -70,7 +113,6 @@ def add_game_to_cart(request, pk, game_pk):
     
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-@transaction.atomic
 def add_dlc_to_cart(request, pk, game_pk):
     try:
         user = MyUser.objects.get(pk=pk)
@@ -80,17 +122,8 @@ def add_dlc_to_cart(request, pk, game_pk):
     except DLC.DoesNotExist:
         return Response({'error': 'DLC not found.'}, status=404)
     
-    key = Key.objects.select_for_update().filter(dlc=dlc, status='available').first()
-    
-    if not key:
-        return Response({'success': False, 'message': 'Stock out'}, status=200)
-    
     try:
-        # update key status
-        key.status = 'reserved'
-        key.save()
-        
-        order = Order.objects.create(user=user, dlc=dlc, key=key)
+        Order.objects.create(user=user, dlc=dlc)
         
         # get total order count of specific user
         order_count = user.orders.count()
@@ -113,7 +146,7 @@ def add_dlc_to_cart(request, pk, game_pk):
 @permission_classes([IsAuthenticated])
 def get_cart_count(request, pk):
     try:
-        order_count =  Order.objects.filter(user__pk=pk).count()
+        order_count = Order.objects.filter(user__pk=pk).count()
     except MyUser.DoesNotExist:
         return Response({'error': 'User not found.'}, status=404)
     
@@ -153,18 +186,13 @@ class CartDeleteView(LoginRequiredMixin, View):
     login_url = '/login/'
     
     def post(self, request, pk, *args, **kwargs):
+        order = get_object_or_404(Order, pk=pk, user=request.user)
         with transaction.atomic():
-            order = get_object_or_404(Order.objects.select_for_update(), pk=pk, user=request.user)
-            key = order.key
-            
-            if not key or key.status != 'reserved':
-                return HttpResponseForbidden("This key is no longer reserved or already available.")
-            
-            key.status = 'available'
-            key.save()
-
+            if order.key:
+                key = order.key
+                key.status = 'available'
+                order.key = None
             order.delete()
-
         return redirect('cart')
     
 
@@ -206,6 +234,14 @@ def success(request):
 
 @login_required
 def cancel(request):
+    orders = Order.objects.filter(user=request.user)
+    with transaction.atomic():
+        for order in orders:
+            key = order.key
+            if key:
+                key.status = 'available'
+                key.save()
+            order.delete()
     return render(request, "cart/cancel.html")
 
 
@@ -237,7 +273,6 @@ def webhook_view(request):
         return HttpResponse(status=200)
 
     status = 'failed'
-    brand = last4 = exp_month = exp_year = None
 
     payment_intent_id = session.get('payment_intent')
     if payment_intent_id:
@@ -272,7 +307,7 @@ def webhook_view(request):
         return HttpResponse(status=500)
 
     for item in line_items['data']:
-        product_id = item['price']['product']
+        # product_id = item['price']['product']
         total_amount = item['amount_total'] / 100
 
         for order in user.orders.all():
@@ -287,12 +322,12 @@ def webhook_view(request):
                     if order.game:
                         item_id = order.game.id
                         trx = create_transaction(user, status, session_id, total_amount, customer_email, brand, last4, phone, exp_month, exp_year, order.key, order.game, None)
-                        
+                        send_mailjet_email_purchase_success(customer_email, order.game.name, order.id, order.key)
                         create_user_game(user, order.key, trx, order.game, None)
                     else:
                         item_id = order.dlc.id
                         trx = create_transaction(user, status, session_id, total_amount, customer_email, brand, last4, phone, exp_month, exp_year, order.key, None, order.dlc)
-                        
+                        send_mailjet_email_purchase_success(customer_email, order.dlc.name, order.id, order.key)
                         create_user_game(user, order.key, trx, None, order.dlc)
 
                     create_user_interaction(user_id, item_id, timestamp)

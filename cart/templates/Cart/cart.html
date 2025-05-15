@@ -1,10 +1,8 @@
 {% extends "homepage/base.html" %}
 {% load static %}
 
-
 {% block extra_css %}
-	<link rel="stylesheet" href="{% static 'cart/css/checkout.css' %}" />
-	<link rel="stylesheet" href="{% static 'cart/css/nothing.css' %}" />
+    <link rel="stylesheet" href="{% static 'cart/css/cart.css' %}" />
 {% endblock %}
 
 {% block content %}
@@ -16,7 +14,7 @@
             <div class="cart-left">
                 {% for order in orders %}
                     {% if order.game %}
-                        <div data-game-pk="{{ order.game.pk }}" class="cart-item">
+                        <div data-type="base" data-order-id="{{ order.pk }}" data-game-pk="{{ order.game.pk }}" class="cart-item">
                             <img src="{{ order.game.image.url }}" class="item-image" alt="Game Image" />
                             <div class="item-details">
                                 <div class="item-header">
@@ -25,7 +23,7 @@
                                 </div>
                                 <h2 class="item-name">{{ order.game.name }}</h2>
                                 <div class="item-meta">
-                                    {% if item.discount > 0 %}
+                                    {% if order.game.discount > 0 %}
                                         <span class="discount">-{{ order.game.discount }}%</span>
                                         <span class="original-price">${{ order.game.price }}</span>
                                     {% endif %}
@@ -45,7 +43,7 @@
                             </div>
                         </div>
                     {% else %}
-                        <div data-game-pk="{{ order.dlc.pk }}" class="cart-item">
+                        <div data-type="dlc" data-order-id="{{ order.pk }}" data-game-pk="{{ order.dlc.pk }}" class="cart-item">
                             <img src="{{ order.dlc.image.url }}" class="item-image" alt="Game Image" />
                             <div class="item-details">
                                 <div class="item-header">
@@ -54,7 +52,7 @@
                                 </div>
                                 <h2 class="item-name">{{ order.dlc.name }}</h2>
                                 <div class="item-meta">
-                                    {% if item.discount > 0 %}
+                                    {% if order.dlc.discount > 0 %}
                                         <span class="discount">-{{ order.dlc.discount }}%</span>
                                         <span class="original-price">${{ order.dlc.price }}</span>
                                     {% endif %}
@@ -80,25 +78,25 @@
             <div class="cart-right">
                 <h3>Games and Apps Summary</h3>
                 <div class="summary-line">
-                <span>Price</span>
-                <span>${{ total_price }}</span>
+                    <span>Price</span>
+                    <span>${{ total_price }}</span>
                 </div>
                 <div class="summary-line">
-                <span>Sale Discount</span>
-                <span>-${{ discount|floatformat:2 }}</span>
+                    <span>Sale Discount</span>
+                    <span>-${{ discount|floatformat:2 }}</span>
                 </div>
                 <div class="summary-line">
-                <span>Taxes</span>
-                <span>Calculated at Checkout</span>
+                    <span>Taxes</span>
+                    <span>Calculated at Checkout</span>
                 </div>
                 <div class="summary-line total">
-                <span>Subtotal</span>
-                <span>${{ total_discounted_price|floatformat:2 }}</span>
+                    <span>Subtotal</span>
+                    <span>${{ total_discounted_price|floatformat:2 }}</span>
                 </div>
                 <form action="" method="POST">
-					{% csrf_token %}
-					<button id="checkout-btn" class="checkout-btn">Check Out</button>
-				</form>
+                    {% csrf_token %}
+                    <button id="checkout-btn" class="checkout-btn">Check Out</button>
+                </form>
             </div>
           </div>
         </main>
@@ -106,81 +104,20 @@
         <main class="cart-container">
             <h1>My Cart</h1>
             <div class="empty-cart">
-            <div class="empty-icon">😕</div>
-            <p class="empty-text">Your cart is empty.</p>
-            <a href="#" class="shop-btn">Shop for Games & Apps</a>
+                <div class="empty-icon">😕</div>
+                <p class="empty-text">Your cart is empty.</p>
+                <a href="#" class="shop-btn">Shop for Games & Apps</a>
             </div>
         </main>
     {% endif %}
+{% endblock %}
 
+{% block extra_js %}
     <script src="https://js.stripe.com/v3/"></script>
+
     <script>
-        var stripe = Stripe('{{ STRIPE_PUBLISHABLE_KEY }}');
-
-        document.addEventListener('DOMContentLoaded', function () {
-            const checkoutBtn = document.getElementById('checkout-btn');
-        
-            if (checkoutBtn) {
-                checkoutBtn.addEventListener('click', function(event) {
-                    event.preventDefault();
-
-                    fetch("{% url 'create_checkout_session' %}", {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRFToken': '{{ csrf_token }}'
-                        }
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.error) {
-                            alert('Error: ' + data.error);
-                        } else {
-                            stripe.redirectToCheckout({ sessionId: data.id })
-                                .then(function(result) {
-                                    if (result.error) {
-                                        alert('Error: ' + result.error.message);
-                                    }
-                                });
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error creating checkout session:', error);
-                        alert('There was an error creating the checkout session.');
-                    });
-                });
-            } else {
-                console.log('Checkout button not found');
-            }
-        });        
+        const stripe = Stripe("{{ STRIPE_PUBLISHABLE_KEY }}");
     </script>
 
-    <!-- <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const checkoutBtn = document.getElementById('checkout-btn');
-            
-            if (checkoutBtn) {
-                checkoutBtn.addEventListener('click', function() {
-                    const selectedItems = [];
-                
-                    document.querySelectorAll('.cart-item').forEach(item => {
-                        const gamePk = item.getAttribute('data-game-pk');
-                        if (gamePk) {
-                            selectedItems.push({
-                                item_id: gamePk,
-                                event_type: 'buy',
-                                timestamp: Math.floor(Date.now() / 1000),
-                            });
-                        }
-                    });
-                
-                    console.log('Selected game PKs:', selectedItems);
-                
-                    sendInteractions(user_pk, selectedItems);
-                });
-            } else {
-                console.log('No products in cart, checkout button not found.');
-            }
-        });
-    </script> -->
+    <script src="{% static 'cart/js/checkout.js' %}"></script>
 {% endblock %}

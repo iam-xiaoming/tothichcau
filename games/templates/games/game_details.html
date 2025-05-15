@@ -344,17 +344,15 @@
                             // update add to cart btn
                             if (data.key_remain > 0) {
                                 btn.classList.remove('loading');
-                                btn.classList.add('disabled');
+                                btn.classList.remove('disabled')
                                 btn.querySelector('span').innerHTML = '<i class="fa-solid fa-cart-plus"></i> Add to cart'
                                 liElement.innerHTML = `<span id="game-status">Status</span> AVAILABLE`;
-
                             } else {
                                 btn.classList.remove('loading');
                                 btn.classList.add('disabled');
                                 btn.querySelector('span').innerHTML = '<i class="fa-solid fa-arrow-trend-down"></i> Stock out';
                                 liElement.innerHTML = `<span id="game-status">Status</span> STOCK OUT`;
                             }
-
                             // Send interaction when "Add to cart" is clicked
                             sendInteractions(user_pk, [{
                                 item_id: game_pk,

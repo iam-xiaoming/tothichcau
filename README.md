@@ -186,4 +186,26 @@ crontab -l
 
 api/dlc/3/media/review/ -->
 
+redis-server
+redis-cli ping
+python manage.py migrate django_celery_beat
+celery -A GameArt worker --loglevel=info --logfile=celery.log
+celery -A GameArt beat --loglevel=info
 
+
+docker compose up --build
+
+<!-- docker compose build
+docker compose up -->
+
+docker compose exec django python manage.py makemigrations
+docker compose exec django python manage.py migrate
+
+docker tag codaivahoadanhdanh-django:latest babyshark04/gameart:latest
+docker push babyshark04/gameart:latest
+
+<!-- pulll and run -->
+docker pull babyshark04/gameart-django:latest
+docker pull babyshark04/gameart-celery:latest
+
+docker compose up

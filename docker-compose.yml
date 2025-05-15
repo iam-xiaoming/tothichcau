@@ -1,13 +1,42 @@
+version: '3.9'
+
 services:
+  django:
+    build: .
+    command: gunicorn GameArt.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - redis
+      - elasticsearch
+
+  redis:
+    image: redis:7.0-alpine
+    ports:
+      - "6379:6379"
+
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.13.0
     volumes:
       - esdata01:/usr/share/elasticsearch/data
     ports:
-      - 9200:9200
+      - "9200:9200"
     environment:
       - discovery.type=single-node
       - xpack.security.enabled=false
+
+  celery:
+    build: .
+    command: celery -A GameArt worker -l info
+    env_file:
+      - .env
+    depends_on:
+      - redis
+      - django
 
 volumes:
   esdata01:
