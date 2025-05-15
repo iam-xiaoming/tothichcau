@@ -187,11 +187,12 @@ class CartDeleteView(LoginRequiredMixin, View):
     
     def post(self, request, pk, *args, **kwargs):
         order = get_object_or_404(Order, pk=pk, user=request.user)
-        if order.key:
-            key = order.key
-            key.status = 'available'
-            order.key = None
-        order.delete()
+        with transaction.atomic():
+            if order.key:
+                key = order.key
+                key.status = 'available'
+                order.key = None
+            order.delete()
         return redirect('cart')
     
 
@@ -234,12 +235,13 @@ def success(request):
 @login_required
 def cancel(request):
     orders = Order.objects.filter(user=request.user)
-    for order in orders:
-        key = order.key
-        if key:
-            key.status = 'available'
-            key.save()
-        order.delete()
+    with transaction.atomic():
+        for order in orders:
+            key = order.key
+            if key:
+                key.status = 'available'
+                key.save()
+            order.delete()
     return render(request, "cart/cancel.html")
 
 
@@ -271,7 +273,6 @@ def webhook_view(request):
         return HttpResponse(status=200)
 
     status = 'failed'
-    brand = last4 = exp_month = exp_year = None
 
     payment_intent_id = session.get('payment_intent')
     if payment_intent_id:
@@ -306,7 +307,7 @@ def webhook_view(request):
         return HttpResponse(status=500)
 
     for item in line_items['data']:
-        product_id = item['price']['product']
+        # product_id = item['price']['product']
         total_amount = item['amount_total'] / 100
 
         for order in user.orders.all():

@@ -193,4 +193,5 @@ api/dlc/3/media/review/
 redis-server
 redis-cli ping
 python manage.py migrate django_celery_beat
-celery -A GameArt worker -B --loglevel=info
+celery -A GameArt worker --loglevel=info --logfile=celery.log
+celery -A GameArt beat --loglevel=info
