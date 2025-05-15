@@ -49,4 +49,4 @@ class GameDocument(Document):
         
     def get_instances_from_related(self, related_instance):
         if isinstance(related_instance, Category):
-            return related_instance.games.all()
+            return related_instance.game_set.all()
