@@ -1,15 +1,8 @@
 <!-- localhost:8000/api/search/games/?query=elden&offset=0&limit=10 -->
 ### Link donate đây nha ae
-![Alt text](donate.jpg)
+<img src="donate.jpg" alt="Alt text" width="300">
 
 Kênh chơi game với mục đích đem lại niềm vui cho mọi người: https://www.facebook.com/profile.php?id=100027733654960&mibextid=LQQJ4d
-
-
-<!-- tranthihuyenaaaaa@gmail.com -->
-
-<!-- find . -path "*/migrations/*.py" -not -name "__init__.py" -delete -->
-
-<!-- find . -path "*/migrations/*.py" -not -name "__init__.py" -delete -->
 
 
 ## 🎮 XÂY DỰNG TRANG WEB BÁN KEY GAME TRỰC TUYẾN
@@ -18,11 +11,13 @@ Kênh chơi game với mục đích đem lại niềm vui cho mọi người: ht
 
 **Nhóm thực hiện:**
 
-**Trần Thị Huyền** – **MSSV**: *22657821*  
-**Nguyễn Ngọc Minh** – **MSSV**: *22685841*  
-**Phan Công Chiến** – **MSSV**: *22685651*  
-**Trần Thái Nguyên** – **MSSV**: *22697051*  
-**Trần Khắc Liêm** – **MSSV**: *22685251*  
+| Họ Tên               | MSSV     |
+| -------------------- | -------- |
+| **Trần Thị Huyền**   | 22657821 |
+| **Nguyễn Ngọc Minh** | 22685841 |
+| **Phan Công Chiến**  | 22685651 |
+| **Trần Thái Nguyên** | 22697051 |
+| **Trần Khắc Liêm**   | 22685251 |
 
 ---
 
@@ -81,7 +76,6 @@ Kênh chơi game với mục đích đem lại niềm vui cho mọi người: ht
 `games/`, `users/`, `cart/`, ...
 
 ### Cài đặt local:
-
 ```bash
 git clone ...
 cd project/
@@ -148,17 +142,19 @@ docker-compose up -d
 
 ## 🔮 HƯỚNG MỞ RỘNG
 
+* Đa dạng cách thức đăng ký
 * Tích hợp API nhà cung cấp key tự động
 * Gợi ý game theo sở thích người dùng (AWS Personalize)
 * Giao diện mobile bằng **React Native**
 * Phát triển cộng đồng user: comment, vote, review
 
 
-### Cách chạy và lỗi hay gặp
-0. chạy là lỗi gì liên quan tới aws hay trong app recommender thì là do chưa xác thực aws cli, cách xác thực aws cli thế nào thì hỏi chat gpt, xong nó yêu cầu nhập acccess key và secret key và region thì nó trong file env. mấy các khác thì enter để bỏ qua.
-0. `pull origin main` không đc thì chạy `git reset --hard HEAD`, xong pull lại. nếu không thấy cập nhật gì thì đóng hết mấy file đang mở.
-1. lỗi: đổi tên db trong file .env hay đổi cái đéo gì cũng đc mà trong settings.py nó vẫn load cái cũ, ko cập nhật cái mới (cách để biết cũ hay mới là vào settings.py dùng lệnh `print` ra rồi `runserver` để xem nó in ra terminal là cái đéo gì), thì đóng hết tất cả các terminal, xong bật lại cái mới
+### Một số lỗi hay gặp
+1. chạy là lỗi gì liên quan tới aws hay trong app recommender thì là do chưa xác thực aws cli, hãy xác thực aws cli, xong nó yêu cầu nhập acccess key và secret key và region thì nó trong file env. mấy các khác thì enter để bỏ qua.
+2. `pull origin main` không đc thì chạy `git reset --hard HEAD`, xong pull lại. nếu không thấy cập nhật gì thì đóng hết mấy file đang mở.
+3. lỗi: đổi tên db trong file .env hay hay thay đổi trong settings.py nó vẫn load cái cũ, không cập nhật cái mới (cách để biết cũ hay mới là vào settings.py dùng lệnh `print` ra rồi `runserver` để xem nó in ra terminal cái gì), thì đóng hết tất cả các terminal, xong bật lại cái mới
 
+### Cách chạy
 1. clone về
 2. xin file env
 3. mở docker desktop, chạy `docker compose up` nếu muốn sử dụng tính năng search, nếu không hãy vào settings.py, INSTALLED_APPS và comment `django_elasticsearch_dsl` lại, nếu không, thêm hoặc chỉnh sửa sẽ lỗi. còn nếu muốn dùng search, sau khi docker compose up, chạy `python3 manage.py search_index --rebuild`
@@ -178,7 +174,7 @@ docker-compose up -d
 9. Nếu muốn dùng tính năng thanh toán chạy `stripe listen --forward-to localhost:8000/webhook/stripe/`, nếu không sẽ bị lỗi. stripe webhook cần phải cài stripe cli, chứ đéo phải cài mỗi cái thư viện stripe là đủ ok. còn cài thế nào thì lên youtube. cài xong thì chạy `stripe login`, phải login, đéo biết thì hỏi chatgpt. cái tài khoản stripe login này phải là cái tài khoản trùng với tài khoản đc thêm vào project, nếu không sẽ bị lỗi.
 
 
-export VISUAL=nano
+<!-- export VISUAL=nano
 
 crontab -e
 
@@ -188,7 +184,7 @@ crontab -l
 
 */3 * * * * echo "Cron job ran at $(date)" >> /Users/nguyenminh/Mac/CoDaiVaHoaDanhDanh/logs/test_cron.log 2>&1
 
-api/dlc/3/media/review/
+api/dlc/3/media/review/ -->
 
 redis-server
 redis-cli ping

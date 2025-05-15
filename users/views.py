@@ -12,7 +12,6 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.core.files.storage import FileSystemStorage
 
-
 # Create your views here.
 def login_view(request):
     if request.method == 'POST':
@@ -22,14 +21,16 @@ def login_view(request):
             user_instance = form.get_user_instance()
             
             login(request, user_instance)
-            
             request.session['uid'] = str(user['idToken'])
             return redirect('home')
         else:
-            print(form.errors)
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, error)
     else:
         form = UserLoginForm()
-        
+        storage = messages.get_messages(request)
+        storage.used = True
     context = {
         'form': form,
         'errors': form.errors
@@ -50,12 +51,16 @@ def register(request):
             #     form.cleaned_data['password1']
             # )
             # request.session['uid'] = user_record['localId']
+            messages.success(request, 'Registration successful! You can now log in.')
             return redirect('login')
         else:
-            print(form.errors)
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, error)
     else:
         form = UserRegisterForm() 
-        
+        storage = messages.get_messages(request)
+        storage.used = True
     context = {
         'form': form,
         'errors': form.errors
