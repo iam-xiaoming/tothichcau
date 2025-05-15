@@ -28,7 +28,7 @@ STRIPE_PUBLISHABLE_KEY = config('STRIPE_PUBLISHABLE_KEY')
 STRIPE_WEBHOOK_SECRET = config('STRIPE_WEBHOOK_SECRET')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 # Basic Storage configuration for Amazon S3 (Irrespective of Django versions)
 AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
@@ -68,9 +68,29 @@ if not DEBUG:
     }
 
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'django.error.log'),
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    },
+}
 
-# ALLOWED_HOSTS = ['localhost', '127.0.0.1']
-ALLOWED_HOSTS = ['*']
+
+
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+# ALLOWED_HOSTS = ['*']
 
 print(config('DB_NAME'))
 
@@ -95,7 +115,7 @@ INSTALLED_APPS = [
     'rest_framework',
     
     # search
-    # 'django_elasticsearch_dsl',
+    'django_elasticsearch_dsl',
     
     'search.apps.SearchConfig',
     'transactions.apps.TransactionsConfig',
@@ -166,7 +186,7 @@ DATABASES = {
 
 ELASTICSEARCH_DSL = {
     'default': {
-        'hosts': 'http://localhost:9200'
+        'hosts': config('ELASTICSEARCH_HOST')
     }
 }
 
@@ -232,8 +252,10 @@ LOGIN_URL = 'login'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') 
 
-CELERY_BROKER_URL = 'redis://localhost:6379/0'
+
+CELERY_BROKER_URL = config('CELERY_BROKER_URL')
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 
