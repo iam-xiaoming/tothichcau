@@ -29,4 +29,4 @@ venv/
 !**/migrations/__init__.py
 
 .python-version
-dump.rdb
+*.rdb
