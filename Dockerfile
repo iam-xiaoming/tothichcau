@@ -1,35 +1,28 @@
-# Base image
+# Sử dụng Python slim để nhẹ
 FROM python:3.11-slim
 
-# Set environment variables để không tạo file .pyc và để stdout log đúng
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
-# Set working directory
+# Tạo thư mục làm việc
 WORKDIR /app
 
-# Install system dependencies trước để tránh lỗi khi cài các package như psycopg2, Pillow, v.v.
+# Cài đặt thư viện hệ thống (Postgres client, gcc)
 RUN apt-get update && apt-get install -y \
-    build-essential \
+    gcc \
     libpq-dev \
-    libjpeg-dev \
-    zlib1g-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements
-COPY requirements.txt .
+# Copy requirements và cài dependencies
+COPY requirements.txt /app/
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
 
-# Install Python dependencies
-RUN pip install --upgrade pip && pip install -r requirements.txt
-
-# Copy project files
-COPY . .
-
-# Collect static files (nếu có static)
-RUN python manage.py collectstatic --noinput
+# Copy toàn bộ source code
+COPY . /app/
 
 # Expose port 8000
 EXPOSE 8000
 
-# Run Gunicorn
-CMD ["gunicorn", "GameArt.wsgi:application", "--bind", "0.0.0.0:8000"]
+# Chạy gunicorn server
+CMD ["gunicorn", "GameArt.wsgi:application", "--bind", "0.0.0.0:8000", "--timeout", "120"]
