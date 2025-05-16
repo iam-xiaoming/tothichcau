@@ -28,7 +28,7 @@ STRIPE_PUBLISHABLE_KEY = config('STRIPE_PUBLISHABLE_KEY')
 STRIPE_WEBHOOK_SECRET = config('STRIPE_WEBHOOK_SECRET')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 # Basic Storage configuration for Amazon S3 (Irrespective of Django versions)
 AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
@@ -43,7 +43,7 @@ AWS_S3_FILE_OVERWRITE = False
 MAILJET_API_KEY=config('MAILJET_API_KEY')
 MAILJET_API_SECRET=config('MAILJET_API_SECRET')
 
-if not DEBUG:
+if True:
     STORAGES = {
         # Media file (image) management 
         'default': {
@@ -68,7 +68,10 @@ if not DEBUG:
     }
 
 
-ALLOWED_HOSTS = ['*' ,'localhost', '127.0.0.1']
+CSRF_TRUSTED_ORIGINS = [
+    "https://www.tothichcau.shop",
+]
+ALLOWED_HOSTS = ["www.tothichcau.shop", "tothichcau.shop", '*' ,'localhost', '127.0.0.1']
 
 print(config('DB_NAME'))
 
