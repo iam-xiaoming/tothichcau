@@ -273,6 +273,10 @@ def webhook_view(request):
         return HttpResponse(status=200)
 
     status = 'failed'
+    brand = None
+    last4 = None
+    exp_month = None
+    exp_year = None
 
     payment_intent_id = session.get('payment_intent')
     if payment_intent_id:
