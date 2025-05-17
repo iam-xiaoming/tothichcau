@@ -113,6 +113,9 @@ docker-compose up -d
 * `views.py`: API & Web (CBV/FBV)
 * `signals.py`: Stripe webhook, tự động tính điểm
 
+**Diagram:**
+<img src="diagram.jpg" alt="Alt text" width="500">
+
 ---
 
 ## 🚀 TRIỂN KHAI & DEMO
