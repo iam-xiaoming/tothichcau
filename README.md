@@ -109,8 +109,6 @@ Trang web đã được triển khai tại:
 
 ---
 
-Nếu bạn dùng domain tùy chỉnh trong tương lai (VD: `https://gamekey.vn`) thì chỉ cần thay đổi lại đường dẫn. Nếu muốn mình tự động thay thế phần này cho toàn README, mình cũng có thể làm giúp.
-
 
 ## Liên hệ nhóm thực hiện
 
