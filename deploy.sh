@@ -30,7 +30,7 @@ docker run -d \
     -p 8000:8000 \
     -v $(pwd):/app \
     --env-file .env \
-    game-art:debug
+    game-art:v1.0
 
 echo "Starting Celery worker container..."
 docker run -d \
@@ -38,7 +38,7 @@ docker run -d \
     --network "$NETWORK_NAME" \
     -v $(pwd):/app \
     --env-file .env \
-    game-art:debug \
+    game-art:v1.0 \
     celery -A GameArt worker --loglevel=info
 
 echo "Deploy complete. All services are up!"
