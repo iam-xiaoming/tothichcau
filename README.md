@@ -106,5 +106,3 @@ python manage.py runserver
 | Phan Công Chiến  | 22685651 |
 | Trần Thái Nguyên (Nguyn thich xem sexual content) | 22697051 |
 | Trần Khắc Liêm   | 22685251 |
-
-```
