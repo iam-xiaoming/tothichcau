@@ -5,7 +5,6 @@ api_key = settings.MAILJET_API_KEY
 api_secret = settings.MAILJET_API_SECRET
 
 def send_mailjet_email_purchase_success(to_email, game_name, order_id, game_key):
-    print('hahahhahahhahhahahha')
     
     mailjet = Client(auth=(api_key, api_secret), version="v3.1")
 
