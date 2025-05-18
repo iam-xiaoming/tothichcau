@@ -36,8 +36,8 @@ Trang web bán key game trực tuyến, tích hợp thanh toán, xác thực ng�
 ### 1. Clone repo
 
 ```bash
-git clone https://github.com/xiaoMing-04/CoDaiVaHoaDanhDanh.git
-cd CoDaiVaHoaDanhDanh
+git clone https://github.com/xiaoMing-04/tothichcau.git
+cd tothichcau
 ````
 
 ### 2. Lấy file `.env`
