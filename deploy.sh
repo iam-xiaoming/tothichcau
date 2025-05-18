@@ -12,7 +12,7 @@ else
 fi
 
 echo "Building Docker image..."
-docker build -t game-art:debug .
+docker build -t game-art:v1.0 .
 
 echo "Stopping old containers..."
 docker stop game-art celery_worker redis 2>/dev/null
