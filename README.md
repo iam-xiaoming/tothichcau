@@ -97,6 +97,21 @@ python manage.py runserver
 
 ---
 
+Dưới đây là phần **Link deploy** được viết riêng để bạn chèn vào README:
+
+---
+
+## Link triển khai (Deploy)
+
+Trang web đã được triển khai tại:
+
+👉 **[https://www.tothichcau.shop/](https://www.tothichcau.shop/)**
+
+---
+
+Nếu bạn dùng domain tùy chỉnh trong tương lai (VD: `https://gamekey.vn`) thì chỉ cần thay đổi lại đường dẫn. Nếu muốn mình tự động thay thế phần này cho toàn README, mình cũng có thể làm giúp.
+
+
 ## Liên hệ nhóm thực hiện
 
 | Họ Tên           | MSSV     |
