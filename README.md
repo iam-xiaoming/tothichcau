@@ -92,8 +92,6 @@ docker compose up -d
 python -m venv venv
 source venv/bin/activate    # trên Windows: venv\Scripts\activate
 pip install -r requirements.txt
-python manage.py makemigrations
-python manage.py migrate
 python manage.py runserver
 ```
 
@@ -110,5 +108,3 @@ python manage.py runserver
 | Trần Khắc Liêm   | 22685251 |
 
 ```
-
----
