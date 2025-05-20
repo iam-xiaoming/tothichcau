@@ -97,8 +97,6 @@ python manage.py runserver
 
 ---
 
-Dưới đây là phần **Link deploy** được viết riêng để bạn chèn vào README:
-
 ---
 
 ## Link triển khai (Deploy)
