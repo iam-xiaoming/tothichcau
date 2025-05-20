@@ -113,5 +113,5 @@ Trang web đã được triển khai tại:
 | Trần Thị Huyền   | 22657821 |
 | Nguyễn Ngọc Minh | 22685841 |
 | Phan Công Chiến  | 22685651 |
-| Trần Thái Nguyên (Nguyn thich xem sexual content) | 22697051 |
+| Trần Thái Nguyên | 22697051 |
 | Trần Khắc Liêm   | 22685251 |
