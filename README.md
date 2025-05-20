@@ -97,8 +97,6 @@ python manage.py runserver
 
 ---
 
----
-
 ## Link triển khai (Deploy)
 
 Trang web đã được triển khai tại:
