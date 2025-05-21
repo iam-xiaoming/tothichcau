@@ -43,7 +43,7 @@ AWS_S3_FILE_OVERWRITE = False
 MAILJET_API_KEY=config('MAILJET_API_KEY')
 MAILJET_API_SECRET=config('MAILJET_API_SECRET')
 
-if False:
+if True:
     STORAGES = {
         # Media file (image) management 
         'default': {
@@ -243,3 +243,4 @@ CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+STATICFILES_STORAGE = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
