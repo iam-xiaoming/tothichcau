@@ -5,6 +5,8 @@ from game_features.models import Category
 from django.http import HttpResponse
 from homepage.utils import get_trendings, get_sales, get_mostplay, get_coming_soon, get_free_games
 from django.core.paginator import Paginator
+from django.http import JsonResponse
+from django.views.decorators.http import require_GET
 
 # Create your views here.
 genres = Category.objects.all()[:4]
@@ -67,3 +69,28 @@ def action_view(request, action):
     context['page_obj'] = page_obj
     
     return render(request, 'list/games-list.html', context)
+
+@require_GET
+def filter_games(request):
+    genres = request.GET.getlist('genres[]') # frontend gửi genres[]=action&genres[]=rpg
+    
+    print(genres)
+
+    games = Game.objects.all()
+
+    if genres:
+        games = games.filter(categories__slug__in=genres).distinct()
+
+    game_data = []
+    for game in games:
+        game_data.append({
+            'id': game.id,
+            'name': game.name,
+            'image_url': game.image.url,
+            'genres': [genre.name for genre in game.categories.all()],
+            'description': game.description,
+            'release_date': game.release_date.strftime('%B %d, %Y'),
+            'status': game.status,
+        })
+
+    return JsonResponse({'games': game_data})

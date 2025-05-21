@@ -43,7 +43,7 @@ AWS_S3_FILE_OVERWRITE = False
 MAILJET_API_KEY=config('MAILJET_API_KEY')
 MAILJET_API_SECRET=config('MAILJET_API_SECRET')
 
-if True:
+if False:
     STORAGES = {
         # Media file (image) management 
         'default': {

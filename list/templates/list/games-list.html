@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title %}
-    <title>Game Collection - NeonGamer</title>
+    <title>Game Collection</title>
 {% endblock %}
 
 {% block extra_css %}
@@ -31,7 +31,7 @@
                     <div class="filter-options">
                         {% for genre in genres %}
                             <label class="filter-option">
-                                <input type="checkbox" value="{{ genre.slug }}" {% if forloop.first %}checked{% endif %}>
+                                <input type="checkbox" value="{{ genre.slug }}">
                                 <span class="checkmark"></span>
                                 {{ genre|title }}
                             </label>
@@ -42,18 +42,6 @@
                 <div class="filter-actions">
                     <button id="apply-filters" class="btn-primary">Apply Filters</button>
                     <button id="reset-filters" class="btn-secondary">Reset</button>
-                </div>
-            </div>
-
-            <div class="popular-tags">
-                <h3>Popular Tags</h3>
-                <div class="tags-cloud">
-                    <a href="#" class="tag">Open World</a>
-                    <a href="#" class="tag">Multiplayer</a>
-                    <a href="#" class="tag">FPS</a>
-                    <a href="#" class="tag">Survival</a>
-                    <a href="#" class="tag">Battle Royale</a>
-                    <a href="#" class="tag">Roguelike</a>
                 </div>
             </div>
         </div>
@@ -106,20 +94,17 @@
                                         {% url 'dlc-game-details' game.pk as game_url %}
                                     {% endif %}
                                 <a href="{{ game_url }}" class="btn-primary">View Details</a>
-                                <button class="btn-wishlist"><i class="far fa-heart"></i></button>
                             </div>
                         </div>
                     </div>
                 {% endfor %}
             </div>
-
             {% if page_obj.paginator.count > 0 %}
                 <div class="pagination">
                     {% if page_obj.number > 3 %}
                         <a class="" href="?page=1">1</a>
                         <span class="">...</span>
                     {% endif %}  
-        
                     {% for num in page_obj.paginator.page_range %}
                         {% if num > page_obj.number|add:"-3" and num < page_obj.number|add:'3' %}
                             {% if page_obj.number == num %}
@@ -129,27 +114,18 @@
                             {% endif %}
                         {% endif %}
                     {% endfor %}
-        
                     {% if page_obj.number < page_obj.paginator.num_pages|add:'-2' %}
                         <span class="">...</span>
                         <a class="nav-btn" href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
                     {% endif %}
-
                     {% if page_obj.number < page_obj.paginator.num_pages %}
                         <a class="next-btn" href="?page={{ page_obj.next_page_number  }}">Next <i class="fas fa-chevron-right"></i></a>
                     {% endif %}
-                    
-                    <!-- <a href="#" class="active">1</a>
-                    <a href="#">2</a>
-                    <a href="#">3</a>
-                    <a href="#">4</a>
-                    <a href="#">5</a> -->
-                    <!-- <a href="#" class="next">Next <i class="fas fa-chevron-right"></i></a> -->
                 </div>
             {% endif %}
         </div>
     </div>
 
     <script src="{% static 'blog/js/script.js' %}"></script>
-    <!-- <script src="{% static 'list/js/games-list-script.js' %}"></script> -->
+    <script src="{% static 'list/js/games-list-script.js' %}"></script>
 {% endblock %}
