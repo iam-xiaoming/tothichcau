@@ -73,8 +73,6 @@ def action_view(request, action):
 @require_GET
 def filter_games(request):
     genres = request.GET.getlist('genres[]') # frontend gửi genres[]=action&genres[]=rpg
-    
-    print(genres)
 
     games = Game.objects.all()
 
