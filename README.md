@@ -18,6 +18,7 @@ Trang web bán key game trực tuyến, tích hợp thanh toán, xác thực ng�
 | Elasticsearch           | Tìm kiếm toàn văn, autocomplete         |
 | Redis                   | Cache và message broker cho Celery      |
 | Celery                  | Xử lý tác vụ nền                        |
+| Mailjet                 | Xử lý gửi email khi giao dịch thành công|
 
 ---
 
