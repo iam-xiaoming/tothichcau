@@ -70,10 +70,9 @@ if False:
 
 CSRF_TRUSTED_ORIGINS = [
     "https://www.tothichcau.shop",
+    "https://tothichcau.shop"
 ]
-ALLOWED_HOSTS = ["www.tothichcau.shop", "tothichcau.shop", '*' ,'localhost', '127.0.0.1']
-
-print(config('DB_NAME'))
+ALLOWED_HOSTS = ["www.tothichcau.shop", "tothichcau.shop" ,'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -243,3 +242,4 @@ CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+STATICFILES_STORAGE = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
