@@ -43,7 +43,7 @@ AWS_S3_FILE_OVERWRITE = False
 MAILJET_API_KEY=config('MAILJET_API_KEY')
 MAILJET_API_SECRET=config('MAILJET_API_SECRET')
 
-if True:
+if False:
     STORAGES = {
         # Media file (image) management 
         'default': {
@@ -70,10 +70,9 @@ if True:
 
 CSRF_TRUSTED_ORIGINS = [
     "https://www.tothichcau.shop",
+    "https://tothichcau.shop"
 ]
-ALLOWED_HOSTS = ["www.tothichcau.shop", "tothichcau.shop", '*' ,'localhost', '127.0.0.1']
-
-print(config('DB_NAME'))
+ALLOWED_HOSTS = ["www.tothichcau.shop", "tothichcau.shop" ,'localhost', '127.0.0.1']
 
 
 # Application definition

@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
 import stripe
 from django.views import View
-from django.http import JsonResponse, HttpResponse, HttpResponseForbidden
+from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import Order
 from games.models import Game, DLC
@@ -241,7 +241,8 @@ def cancel(request):
             if key:
                 key.status = 'available'
                 key.save()
-            order.delete()
+            order.key = None
+            order.save()
     return render(request, "cart/cancel.html")
 
 
@@ -260,14 +261,17 @@ def webhook_view(request):
         return HttpResponse(status=400)
 
     if event['type'] not in ['checkout.session.completed', 'checkout.session.async_payment_succeeded']:
+        # should do something here
         return HttpResponse(status=200)
 
+    # fetch information of specific payment
     session = event['data']['object']
     session_id = session.get('id')
     customer_email = session.get('customer_details', {}).get('email')
     phone = session.get('customer_details', {}).get('phone')
     user_id = session.get('metadata', {}).get('user_id')
 
+    # when someone get back to payment processed page.
     if Transaction.objects.filter(session_id=session_id).exists():
         logger.info(f"[Webhook] Session {session_id} already processed.")
         return HttpResponse(status=200)

@@ -2336,6 +2336,7 @@ footer {
     background-color: rgba(255, 255, 255, 0.1);
     border-radius: 50%;
     transition: all 0.3s ease;
+	flex-shrink: 0;
 }
 
 .social-icons a:hover {

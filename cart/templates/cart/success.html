@@ -1,15 +1,25 @@
+{% extends "homepage/base.html" %}
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Thank You - Epic Games</title>
-</head>
-<body>
-  <div class="container">
-    <h1>Thank you!</h1>
+{% block title %}
+  <title>Thank You</title>
+{% endblock %}
+
+{% block extra_css %}
+  <style>
+    .payment-success {
+      text-align: center;
+      padding: 100px 0;
+    }
+    .payment-success h1 {
+      color: #fff;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <div class="payment-success">
+    <h1>Thank you for purchase!</h1>
     <a href="{% url 'home' %}">Back to home</a>
   </div>
-</body>
-</html>
+{% endblock %}
