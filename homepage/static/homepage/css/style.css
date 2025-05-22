@@ -498,6 +498,10 @@ ol {
 	margin-top: 120px;
 }
 
+.hero .line-clamp {
+	-webkit-line-clamp: var(--line-clamp, 2);
+}
+
 .hero__items {
 	padding: 300px 0 42px 50px;
 	border-radius: 5px;

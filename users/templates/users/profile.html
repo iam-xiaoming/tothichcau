@@ -135,7 +135,7 @@
                                                 <a style="display: block;" href="{% url 'transaction-detail' user_game.transaction.pk %}"><h5>{{ user_game.game.name }}</h5></a>
                                                 <div class="product-key">
                                                     <span class="key-label">Game Key:</span>
-                                                    <span class="key-value">{{ user_game.key }}</span>
+                                                    <span class="key-value masked-key">************{{ user_game.key|slice:"-4:" }}</span>
                                                     <button class="copy-key" data-key="{{ user_game.key }}">
                                                         <i class="fa fa-copy"></i>
                                                     </button>
