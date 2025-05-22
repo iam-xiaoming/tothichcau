@@ -1,13 +1,27 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Checkout canceled</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <section>
+{% extends "homepage/base.html" %}
+{% load static %}
+
+{% block title %}
+  <title>Cancel Payment</title>
+{% endblock %}
+
+{% block extra_css %}
+  <style>
+    .cancel-payment {
+      text-align: center;
+      padding: 100px 0;
+    }
+    .cancel-payment p {
+      font-size: 24px;
+      color: #fff !important;
+      font-weight: 600;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <section class="cancel-payment">
     <p>Forgot to add something to your cart? Shop around then come back to pay!</p>
     <a href="{% url 'home' %}">Back to home.</a>
   </section>
-</body>
-</html>
+{% endblock %}
