@@ -19,7 +19,7 @@ Trang web bán key game trực tuyến, tích hợp thanh toán, xác thực ng�
 | Redis                   | Cache và message broker cho Celery      |
 | Celery                  | Xử lý tác vụ nền                        |
 | Mailjet                 | Xử lý gửi email khi giao dịch thành công|
-
+| CloudFront              | Tăng tốc độ xử lý file tĩnh             |
 ---
 
 ## Tính năng chính
