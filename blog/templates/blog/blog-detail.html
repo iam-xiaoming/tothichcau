@@ -82,16 +82,16 @@
                                 <div class="form-row">
                                     <div class="form-group">
                                         <label for="comment-name">Name <span class="required">*</span></label>
-                                        {{ form.name }}
+                                        {{ comment_form.name }}
                                     </div>
                                     <div class="form-group">
                                         <label for="comment-email">Email <span class="required">*</span></label>
-                                        {{ form.email }}
+                                        {{ comment_form.email }}
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="comment-content">Comment <span class="required">*</span></label>
-                                    {{ form.content }}
+                                    {{ comment_form.content }}
                                 </div>
                                 <button type="submit" class="btn-primary">Post Comment</button>
                             </form>
@@ -100,20 +100,38 @@
 
                     <div class="comments-list">
                         {% for comment in page_obj %}
-                            <div class="comment">
+                            <div id="comment-{{ comment.pk }}" class="comment" style="scroll-margin-top: 80px;">
                                 <div class="comment-avatar">
                                     <img src="{{ comment.user.image.url }}" alt="User Avatar">
                                 </div>
                                 <div class="comment-content">
                                     <div class="comment-meta">
-                                        <span class="comment-author">{{ comment.name }}</span>
-                                        <span class="comment-date">{{ comment.created_at|date:"F d, Y H:i"|title }}</span>
+                                        {% if comment.parent %}
+                                            <div class="comment-quote">
+                                                <p>Reply <a href="#comment-{{ comment.parent.pk }}">@{{ comment.parent.user.username }}</a>:</p>
+                                                <p class="line-clamp">{{ comment.parent.content|truncatechars:100 }}</p>
+                                            </div>
+                                        {% endif %}
+                                        <div class="comment-info">
+                                            <span class="comment-author">{{ comment.user.username }}</span>
+                                            <span class="comment-date">{{ comment.created_at|date:"F d, Y H:i"|title }}</span>
+                                        </div>
                                     </div>
                                     <div class="comment-text">
                                         <p>{{ comment.content }}</p>
                                     </div>
                                     <div class="comment-actions">
                                         <a comment-pk={{ comment.pk }} href="#" class="comment-like {% if comment.id in liked_comment_ids %}liked{% endif %}"><i class="fas fa-heart"></i> <span>{{ comment.count_like }}</span></a>
+                                        <a href="#" class="comment-reply-toggle">Reply</a>
+                                    </div>
+                                    <div class="comment-reply-form" style="display: none; margin-top: 10px;">
+                                        <form style="display: flex; align-items: flex-end; gap: 20px;" action="" method="POST">
+                                            {% csrf_token %}
+                                            <label for="comment-content"></label>
+                                            {{ reply_form.content }}
+                                            <input type="hidden" name="parent_id" value="{{ comment.pk }}">
+                                            <button type="submit" class="btn-reply-submit">Reply</button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -220,4 +238,17 @@
     </script>
     <script src="{% static 'blog/js/script.js' %}"></script>
     <script src="{% static 'blog/js/blog-detail-script.js' %}"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const replyToggles = document.querySelectorAll('.comment-reply-toggle');
+            replyToggles.forEach(btn => {
+                btn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const commentContent = btn.closest('.comment-content');
+                    const replyForm = commentContent.querySelector('.comment-reply-form');
+                    replyForm.style.display = replyForm.style.display === 'none' ? 'block' : 'none';
+                });
+            });
+        });
+    </script>
 {%  endblock %}

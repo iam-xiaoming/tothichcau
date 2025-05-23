@@ -44,9 +44,22 @@ def save_post_like(sender, instance, **kwargs):
 def create_comment_notification(sender, instance, created, **kwargs):
     if created:
         post = instance.post
-        recipient = post.user
         sender_user = instance.user
+        parent = instance.parent
         
+        if parent:
+            recipient = parent.user
+            if recipient != sender_user:
+                Notification.objects.create(
+                    recipient=recipient,
+                    sender=sender_user,
+                    post=post,
+                    comment=instance,
+                    message=f"{sender_user.username} has replied on your comment."
+                )
+            return
+        
+        recipient = post.user
         if recipient != sender_user:
             Notification.objects.create(
                 recipient=recipient,

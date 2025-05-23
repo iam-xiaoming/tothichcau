@@ -946,3 +946,23 @@ blockquote cite {
         padding-top: 20px;
     }
 }
+
+.comment-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.comments-list .comment-quote {
+    margin-top: -10px;
+    display: flex;
+    gap: 2px;
+}
+
+.comment-quote p {
+    font-size: 13px;
+    font-style: italic;
+    margin: 0 !important;
+    color: #fff;
+    -webkit-line-clamp: var(--line-clamp, 1);
+}

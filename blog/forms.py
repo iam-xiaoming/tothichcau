@@ -72,5 +72,34 @@ class PostCommentForm(forms.ModelForm):
             
         return comment
         
+class CommentReplyForm(forms.ModelForm):
+    content = forms.CharField(widget=forms.Textarea(attrs={'rows': 2}))
+    
+    class Meta:
+        model = PostComment
+        fields = ['content']
         
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        self.post = kwargs.pop('post', None)
+        self.comment = kwargs.pop('comment', None)
+        super().__init__(*args, **kwargs)
         
+    def clean(self):
+        cleaned_data = super().clean()
+        
+        if not (self.user and self.post and self.comment):
+            raise forms.ValidationError('User, Post and Comment are required.')
+        
+        return cleaned_data
+    
+    def save(self, commit=True):
+        reply = super().save(commit=False)
+        reply.user = self.user
+        reply.post = self.post
+        reply.parent = self.comment
+        
+        if commit:
+            reply.save()
+            
+        return reply

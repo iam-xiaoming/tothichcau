@@ -11,7 +11,7 @@ from users.models import MyUser
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from .forms import PostCommentForm
+from .forms import PostCommentForm, CommentReplyForm
 from django.contrib import messages
 from django.core.paginator import Paginator
 
@@ -37,7 +37,7 @@ class UserPostListView(ListView):
     model = Post
     template_name = 'blog/blog.html'
     context_object_name = 'posts'
-    ordering = ['-created_at']
+    ordering = ['-updated_at']
     paginate_by = 10
     
     def get_queryset(self):
@@ -111,7 +111,8 @@ class PostDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         related_posts = Post.objects.all().order_by('created_at')[:3]
         
-        context['form'] = PostCommentForm(user=user, post=obj)
+        context['comment_form'] = PostCommentForm(user=user, post=obj)
+        context['reply_form'] = CommentReplyForm(user=user, post=obj)
         
         if PostLike.objects.filter(user=user, post=obj).exists():
             context['post_liked'] = 'post_liked'
@@ -136,17 +137,34 @@ class PostDetailView(DetailView):
     
     
     def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
         user = self.request.user
-        post = self.get_object()
-        form = PostCommentForm(request.POST, user=user, post=post)
-        if form.is_valid():
-            form.save()
+        post = self.object
+        parent_id = request.POST.get('parent_id')
+        
+        parent_comment = None
+        if parent_id:
+            try:
+                parent_comment = PostComment.objects.get(pk=parent_id)
+            except PostComment.DoesNotExist:
+                parent_comment = None
+        
+        comment_form = PostCommentForm(request.POST, user=user, post=post)
+        reply_form = CommentReplyForm(request.POST, user=user, post=post, comment=parent_comment)
+        
+        if parent_comment and reply_form.is_valid():
+            reply_form.save()
+            return redirect('post-detail', post.pk)
+        elif not parent_id and comment_form.is_valid():
+            comment_form.save()
             return redirect('post-detail', post.pk)
         else:
-            print(form.errors)
-            
+            print(f'Comment Form Error: {comment_form.errors}')
+            print(f'Reply Form Error: {reply_form.errors}')
+                        
         context = self.get_context_data()
-        context['form'] = form
+        context['comment_form'] = comment_form
+        context['reply_form'] = reply_form
         messages.error(request, "There was an error with your comment.")
         return self.render_to_response(context)
 

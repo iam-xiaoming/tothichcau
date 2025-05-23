@@ -30,7 +30,7 @@ class PostLikeAdmin(admin.ModelAdmin):
 
 @admin.register(PostComment)
 class PostCommentAdmin(admin.ModelAdmin):
-    list_display = ('user', 'post', 'count_like', 'created_at',)
+    list_display = ('user', 'post', 'parent', 'count_like', 'created_at',)
     search_fields = ('user', 'post',)
     
     
