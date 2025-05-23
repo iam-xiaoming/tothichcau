@@ -1,0 +1,144 @@
+/* Container styling */
+.transaction-detail {
+    padding: 40px 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f9f9f9;
+}
+
+.transaction-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.transaction-header h2 {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.transaction-header p {
+    font-size: 16px;
+    color: #555;
+}
+
+/* Main content layout */
+.transaction-content .row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: center;
+}
+
+.game-details, .payment-details {
+    background-color: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
+.game-details img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.game-details h3 {
+    font-size: 22px;
+    margin-bottom: 10px;
+}
+
+.game-details p {
+    color: #555;
+    margin-bottom: 15px;
+}
+
+.game-details ul, .payment-details ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.game-details li, .payment-details li {
+    margin-bottom: 8px;
+    font-size: 15px;
+}
+
+.payment-details h4 {
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+.game-key-section {
+    margin-top: 25px;
+}
+
+.game-key-section h5 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+/* Game key display */
+.key-display {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.key-value {
+    font-weight: 600;
+    background-color: #eee;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-family: monospace;
+}
+
+.copy-key-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.copy-key-btn:hover {
+    background-color: #0056b3;
+}
+
+.redeem-link {
+    color: #28a745;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.redeem-link:hover {
+    text-decoration: underline;
+}
+
+/* Back to profile button */
+.back-to-profile {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.back-to-profile .site-btn {
+    padding: 10px 20px;
+    background-color: #333;
+    color: white;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.back-to-profile .site-btn:hover {
+    background-color: #555;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+    .transaction-content .row {
+        flex-direction: column;
+    }
+}

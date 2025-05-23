@@ -396,64 +396,67 @@
         </div>
     </section>
     <!-- Explore Section End -->
+{% endblock %}
 
+{% block extra_js %}
+    <script src="{% static 'homepage/js/video-thumbnail.js' %}"></script>
     <script>
         function getProductWidth(card) {
-            const style = window.getComputedStyle(card);
-            const width = card.offsetWidth;
-            const marginRight = parseFloat(style.marginRight);
-            return width + marginRight;
-        }
-        
+        const style = window.getComputedStyle(card);
+        const width = card.offsetWidth;
+        const marginRight = parseFloat(style.marginRight);
+        return width + marginRight;
+    }
+    
         const scrollStep = 4;
         const state = {
             trending: 0,
             sale: 0
         };
-        
+    
         function updateButtonVisibility(prefix, totalProducts, productWidth) {
-            const leftBtn = document.querySelector(`#${prefix}-wrapper .left-btn`);
-            const rightBtn = document.querySelector(`#${prefix}-wrapper .right-btn`);
-            const currentIndex = state[prefix];
-        
-            leftBtn.style.display = currentIndex === 0 ? 'none' : 'block';
-            rightBtn.style.display = currentIndex >= totalProducts - scrollStep ? 'none' : 'block';
-        }
-        
+        const leftBtn = document.querySelector(`#${prefix}-wrapper .left-btn`);
+        const rightBtn = document.querySelector(`#${prefix}-wrapper .right-btn`);
+        const currentIndex = state[prefix];
+    
+        leftBtn.style.display = currentIndex === 0 ? 'none' : 'block';
+        rightBtn.style.display = currentIndex >= totalProducts - scrollStep ? 'none' : 'block';
+    }
+    
         function customScrollLeft(prefix) {
-            const container = document.getElementById(`${prefix}-product-list`);
-            const card = container.querySelector('.product-card');
-            const totalProducts = container.querySelectorAll('.product-card').length;
-            const productWidth = getProductWidth(card);
-        
-            state[prefix] = Math.max(0, state[prefix] - scrollStep);
-            container.style.transform = `translateX(-${state[prefix] * productWidth}px)`;
-            updateButtonVisibility(prefix, totalProducts, productWidth);
-        }
-        
+        const container = document.getElementById(`${prefix}-product-list`);
+        const card = container.querySelector('.product-card');
+        const totalProducts = container.querySelectorAll('.product-card').length;
+        const productWidth = getProductWidth(card);
+    
+        state[prefix] = Math.max(0, state[prefix] - scrollStep);
+        container.style.transform = `translateX(-${state[prefix] * productWidth}px)`;
+        updateButtonVisibility(prefix, totalProducts, productWidth);
+    }
+    
         function customScrollRight(prefix) {
-            const container = document.getElementById(`${prefix}-product-list`);
-            const card = container.querySelector('.product-card');
-            const totalProducts = container.querySelectorAll('.product-card').length;
-            const productWidth = getProductWidth(card);
-        
-            const maxIndex = totalProducts - scrollStep;
-            state[prefix] = Math.min(maxIndex, state[prefix] + scrollStep);
-            container.style.transform = `translateX(-${state[prefix] * productWidth}px)`;
-            updateButtonVisibility(prefix, totalProducts, productWidth);
-        }
-        
+        const container = document.getElementById(`${prefix}-product-list`);
+        const card = container.querySelector('.product-card');
+        const totalProducts = container.querySelectorAll('.product-card').length;
+        const productWidth = getProductWidth(card);
+    
+        const maxIndex = totalProducts - scrollStep;
+        state[prefix] = Math.min(maxIndex, state[prefix] + scrollStep);
+        container.style.transform = `translateX(-${state[prefix] * productWidth}px)`;
+        updateButtonVisibility(prefix, totalProducts, productWidth);
+    }
+    
         document.addEventListener('DOMContentLoaded', function () {
-            ['trending', 'sale'].forEach(prefix => {
-                const container = document.getElementById(`${prefix}-product-list`);
-                const card = container?.querySelector('.product-card');
-                if (container && card) {
-                    const totalProducts = container.querySelectorAll('.product-card').length;
-                    const productWidth = getProductWidth(card);
-                    updateButtonVisibility(prefix, totalProducts, productWidth);
-                }
-            });
-        });        
+        ['trending', 'sale'].forEach(prefix => {
+            const container = document.getElementById(`${prefix}-product-list`);
+            const card = container?.querySelector('.product-card');
+            if (container && card) {
+                const totalProducts = container.querySelectorAll('.product-card').length;
+                const productWidth = getProductWidth(card);
+                updateButtonVisibility(prefix, totalProducts, productWidth);
+            }
+        });
+    });        
     </script>
 
     <script>
@@ -480,8 +483,4 @@
             });
         });
     </script>
-
-    {% block extra_js %}
-        <script src="{% static 'homepage/js/video-thumbnail.js' %}"></script>
-    {% endblock %}
 {% endblock %}

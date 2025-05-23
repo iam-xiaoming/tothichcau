@@ -82,8 +82,10 @@
         </div>
     </section>
     <!-- Login Section End -->
-    
-   <script>
+{% endblock %}
+
+{% block extra_js %}
+    <script>
         function checkAllImagesLoaded() {
             loadedImages++;
             if (loadedImages >= totalToLoad) {

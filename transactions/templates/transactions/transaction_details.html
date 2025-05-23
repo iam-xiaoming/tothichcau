@@ -1,0 +1,90 @@
+{% extends "homepage/base.html" %}
+{% load static %}
+
+{% block title %}
+    <title>Transaction Detail</title>
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'transactions/css/transaction-details.css' %}">
+{% endblock %}
+
+
+{% block content %}
+<section class="transaction-detail spad">
+    <div class="container">
+        <div class="transaction-header">
+            <h2>Transaction #{{ transaction.id }}</h2>
+            <p>Status: <strong>{{ transaction.status|title }}</strong></p>
+            <p>Purchased on: {{ transaction.created_at|date:"F d, Y H:i" }}</p>
+        </div>
+
+        <div class="transaction-content">
+            <div class="row">
+                <!-- Game Details -->
+                <div class="col-lg-6">
+                    <div class="game-details">
+                        <img src="{{ transaction.game.image.url }}" alt="{{ transaction.game.name }}" class="img-fluid">
+                        <h3>{{ transaction.game.name }}</h3>
+                        <p>{{ transaction.game.description }}</p>
+                        <ul>
+                            <li><strong>Publisher:</strong> {{ transaction.game.publisher }}</li>
+                            <li><strong>Release Date:</strong> {{ transaction.game.release_date|date:"F d, Y" }}</li>
+                            <li><strong>Rating:</strong> {{ transaction.game.rating|title }}</li>
+                            <li><strong>Average Score:</strong> {{ transaction.game.average_score }}</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Payment Details -->
+                <div class="col-lg-6">
+                    <div class="payment-details">
+                        <h4>Payment Information</h4>
+                        <ul>
+                            <li><strong>Amount Paid:</strong> ${{ transaction.total_amount }}</li>
+                            <li><strong>Payment Method:</strong> {{ transaction.brand|upper }} ending in {{ transaction.last4 }}</li>
+                            <li><strong>Card Expiry:</strong> {{ transaction.exp_month }}/{{ transaction.exp_year }}</li>
+                            <li><strong>Customer Email:</strong> {{ transaction.customer_email }}</li>
+                        </ul>
+
+                        <div class="game-key-section">
+                            <h5>Game Key</h5>
+                            <div class="key-display">
+                                <span class="key-value masked-key">************{{ transaction.key|stringformat:"s"|slice:"-4:" }}</span>
+                                <button class="copy-key-btn" data-key="{{ transaction.key }}">
+                                    <i class="fa fa-copy"></i> Copy
+                                </button>
+                                <a href="https://store.steampowered.com/account/registerkey?key={{ transaction.key }}" target="_blank" rel="noopener noreferrer" class="redeem-link">
+                                    Redeem on Steam
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="back-to-profile">
+            <a href="{% url 'profile' %}" class="site-btn"><i class="fa fa-arrow-left"></i> Back to Profile</a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const copyBtn = document.querySelector('.copy-key-btn');
+        if (copyBtn) {
+            copyBtn.addEventListener('click', function () {
+                const key = this.getAttribute('data-key');
+                navigator.clipboard.writeText(key).then(() => {
+                    alert('Game key copied to clipboard!');
+                }).catch(err => {
+                    console.error('Failed to copy key: ', err);
+                });
+            });
+        }
+    });
+</script>
+{% endblock %}

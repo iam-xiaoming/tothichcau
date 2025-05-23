@@ -219,9 +219,10 @@
             </div>
         </div>
     </div>
+{% endblock %}
 
+{% block extra_js %}
     <script>
-
         const game_pk = "{{ object.pk }}";
         const gameType = "{{ object.status }}"
         const in_wishlist = "{{ in_wishlist }}"
