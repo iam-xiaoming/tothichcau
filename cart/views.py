@@ -360,19 +360,24 @@ def webhook_view(request):
 
     card_info = get_payment_info(session)
 
-    total_orders = user.orders.count()
     processed_orders = 0
+    
+    line_items_data = line_items['data']
+    user_orders = list(user.orders.filter(key__status='reserved'))
+    
+    if len(line_items_data) != len(user_orders):
+        logger.warning(f"[Webhook] Mismatch: {len(line_items_data)} items vs {len(user_orders)} orders.")
+        return HttpResponse(status=400)
 
-    for item in line_items['data']:
+    for item, order in zip(line_items_data, user_orders):
         total_amount = item['amount_total'] / 100
-        for order in user.orders.all():
-            try:
-                with transaction.atomic():
-                    if process_order(order, user, total_amount, session_id, customer_email, card_info):
-                        processed_orders += 1
-            except Exception as e:
-                logger.error(f"[Webhook] Failed processing order {order.pk}: {e}")
-                continue
+        try:
+            with transaction.atomic():
+                if process_order(order, user, total_amount, session_id, customer_email, card_info):
+                    processed_orders += 1
+        except Exception as e:
+            logger.error(f"[Webhook] Failed processing order {order.pk}: {e}")
+            continue
 
     if processed_orders == 0:
         return HttpResponse(status=400)
