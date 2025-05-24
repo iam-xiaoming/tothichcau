@@ -66,7 +66,8 @@ cd tothichcau
 
 *Liên hệ nhóm phát triển để nhận file cấu hình `.env`.*
 
-### 3. Chạy với Docker (Windows/Mac/Linux)
+### 3. Chạy với Docker (Windows/Mac/Linux) (CPU kiến trúc ARM)
+*Note: Chạy `docker-compose` hoặc `docker compose` tuỳ máy. Cách kiểm tra `docker-compose version`.*
 
 ```bash
 docker compose pull
