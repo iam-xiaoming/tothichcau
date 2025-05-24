@@ -3,6 +3,7 @@ from django.conf import settings
 
 api_key = settings.MAILJET_API_KEY
 api_secret = settings.MAILJET_API_SECRET
+sender = settings.SENDER
 
 def send_mailjet_email_purchase_success(to_email, game_name, order_id, game_key):
     
@@ -12,7 +13,7 @@ def send_mailjet_email_purchase_success(to_email, game_name, order_id, game_key)
         "Messages": [
             {
                 "From": {
-                    "Email": "minhnguyen47431@gmail.com",
+                    "Email": sender,
                     "Name": "Your Game Store"
                 },
                 "To": [
