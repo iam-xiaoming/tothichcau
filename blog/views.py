@@ -117,7 +117,7 @@ class PostDetailView(DetailView):
         if PostLike.objects.filter(user=user, post=obj).exists():
             context['post_liked'] = 'post_liked'
 
-        comments = PostComment.objects.filter(post=obj)
+        comments = PostComment.objects.filter(post=obj).order_by('-created_at')
         user_comment_likes = PostCommentLike.objects.filter(user=user, comment__in=comments)
         
         liked_comment_ids = set(user_comment_likes.values_list('comment_id', flat=True))
