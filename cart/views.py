@@ -362,19 +362,25 @@ def webhook_view(request):
 
     processed_orders = 0
     
-    line_items_data = line_items['data']
-    user_orders = list(user.orders.filter(key__status='reserved'))
+    order_ids_str = session.metadata.get("order_ids", "")
+    order_ids = [int(id.strip()) for id in order_ids_str.split(",") if id.strip()]
     
-    if len(line_items_data) != len(user_orders):
-        logger.warning(f"[Webhook] Mismatch: {len(line_items_data)} items vs {len(user_orders)} orders.")
+    line_items_data = line_items['data']
+    
+    if len(line_items_data) != len(order_ids):
+        logger.warning(f"[Webhook] Mismatch: {len(line_items_data)} items vs {len(order_ids)} orders.")
         return HttpResponse(status=400)
 
-    for item, order in zip(line_items_data, user_orders):
-        total_amount = item['amount_total'] / 100
+    for item, order_id in zip(line_items_data, order_ids):
         try:
+            order = Order.objects.get(id=order_id, user=user, key__status='reserved')
+            total_amount = item['amount_total'] / 100
             with transaction.atomic():
                 if process_order(order, user, total_amount, session_id, customer_email, card_info):
                     processed_orders += 1
+        except Order.DoesNotExist:
+            logger.error(f"[Webhook] Order with ID {order_id} not found or not reserved.")
+            continue
         except Exception as e:
             logger.error(f"[Webhook] Failed processing order {order.pk}: {e}")
             continue
