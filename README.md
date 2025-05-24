@@ -70,10 +70,11 @@ cd tothichcau
 *Note: Chạy `docker-compose` hoặc `docker compose` tuỳ máy. Cách kiểm tra `docker-compose version`.*
 
 ```bash
-docker compose pull
-docker compose up -d
-docker compose exec web python manage.py migrate
-docker compose exec web python manage.py collectstatic --noinput
+docker-compose pull
+docker-compose up -d
+docker-compose exec web python manage.py makemigrations
+docker-compose exec web python manage.py migrate
+docker-compose exec web python manage.py collectstatic --noinput
 ```
 
 ### 4. Chạy trên máy không dùng Docker (tuỳ chọn)
