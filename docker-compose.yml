@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   web:
     image: nguyenminh079/game-art:v1.0
