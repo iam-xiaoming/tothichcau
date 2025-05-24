@@ -257,7 +257,7 @@
 				}
 		
 				debounceTimeout = setTimeout(() => {
-					fetch(`api/search/games/?query=${encodeURIComponent(query)}`)
+					fetch(`/api/search/games/?query=${encodeURIComponent(query)}`)
 						.then(res => res.json())
 						.then(data => {
 							if (data.length === 0) {
