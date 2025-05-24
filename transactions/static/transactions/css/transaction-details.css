@@ -115,6 +115,7 @@
 
 .redeem-link:hover {
     text-decoration: underline;
+    color: #28a745;
 }
 
 /* Back to profile button */
