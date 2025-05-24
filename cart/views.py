@@ -232,6 +232,7 @@ def success(request):
     return render(request, "cart/success.html")
 
 
+
 @login_required
 def cancel(request):
     orders = Order.objects.filter(user=request.user)
@@ -246,61 +247,104 @@ def cancel(request):
     return render(request, "cart/cancel.html")
 
 
+def verify_stripe_event(payload, sig_header, webhook_secret, logger):
+    try:
+        return stripe.Webhook.construct_event(payload, sig_header, webhook_secret)
+    except (ValueError, stripe.error.SignatureVerificationError) as e:
+        logger.warning(f"[Webhook] Invalid signature or payload: {e}")
+        return None
+    
+
+def get_payment_info(session):
+    payment_intent_id = session.get('payment_intent')
+    info = {
+        "status": "failed",
+        "brand": None,
+        "last4": None,
+        "exp_month": None,
+        "exp_year": None,
+        "phone": session.get('customer_details', {}).get('phone')
+    }
+
+    if not payment_intent_id:
+        return info
+
+    try:
+        payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id)
+        payment_method_id = payment_intent.payment_method
+        payment_method = stripe.PaymentMethod.retrieve(payment_method_id)
+        card = payment_method.get('card', {})
+
+        info.update({
+            "status": "completed",
+            "brand": card.get('brand'),
+            "last4": card.get('last4'),
+            "exp_month": card.get('exp_month'),
+            "exp_year": card.get('exp_year'),
+        })
+
+        if not info["phone"]:
+            info["phone"] = payment_method.get('billing_details', {}).get('phone')
+
+    except Exception as e:
+        logging.warning(f"[Webhook] Failed to retrieve payment method: {e}")
+
+    return info
+
+
+def process_order(order, user, total_amount, session_id, customer_email, card_info):
+    if order.key.status != 'reserved':
+        logging.warning(f"[Webhook] Key for order {order.pk} is not reserved.")
+        return False
+
+    timestamp = int(datetime.now().timestamp() * 1000)
+
+    if order.game:
+        item_id = order.game.id
+        trx = create_transaction(user, card_info["status"], session_id, total_amount, customer_email,
+                                 card_info["brand"], card_info["last4"], card_info["phone"],
+                                 card_info["exp_month"], card_info["exp_year"],
+                                 order.key, order.game, None)
+        send_mailjet_email_purchase_success(customer_email, order.game.name, order.id, order.key)
+        create_user_game(user, order.key, trx, order.game, None)
+    else:
+        item_id = order.dlc.id
+        trx = create_transaction(user, card_info["status"], session_id, total_amount, customer_email,
+                                 card_info["brand"], card_info["last4"], card_info["phone"],
+                                 card_info["exp_month"], card_info["exp_year"],
+                                 order.key, None, order.dlc)
+        send_mailjet_email_purchase_success(customer_email, order.dlc.name, order.id, order.key)
+        create_user_game(user, order.key, trx, None, order.dlc)
+
+    create_user_interaction(user.id, item_id, timestamp)
+
+    order.key.status = 'sold'
+    order.key.save()
+    order.delete()
+
+    return True
+
 @csrf_exempt
 def webhook_view(request):
     logger = logging.getLogger(__name__)
     payload = request.body
     sig_header = request.META.get('HTTP_STRIPE_SIGNATURE')
 
-    try:
-        event = stripe.Webhook.construct_event(
-            payload, sig_header, settings.STRIPE_WEBHOOK_SECRET
-        )
-    except (ValueError, stripe.error.SignatureVerificationError) as e:
-        logger.warning(f"[Webhook] Invalid signature or payload: {e}")
+    event = verify_stripe_event(payload, sig_header, settings.STRIPE_WEBHOOK_SECRET, logger)
+    if event is None:
         return HttpResponse(status=400)
 
     if event['type'] not in ['checkout.session.completed', 'checkout.session.async_payment_succeeded']:
-        # should do something here
         return HttpResponse(status=200)
 
-    # fetch information of specific payment
     session = event['data']['object']
     session_id = session.get('id')
     customer_email = session.get('customer_details', {}).get('email')
-    phone = session.get('customer_details', {}).get('phone')
     user_id = session.get('metadata', {}).get('user_id')
 
-    # when someone get back to payment processed page.
     if Transaction.objects.filter(session_id=session_id).exists():
         logger.info(f"[Webhook] Session {session_id} already processed.")
         return HttpResponse(status=200)
-
-    status = 'failed'
-    brand = None
-    last4 = None
-    exp_month = None
-    exp_year = None
-
-    payment_intent_id = session.get('payment_intent')
-    if payment_intent_id:
-        try:
-            payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id)
-            payment_method_id = payment_intent.payment_method
-            payment_method = stripe.PaymentMethod.retrieve(payment_method_id)
-            card_info = payment_method.get('card', {})
-
-            brand = card_info.get('brand')
-            last4 = card_info.get('last4')
-            exp_month = card_info.get('exp_month')
-            exp_year = card_info.get('exp_year')
-
-            if not phone:
-                phone = payment_method.get('billing_details', {}).get('phone')
-
-            status = 'completed'
-        except Exception as e:
-            logger.warning(f"[Webhook] Failed to retrieve payment method: {e}")
 
     try:
         user = MyUser.objects.get(id=user_id)
@@ -314,38 +358,22 @@ def webhook_view(request):
         logger.error(f"[Webhook] Failed to get line items: {e}")
         return HttpResponse(status=500)
 
-    for item in line_items['data']:
-        # product_id = item['price']['product']
-        total_amount = item['amount_total'] / 100
+    card_info = get_payment_info(session)
 
+    total_orders = user.orders.count()
+    processed_orders = 0
+
+    for item in line_items['data']:
+        total_amount = item['amount_total'] / 100
         for order in user.orders.all():
             try:
                 with transaction.atomic():
-                    if order.key.status != 'reserved':
-                        logger.warning(f"[Webhook] Key for order {order.pk} is not available.")
-                        continue
-                    
-                    timestamp = int(datetime.now().timestamp() * 1000)
-                    
-                    if order.game:
-                        item_id = order.game.id
-                        trx = create_transaction(user, status, session_id, total_amount, customer_email, brand, last4, phone, exp_month, exp_year, order.key, order.game, None)
-                        send_mailjet_email_purchase_success(customer_email, order.game.name, order.id, order.key)
-                        create_user_game(user, order.key, trx, order.game, None)
-                    else:
-                        item_id = order.dlc.id
-                        trx = create_transaction(user, status, session_id, total_amount, customer_email, brand, last4, phone, exp_month, exp_year, order.key, None, order.dlc)
-                        send_mailjet_email_purchase_success(customer_email, order.dlc.name, order.id, order.key)
-                        create_user_game(user, order.key, trx, None, order.dlc)
-
-                    create_user_interaction(user_id, item_id, timestamp)
-
-                    order.key.status = 'sold'
-                    order.key.save()
-                    order.delete()
-
+                    if process_order(order, user, total_amount, session_id, customer_email, card_info):
+                        processed_orders += 1
             except Exception as e:
-                logger.error(f"[Webhook] Failed processing game {order.game if order.game else order.dlc}: {e}")
+                logger.error(f"[Webhook] Failed processing order {order.pk}: {e}")
                 continue
 
+    if processed_orders == 0:
+        return HttpResponse(status=400)
     return HttpResponse(status=200)
