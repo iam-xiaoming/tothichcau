@@ -31,6 +31,9 @@ docker run -d \
     --env-file .env \
     ${IMAGE_NAME}:${IMAGE_TAG}
 
+echo "Running Django makemigrations..."
+docker exec game-art python manage.py makemigrations
+
 echo "Running Django migrations..."
 docker exec game-art python manage.py migrate
 
