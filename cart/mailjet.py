@@ -14,7 +14,7 @@ def send_mailjet_email_purchase_success(to_email, game_name, order_id, game_key)
             {
                 "From": {
                     "Email": sender,
-                    "Name": "Your Game Store"
+                    "Name": "Game Art"
                 },
                 "To": [
                     {
