@@ -1,4 +1,3 @@
-````markdown
 # Web bán key game trực tuyến
 
 ## Giới thiệu
@@ -104,5 +103,3 @@ python manage.py runserver
 | Phan Công Chiến  | 22685651 |
 | Trần Thái Nguyên | 22697051 |
 | Trần Khắc Liêm   | 22685251 |
-
-```
