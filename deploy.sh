@@ -1,7 +1,9 @@
 #!/bin/bash
+set -e
 
-# Tên mạng dùng chung cho các container
 NETWORK_NAME="game-net"
+IMAGE_NAME="game-art"
+IMAGE_TAG="v1.0"
 
 echo "Checking Docker network..."
 if ! docker network ls | grep -q "$NETWORK_NAME"; then
@@ -12,13 +14,10 @@ else
 fi
 
 echo "Building Docker image..."
-docker build -t game-art:v1.0 .
-
-echo "Stopping old containers..."
-docker stop game-art celery_worker redis 2>/dev/null
+docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .
 
 echo "Removing old containers..."
-docker rm game-art celery_worker redis 2>/dev/null
+docker rm -f game-art celery_worker redis 2>/dev/null || true
 
 echo "Starting Redis container..."
 docker run -d --name redis --network "$NETWORK_NAME" redis:7-alpine
@@ -30,7 +29,13 @@ docker run -d \
     -p 8000:8000 \
     -v $(pwd):/app \
     --env-file .env \
-    game-art:v1.0
+    ${IMAGE_NAME}:${IMAGE_TAG}
+
+echo "Running Django migrations..."
+docker exec game-art python manage.py migrate
+
+echo "Collecting static files to S3..."
+docker exec game-art python manage.py collectstatic --noinput
 
 echo "Starting Celery worker container..."
 docker run -d \
@@ -38,7 +43,7 @@ docker run -d \
     --network "$NETWORK_NAME" \
     -v $(pwd):/app \
     --env-file .env \
-    game-art:v1.0 \
+    ${IMAGE_NAME}:${IMAGE_TAG} \
     celery -A GameArt worker --loglevel=info
 
 echo "Deploy complete. All services are up!"

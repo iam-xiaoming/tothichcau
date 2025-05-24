@@ -1,8 +1,21 @@
+````markdown
 # Web bán key game trực tuyến
 
 ## Giới thiệu
 
 Trang web bán key game trực tuyến, tích hợp thanh toán, xác thực người dùng, và quản lý đơn hàng.
+
+---
+
+## Mục Lục
+
+- [Giới thiệu](#giới-thiệu)
+- [Công nghệ chính](#công-nghệ-chính)
+- [Tính năng chính](#tính-năng-chính)
+- [Yêu cầu](#yêu-cầu)
+- [Hướng dẫn cài đặt](#hướng-dẫn-cài-đặt)
+- [Link triển khai](#link-triển-khai)
+- [Liên hệ nhóm thực hiện](#liên-hệ-nhóm-thực-hiện)
 
 ---
 
@@ -20,6 +33,7 @@ Trang web bán key game trực tuyến, tích hợp thanh toán, xác thực ng�
 | Celery                  | Xử lý tác vụ nền                        |
 | Mailjet                 | Xử lý gửi email khi giao dịch thành công|
 | CloudFront              | Tăng tốc độ xử lý file tĩnh             |
+
 ---
 
 ## Tính năng chính
@@ -29,6 +43,14 @@ Trang web bán key game trực tuyến, tích hợp thanh toán, xác thực ng�
 - Xác thực người dùng (Firebase)
 - Đánh giá & bình luận game
 - Lưu trữ và hiển thị media review (ảnh, video)
+
+---
+
+## Yêu cầu
+
+- Docker (>=20.x), Docker Compose (>=1.29.x)
+- Python 3.11 (nếu chạy local)
+- File `.env` với cấu hình môi trường đầy đủ (liên hệ nhóm phát triển)
 
 ---
 
@@ -47,52 +69,21 @@ cd tothichcau
 
 ### 3. Chạy với Docker (Windows/Mac/Linux)
 
-#### a) Cài Docker Desktop (Windows/Mac) hoặc Docker Engine (Linux)
-
-* [Docker Desktop cho Windows/Mac](https://www.docker.com/products/docker-desktop/)
-
-#### b) Pull image Docker
-
 ```bash
-docker pull nguyenminh079/game-art:v1.0
-docker pull redis:7-alpine
+docker-compose pull
+docker-compose up -d
+docker-compose exec web python manage.py migrate
+docker-compose exec web python manage.py collectstatic --noinput
 ```
 
-#### c) Tạo file `docker-compose.yml` (hoặc dùng file có sẵn) với nội dung:
-
-```yaml
-version: "3.9"
-services:
-  django:
-    image: nguyenminh079/game-art:v1.0
-    ports:
-      - "8000:8000"
-    command: gunicorn GameArt.wsgi:application --bind 0.0.0.0:8000 --timeout 120
-    depends_on:
-      - redis
-
-  celery:
-    image: nguyenminh079/game-art:v1.0
-    command: celery -A GameArt worker --loglevel=info
-    depends_on:
-      - redis
-
-  redis:
-    image: redis:7-alpine
-```
-
-#### d) Chạy Docker Compose
-
-```bash
-docker compose up -d
-```
-
-### 4. Chạy trên máy không dùng Docker (tuỳ chọn, cần Python và môi trường ảo)
+### 4. Chạy trên máy không dùng Docker (tuỳ chọn)
 
 ```bash
 python -m venv venv
 source venv/bin/activate    # trên Windows: venv\Scripts\activate
 pip install -r requirements.txt
+python manage.py makemigrations
+python manage.py migrate
 python manage.py runserver
 ```
 
@@ -100,12 +91,9 @@ python manage.py runserver
 
 ## Link triển khai (Deploy)
 
-Trang web đã được triển khai tại:
-
 👉 **[https://www.tothichcau.shop/](https://www.tothichcau.shop/)**
 
 ---
-
 
 ## Liên hệ nhóm thực hiện
 
@@ -116,3 +104,5 @@ Trang web đã được triển khai tại:
 | Phan Công Chiến  | 22685651 |
 | Trần Thái Nguyên | 22697051 |
 | Trần Khắc Liêm   | 22685251 |
+
+```
