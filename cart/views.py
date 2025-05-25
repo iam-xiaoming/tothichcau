@@ -207,7 +207,7 @@ class CreateCheckoutSessionView(LoginRequiredMixin, View):
         
         for order in orders:
             line_items.append({
-                'price': order.game.stripe_price_id,
+                'price': order.game.stripe_price_id if order.game else order.dlc.stripe_price_id,
                 'quantity': 1
             })
             

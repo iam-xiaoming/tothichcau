@@ -31,3 +31,4 @@ venv/
 .python-version
 *.rdb
 *.pem
+media
