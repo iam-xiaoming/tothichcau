@@ -22,9 +22,6 @@ venv/
 # macOS
 .DS_Store
 
-# Git
-*.gitignore
-
 **/migrations/*.py
 !**/migrations/__init__.py
 
