@@ -33,7 +33,7 @@ Trang web bán key game trực tuyến, tích hợp thanh toán, xác thực ng�
 | Mailjet                 | Xử lý gửi email khi giao dịch thành công|
 | CloudFront              | Tăng tốc độ xử lý file tĩnh             |
 | Cloudflare              | Quản lý DNS
-
+| AWS EC 2                    | Deploy
 ---
 
 ## Tính năng chính
