@@ -260,29 +260,36 @@
 					fetch(`/api/search/games/?query=${encodeURIComponent(query)}`)
 						.then(res => res.json())
 						.then(data => {
-							if (data.length === 0) {
+							if (!data.items || data.items.length === 0) {
 								resultSection.innerHTML = `
 									<div class="no-result search-list">
 										<p>No results found.</p>
 									</div>
 								`;
 								return;
-							}
-		
+							}	
 							const itemsHTML = `
 								<div class="search-list">
-									${data.map(game => `
-										<a href="/game-details/${game.id}" class="search-item">
-											<img src="${game.image}" alt="${game.name}" class="item-img">
-											<div class="item-info">
-												<p class="item-name line-clamp">${game.name}</p>
-												<small class="text-muted d-block">${game.categories.map(c => c.name).join(', ')}</small>
-												<span class="item-price">$${game.discounted_price}</span>
-											</div>
-										</a>
-									`).join('')}
+									${data.items.map(item => {
+										const url = item.type === 'dlc'
+											? `/game-details/dlc/${item.id}/`
+											: `/game-details/${item.id}/`;
+										return `
+											<a href="${url}" class="search-item">
+												<img src="${item.image}" alt="${item.name}" class="item-img">
+												<div class="item-info">
+													<p class="item-name line-clamp">${item.name}</p>
+													<small class="text-muted d-block">
+														${item.categories.map(c => c.name).join(', ')}
+													</small>
+													<span class="item-price">$${item.discounted_price}</span>
+												</div>
+											</a>
+										`;
+									}).join('')}
 								</div>
 							`;
+
 		
 							resultSection.innerHTML = itemsHTML;
 						})
