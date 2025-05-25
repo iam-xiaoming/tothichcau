@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .utils import get_trendings, get_sales, get_mostplay, get_coming_soon, get_free_games
+from .utils import get_trendings, get_sales, get_mostplay, get_coming_soon, get_free_games, get_new_release
 from game_features.models import FeatureHighlight, GameStory
 from admin_manager.models import GameHero
 
@@ -25,7 +25,7 @@ def home(request):
             {
                 'name': 'new__release',
                 'display_name': 'New Release',
-                'games': sales,
+                'games': get_new_release(),
                 'id': 'new_release'
             }
         ],

@@ -1,7 +1,7 @@
 from games.models import Game, DLC
 from django.utils.timezone import now
 
-def get_trendings(status='get'):
+def get_trendings(status='limit'):
     games = list(Game.objects.all().order_by('-release_date', '-average_score'))
     dlcs = list(DLC.objects.all().order_by('-release_date', '-average_score'))
     
@@ -12,7 +12,7 @@ def get_trendings(status='get'):
     return combined[:21]
 
 
-def get_sales(status='get'):
+def get_sales(status='limit'):
     games = list(Game.objects.filter(discount__gt=0).all())
     dlcs = list(DLC.objects.filter(discount__gt=0).all())
     
@@ -23,7 +23,7 @@ def get_sales(status='get'):
     return combined[:21]
 
 
-def get_mostplay(status='get'):
+def get_mostplay(status='limit'):
     games = list(Game.objects.all().order_by('-number_of_buy'))
     dlcs = list(DLC.objects.all().order_by('-number_of_buy'))
     
@@ -34,7 +34,7 @@ def get_mostplay(status='get'):
     return combined[:4]
 
 
-def get_coming_soon(status='get'):
+def get_coming_soon(status='limit'):
     games = list(Game.objects.filter(release_date__gt=now()))
     dlcs = list(DLC.objects.filter(release_date__gt=now()))
     
@@ -45,7 +45,7 @@ def get_coming_soon(status='get'):
     return combined[:4]
 
 
-def get_free_games(status='get'):
+def get_free_games(status='limit'):
     games = list(Game.objects.filter(discount=100).all())
     dlcs = list(DLC.objects.filter(discount=100).all())
     
@@ -54,3 +54,14 @@ def get_free_games(status='get'):
         return combined
     
     return combined[:4]
+
+
+def get_new_release(status='limit'):
+    games = list(Game.objects.all().order_by('-release_date'))
+    dlcs = list(DLC.objects.all().order_by('-release_date'))
+    
+    combined = games + dlcs
+    if status == 'all':
+        return combined
+    
+    return combined[:21]
