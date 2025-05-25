@@ -782,7 +782,7 @@ ol {
 	margin-bottom: 30px;
 }
 
-.trending__product {
+.trending__product, .sale__product {
 	width: 100%;
 	margin-bottom: 50px;
 }

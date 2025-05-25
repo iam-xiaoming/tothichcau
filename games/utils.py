@@ -6,7 +6,8 @@ def stripe_create(created, instance):
             # Create Stripe product
             stripe_product = stripe.Product.create(
                 name=instance.name,
-                description=instance.description
+                description=instance.description,
+                images=[instance.image.url]
             )
             stripe_price = stripe.Price.create(
                 product=stripe_product.id,
@@ -24,7 +25,8 @@ def stripe_create(created, instance):
                 stripe.Product.modify(
                     instance.stripe_product_id,
                     name=instance.name,
-                    description=instance.description
+                    description=instance.description,
+                    images=[instance.image.url]
                 )
 
             # Stripe prices are immutable (can’t update amount),

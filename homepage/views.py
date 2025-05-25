@@ -21,6 +21,12 @@ def home(request):
                 'display_name': 'Sale',
                 'games': sales,
                 'id': 'sale'
+            },
+            {
+                'name': 'new__release',
+                'display_name': 'New Release',
+                'games': sales,
+                'id': 'new_release'
             }
         ],
         'top_sellers': sorted(sales, key=lambda x: -x.discount),

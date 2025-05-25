@@ -86,13 +86,6 @@
                                         <div class="col-lg-3 col-md-4 col-sm-6 col-12 product-card">
                                             <a class="item-click" game-pk="{{ game.pk }}" href="{{ game_url }}">
                                                 <div class="product__item">
-                                                    <!-- <div class="rating-section">
-                                                        <div class="rating-wrapper">
-                                                            <i class="fa-solid fa-star">
-                                                                <span class="score-text">5.5</span>
-                                                            </i>
-                                                        </div>
-                                                    </div> -->
                                                     {% if game.quantity > 0 %}
                                                         <div class="product__item__pic set-bg" data-setbg="{{ game.image.url }}"></div>
                                                     {% else %}
@@ -399,7 +392,10 @@
 {% endblock %}
 
 {% block extra_js %}
+    <!-- video thumbnail -->
     <script src="{% static 'homepage/js/video-thumbnail.js' %}"></script>
+
+    <!-- list items -->
     <script>
         function getProductWidth(card) {
         const style = window.getComputedStyle(card);
@@ -411,7 +407,8 @@
         const scrollStep = 4;
         const state = {
             trending: 0,
-            sale: 0
+            sale: 0,
+            new_release: 0,
         };
     
         function updateButtonVisibility(prefix, totalProducts, productWidth) {
@@ -447,7 +444,7 @@
     }
     
         document.addEventListener('DOMContentLoaded', function () {
-        ['trending', 'sale'].forEach(prefix => {
+        ['trending', 'sale', 'new_release'].forEach(prefix => {
             const container = document.getElementById(`${prefix}-product-list`);
             const card = container?.querySelector('.product-card');
             if (container && card) {
