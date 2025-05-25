@@ -3,7 +3,7 @@ from games.models import Game, DLC
 from django.views.generic import ListView
 from game_features.models import Category
 from django.http import HttpResponse
-from homepage.utils import get_trendings, get_sales, get_mostplay, get_coming_soon, get_free_games
+from homepage.utils import get_trendings, get_sales, get_mostplay, get_coming_soon, get_free_games, get_new_release
 from django.core.paginator import Paginator
 from django.http import JsonResponse
 from django.views.decorators.http import require_GET
@@ -44,7 +44,7 @@ def category_view(request, slug):
 
 
 def action_view(request, action):
-    if action not in ['trending', 'sale', 'most-played', 'upcoming', 'free-games']:
+    if action not in ['trending', 'sale', 'most-played', 'upcoming', 'free-games', 'new_release']:
         return HttpResponse('<h1>404</h1>')
     
     context = {
@@ -59,6 +59,8 @@ def action_view(request, action):
         context['games'] = get_mostplay(status='all')
     elif action == 'upcoming':
         context['games'] = get_coming_soon(status='all')
+    elif action == 'new_release':
+        context['games'] = get_new_release(status='all')
     else:
         context['games'] = get_free_games(status='all')
         

@@ -1,5 +1,6 @@
 from games.models import Game, DLC
 from django.utils.timezone import now
+from datetime import timedelta
 
 def get_trendings(status='limit'):
     games = list(Game.objects.all().order_by('-release_date', '-average_score'))
@@ -57,8 +58,10 @@ def get_free_games(status='limit'):
 
 
 def get_new_release(status='limit'):
-    games = list(Game.objects.all().order_by('-release_date'))
-    dlcs = list(DLC.objects.all().order_by('-release_date'))
+    thirty_days_ago = now() - timedelta(days=30)
+    
+    games = list(Game.objects.filter(release_date__gt=thirty_days_ago).order_by('-release_date'))
+    dlcs = list(DLC.objects.filter(release_date__gt=thirty_days_ago).order_by('-release_date'))
     
     combined = games + dlcs
     if status == 'all':
