@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Setup Live Stream</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="{% static 'livestream/css/live_setup.css' %}" />
+  <link rel="stylesheet" href="{% static 'livestream/css/stream_setup.css' %}" />
   <style>
     /* Reset cơ bản */
     * {
@@ -59,7 +59,7 @@
     }
     .info {
       background: #333;
-      word-break: break-all;
+      word-break: break-word;
     }
     .status {
       margin-top: 0.75rem;
@@ -120,12 +120,12 @@
     </div>
     <div>
       <label>URL RTMP Server để cấu hình OBS hoặc phần mềm stream:</label>
-      <div class="info" id="rtmpUrlDisplay">rtmp://{{ server_ip }}:1935/hls</div>
+      <div class="info" id="rtmpUrlDisplay">rtmp://{{ server_ip }}:1939/hls</div>
     </div>
     <div class="status" id="connectionStatus">Đang kiểm tra kết nối với OBS...</div>
     <button type="submit" id="startStreamBtn" disabled>Bắt đầu Stream</button>
   </form>
 
-  <script src="{% static 'livestream/js/live_setup.js' %}"></script>
+  <script src="{% static 'livestream/js/stream_setup.js' %}"></script>
 </body>
 </html>
