@@ -39,18 +39,16 @@ def stream_setup(request):
 
 @login_required
 def check_stream(request):
-    """
-    Kiểm tra stream_key có live trên RTMP server hay không.
-    Dùng HTTP API của nginx-rtmp (http://localhost:8080/stat).
-    """
     stream_key = request.GET.get("streamKey")
     try:
-        r = requests.get("http://localhost:8080/stat", timeout=5)
-        if stream_key and stream_key in r.text:
+        res = requests.get("http://localhost:8080/stat")
+        text = res.text
+
+        if stream_key in text:
             return JsonResponse({"status": "connected"})
         else:
             return JsonResponse({"status": "disconnected"})
-    except requests.RequestException as e:
+    except Exception as e:
         return JsonResponse({"status": "error", "detail": str(e)})
 
 
