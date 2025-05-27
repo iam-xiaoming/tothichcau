@@ -113,16 +113,17 @@ class PostDetailView(DetailView):
         
         context['comment_form'] = PostCommentForm(user=user, post=obj)
         context['reply_form'] = CommentReplyForm(user=user, post=obj)
-        
-        if PostLike.objects.filter(user=user, post=obj).exists():
-            context['post_liked'] = 'post_liked'
 
         comments = PostComment.objects.filter(post=obj).order_by('-created_at')
-        user_comment_likes = PostCommentLike.objects.filter(user=user, comment__in=comments)
         
-        liked_comment_ids = set(user_comment_likes.values_list('comment_id', flat=True))
+        if user.is_authenticated:
+            if PostLike.objects.filter(user=user, post=obj).exists():
+                context['post_liked'] = 'post_liked'
+                
+            user_comment_likes = PostCommentLike.objects.filter(user=user, comment__in=comments)
+            liked_comment_ids = set(user_comment_likes.values_list('comment_id', flat=True))
         
-        context['liked_comment_ids'] = liked_comment_ids
+            context['liked_comment_ids'] = liked_comment_ids
         
         # paginator
         paginator = Paginator(comments, 10)

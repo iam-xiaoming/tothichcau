@@ -120,10 +120,12 @@
                                     <div class="comment-text">
                                         <p>{{ comment.content }}</p>
                                     </div>
-                                    <div class="comment-actions">
-                                        <a comment-pk={{ comment.pk }} href="#" class="comment-like {% if comment.id in liked_comment_ids %}liked{% endif %}"><i class="fas fa-heart"></i> <span>{{ comment.count_like }}</span></a>
-                                        <a href="#" class="comment-reply-toggle">Reply</a>
-                                    </div>
+                                    {% if user.is_authenticated %}
+                                        <div class="comment-actions">
+                                            <a comment-pk={{ comment.pk }} href="#" class="comment-like {% if comment.id in liked_comment_ids %}liked{% endif %}"><i class="fas fa-heart"></i> <span>{{ comment.count_like }}</span></a>
+                                            <a href="#" class="comment-reply-toggle">Reply</a>
+                                        </div>
+                                    {% endif %}
                                     <div class="comment-reply-form" style="display: none; margin-top: 10px;">
                                         <form style="display: flex; align-items: flex-end; gap: 20px;" action="" method="POST">
                                             {% csrf_token %}
