@@ -61,10 +61,13 @@ docker run -d \
   ${IMAGE_NAME}:${IMAGE_TAG} \
   celery -A GameArt beat -l info
 
-
 # Build RTMP server
 echo "===> Building RTMP server image..."
 docker build -f Dockerfile.rtmp -t rtmp-server .
+
+# Ensure directories exist
+mkdir -p /opt/data/hls /home/ec2-user/tothichcau/www/static
+chmod -R 777 /opt/data/hls /home/ec2-user/tothichcau/www/static
 
 echo "===> Starting RTMP server container..."
 docker run -d \
@@ -73,6 +76,7 @@ docker run -d \
   -p 1935:1935 \
   -p 8080:80 \
   -v /opt/data/hls:/opt/data/hls \
+  -v /home/ec2-user/tothichcau/www/static:/www/static \
   rtmp-server
 
 echo "===> Deploy complete. All services are running."

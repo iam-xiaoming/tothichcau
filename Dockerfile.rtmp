@@ -1,5 +1,10 @@
 FROM alfg/nginx-rtmp:latest
 
-COPY nginx.conf /etc/nginx/nginx.conf
+# Copy file nginx.conf vào đúng vị trí template
+COPY nginx.conf /etc/nginx/nginx.conf.template
+
+# Đảm bảo thư mục cho HLS và static
+RUN mkdir -p /opt/data/hls /www/static && \
+    chmod -R 777 /opt/data/hls /www/static
 
 EXPOSE 1935 80
