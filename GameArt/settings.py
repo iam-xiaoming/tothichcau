@@ -114,7 +114,8 @@ INSTALLED_APPS = [
     'blog.apps.BlogConfig',
     'wishlist.apps.WishlistConfig',
     'notification.apps.NotificationConfig',
-    'list.apps.ListConfig'
+    'list.apps.ListConfig',
+    'livestream.apps.LivestreamConfig'
 ]
 
 MIDDLEWARE = [

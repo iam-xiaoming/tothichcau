@@ -1,0 +1,103 @@
+body {
+    font-family: 'Inter', sans-serif;
+    background: #121212;
+    color: #f0f0f0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1rem;
+    min-height: 100vh;
+}
+h1 {
+    color: #00d8ff;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+    text-shadow: 0 0 8px #00d8ffaa;
+}
+form {
+    background: #222;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 0 20px #00d8ff44;
+    max-width: 480px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+label {
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+    display: block;
+}
+input[type=text], select {
+    padding: 0.5rem 0.75rem;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: none;
+    outline: none;
+    width: 100%;
+    background: #333;
+    color: #eee;
+    box-shadow: inset 0 0 6px #000000aa;
+}
+input[type=text]:focus, select:focus {
+    box-shadow: 0 0 10px #00d8ffcc;
+    background: #222;
+}
+.info {
+    background: #111;
+    border-radius: 8px;
+    padding: 1rem;
+    font-size: 0.9rem;
+    color: #aaa;
+    user-select: text;
+    word-break: break-all;
+    font-family: monospace;
+}
+button {
+    background-color: #00d8ff;
+    color: #121212;
+    font-weight: 700;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 1.1rem;
+    box-shadow: 0 0 15px #00d8ff88;
+    user-select: none;
+}
+button:hover:not(:disabled) {
+    background-color: #00b0cc;
+    box-shadow: 0 0 20px #00b0cccc;
+}
+button:disabled {
+    background-color: #555;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+.note {
+    font-size: 0.85rem;
+    color: #888;
+    margin-top: -0.75rem;
+    margin-bottom: 0.75rem;
+}
+.status {
+    font-size: 0.9rem;
+    padding: 0.5rem;
+    border-radius: 6px;
+    text-align: center;
+}
+.status.connecting {
+    color: #ffaa00;
+    background: #ffaa0022;
+}
+.status.connected {
+    color: #00ff00;
+    background: #00ff0022;
+}
+.status.error {
+    color: #ff3333;
+    background: #ff333322;
+}

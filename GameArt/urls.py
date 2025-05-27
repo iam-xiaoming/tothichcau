@@ -32,6 +32,7 @@ import blog.urls
 import wishlist.urls
 import notification.urls
 import list.urls
+import livestream.urls
 
 
 urlpatterns = [
@@ -49,7 +50,8 @@ urlpatterns = [
     path('', include(blog.urls)),
     path('', include(wishlist.urls)),
     path('', include(notification.urls)),
-    path('', include(list.urls))
+    path('', include(list.urls)),
+    path('', include(livestream.urls))
 ]
 
 

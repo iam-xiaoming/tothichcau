@@ -1,0 +1,39 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Setup Live Stream</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'livestream/css/live_setup.css' %}">
+</head>
+<body>
+  <h1>Setup Live Stream</h1>
+  
+  <form id="streamSetupForm">
+    <div>
+      <label for="streamTitle">Tiêu đề Livestream</label>
+      <input type="text" id="streamTitle" name="streamTitle" placeholder="Nhập tiêu đề livestream" required />
+    </div>
+
+    <div>
+      <label for="streamKey">Stream Key</label>
+      <input type="text" id="streamKey" name="streamKey" readonly value="" />
+    </div>
+
+    <div>
+      <label>URL RTMP Server để cấu hình OBS hoặc phần mềm stream:</label>
+      <div class="info" id="rtmpUrlDisplay">rtmp://{{ server_ip }}:1935/stream</div>
+    </div>
+
+    <div class="status" id="connectionStatus">Đang kiểm tra kết nối với OBS...</div>
+
+    <button type="submit" id="startStreamBtn" disabled>Bắt đầu Stream</button>
+  </form>
+
+  <script src="{% static 'livestream/js/live_setup.js' %}"></script>
+</body>
+</html>

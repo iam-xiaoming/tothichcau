@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Live Stream Player</title>
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  
+  <style>
+    /* Reset cơ bản */
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #121212;
+      color: #f0f0f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      padding: 2rem 1rem;
+    }
+
+    h1 {
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      font-size: 2.2rem;
+      text-align: center;
+      color: #00d8ff;
+      text-shadow: 0 0 8px #00d8ffaa;
+    }
+
+    .player-wrapper {
+      position: relative;
+      max-width: 900px;
+      width: 100%;
+      background: #222;
+      border-radius: 10px;
+      box-shadow: 0 0 20px #00d8ff44;
+      overflow: hidden;
+    }
+
+    video {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      background: black;
+      outline: none;
+    }
+
+    .status {
+      margin-top: 0.75rem;
+      font-size: 1rem;
+      color: #ccc;
+      text-align: center;
+      user-select: none;
+    }
+
+    .status.connected {
+      color: #4caf50;
+    }
+
+    .status.error {
+      color: #e03e3e;
+    }
+
+    button.refresh-btn {
+      margin-top: 1rem;
+      background-color: #00d8ff;
+      border: none;
+      color: #121212;
+      padding: 0.5rem 1.25rem;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: background-color 0.3s ease;
+      user-select: none;
+      box-shadow: 0 0 10px #00d8ff88;
+    }
+
+    button.refresh-btn:hover {
+      background-color: #00b0cc;
+      box-shadow: 0 0 15px #00b0cccc;
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.6rem;
+      }
+      .refresh-btn {
+        width: 100%;
+      }
+    }
+    #copyLinkBtn {
+        padding: 10px 20px;
+        background-color: #007bff; /* màu xanh dương */
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+        margin-bottom: 20px;
+      }
+
+    #copyLinkBtn:hover {
+      background-color: #0056b3;
+    }
+
+    #copyLinkBtn:active {
+      background-color: #003f7f;
+    }
+  </style>
+</head>
+<body>
+  <h1>{{ title }}</h1>
+  <button id="copyLinkBtn">Copy Link</button>
+  
+  <div class="player-wrapper">
+    <video id="video" controls autoplay muted playsinline></video>
+  </div>
+
+  <div id="status" class="status">Đang kết nối...</div>
+  <button id="refreshBtn" class="refresh-btn" title="Tải lại stream">🔄 Tải lại stream</button>
+
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <script>
+    const video = document.getElementById('video');
+    const statusEl = document.getElementById('status');
+    const refreshBtn = document.getElementById('refreshBtn');
+    const streamUrl = "{{ stream_url }}";
+
+    function updateStatus(text, type = '') {
+      statusEl.textContent = text;
+      statusEl.className = 'status'; // reset
+      if(type) statusEl.classList.add(type);
+    }
+
+    function loadStream() {
+      updateStatus('Đang kết nối...', '');
+
+      if (Hls.isSupported()) {
+        if(window.hls) {
+          window.hls.destroy();
+          window.hls = null;
+        }
+
+        const hls = new Hls();
+        window.hls = hls;
+
+        hls.loadSource(streamUrl);
+        hls.attachMedia(video);
+
+        hls.on(Hls.Events.MANIFEST_PARSED, () => {
+          video.play();
+          updateStatus('Đã kết nối', 'connected');
+        });
+
+        hls.on(Hls.Events.ERROR, (event, data) => {
+          console.error('HLS.js error:', data);
+          updateStatus('Lỗi khi tải stream', 'error');
+        });
+      } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = streamUrl;
+
+        video.addEventListener('loadedmetadata', () => {
+          video.play();
+          updateStatus('Đã kết nối', 'connected');
+        });
+
+        video.addEventListener('error', () => {
+          updateStatus('Lỗi khi tải stream', 'error');
+        });
+      } else {
+        updateStatus('Trình duyệt không hỗ trợ phát video này', 'error');
+        alert('Trình duyệt của bạn không hỗ trợ phát video này.');
+      }
+    }
+
+    refreshBtn.addEventListener('click', () => {
+      loadStream();
+    });
+
+    loadStream();
+  </script>
+  <script>
+    document.getElementById('copyLinkBtn').addEventListener('click', function() {
+      const link = "{{ stream_url }}";
+      navigator.clipboard.writeText(link).then(() => {
+        alert('Đã sao chép link: ' + link);
+      }).catch(err => {
+        alert('Lỗi khi sao chép link');
+        console.error(err);
+      });
+    });
+</script>
+</body>
+</html>
