@@ -31,7 +31,7 @@ def stream_setup(request):
         request.session["stream_key"] = key
 
     context = {
-        "server_ip": get_server_public_ip(),
+        "server_ip": "47.130.87.247",  # Hardcode IP vì đã xác nhận hoạt động
         "stream_key": request.session["stream_key"],
     }
     return render(request, "livestream/stream_setup.html", context)

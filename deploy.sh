@@ -9,6 +9,7 @@ APP_CONTAINER_NAME="game-art"
 CELERY_WORKER_NAME="celery_worker"
 CELERY_BEAT_NAME="celery_beat"
 REDIS_CONTAINER_NAME="redis"
+RTMP_CONTAINER_NAME="rtmp-server"
 
 echo "===> Checking Docker network..."
 if ! docker network ls | grep -qw "$NETWORK_NAME"; then
@@ -22,7 +23,7 @@ echo "===> Building Docker image ${IMAGE_NAME}:${IMAGE_TAG}..."
 docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .
 
 echo "===> Removing old containers if exist..."
-docker rm -f $APP_CONTAINER_NAME $CELERY_WORKER_NAME $CELERY_BEAT_NAME $REDIS_CONTAINER_NAME 2>/dev/null || true
+docker rm -f $APP_CONTAINER_NAME $CELERY_WORKER_NAME $CELERY_BEAT_NAME $REDIS_CONTAINER_NAME $RTMP_CONTAINER_NAME 2>/dev/null || true
 
 echo "===> Starting Redis container..."
 docker run -d --name $REDIS_CONTAINER_NAME --network "$NETWORK_NAME" redis:7-alpine
@@ -72,12 +73,17 @@ sudo chown -R ec2-user:ec2-user /opt/data/hls /home/ec2-user/tothichcau/www/stat
 
 echo "===> Starting RTMP server container..."
 docker run -d \
-  --name rtmp-server \
+  --name $RTMP_CONTAINER_NAME \
   --network "$NETWORK_NAME" \
   -p 1935:1935 \
   -p 8080:80 \
   -v /opt/data/hls:/opt/data/hls \
   -v /home/ec2-user/tothichcau/www/static:/www/static \
+  -v "$(pwd)/nginx.conf:/etc/nginx/nginx.conf" \
   rtmp-server
+
+echo "===> Verifying RTMP server configuration..."
+docker exec $RTMP_CONTAINER_NAME nginx -t
+docker exec $RTMP_CONTAINER_NAME nginx -s reload
 
 echo "===> Deploy complete. All services are running."
