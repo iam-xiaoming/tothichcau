@@ -44,7 +44,7 @@ MAILJET_API_KEY=config('MAILJET_API_KEY')
 MAILJET_API_SECRET=config('MAILJET_API_SECRET')
 SENDER = config('SENDER')
 
-if not DEBUG:
+if True:
     STORAGES = {
         # Media file (image) management 
         'default': {
