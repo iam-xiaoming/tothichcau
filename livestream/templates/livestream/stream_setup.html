@@ -7,6 +7,104 @@
   <title>Setup Live Stream</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="{% static 'livestream/css/live_setup.css' %}" />
+  <style>
+    /* Reset cơ bản */
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #121212;
+      color: #f0f0f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      padding: 2rem 1rem;
+    }
+    h1 {
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      font-size: 2.2rem;
+      text-align: center;
+      color: #00d8ff;
+      text-shadow: 0 0 8px #00d8ffaa;
+    }
+    form {
+      max-width: 500px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    label {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      display: block;
+      color: #ccc;
+    }
+    input, .info {
+      width: 100%;
+      padding: 0.75rem;
+      border: none;
+      border-radius: 5px;
+      background: #222;
+      color: #f0f0f0;
+      font-size: 1rem;
+    }
+    input[readonly] {
+      background: #333;
+      cursor: not-allowed;
+    }
+    .info {
+      background: #333;
+      word-break: break-all;
+    }
+    .status {
+      margin-top: 0.75rem;
+      font-size: 1rem;
+      text-align: center;
+    }
+    .status.connecting {
+      color: #ccc;
+    }
+    .status.connected {
+      color: #4caf50;
+    }
+    .status.error {
+      color: #e03e3e;
+    }
+    button {
+      margin-top: 1rem;
+      background-color: #00d8ff;
+      border: none;
+      color: #121212;
+      padding: 0.75rem;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: background-color 0.3s ease;
+      box-shadow: 0 0 10px #00d8ff88;
+    }
+    button:disabled {
+      background-color: #666;
+      cursor: not-allowed;
+    }
+    button:hover:not(:disabled) {
+      background-color: #00b0cc;
+      box-shadow: 0 0 15px #00b0cccc;
+    }
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.6rem;
+      }
+      button {
+        width: 100%;
+      }
+    }
+  </style>
 </head>
 <body>
   <h1>Setup Live Stream</h1>
@@ -18,7 +116,7 @@
     </div>
     <div>
       <label for="streamKey">Stream Key</label>
-      <input type="text" id="streamKey" name="streamKey" readonly value="{{ stream_key }}" />
+      <input type="text" id="streamKey" name="streamKey" readonly value="{{ stream_key | safe }}" />
     </div>
     <div>
       <label>URL RTMP Server để cấu hình OBS hoặc phần mềm stream:</label>

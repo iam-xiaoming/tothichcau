@@ -40,6 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
   } else {
     connectionStatus.textContent = 'Lỗi: Stream key không hợp lệ';
     connectionStatus.className = 'status error';
+    startStreamBtn.disabled = true;
   }
 
   // Kiểm tra kết nối mỗi 5 giây

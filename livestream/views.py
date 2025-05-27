@@ -4,7 +4,12 @@ import re
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
+import random
+import string
 
+def generate_stream_key():
+    """Sinh stream_key ngẫu nhiên với 32 ký tự."""
+    return ''.join(random.choices(string.ascii_letters + string.digits, k=32))
 
 def get_server_public_ip():
     """
@@ -21,37 +26,38 @@ def get_server_public_ip():
 @login_required
 def stream_setup(request):
     """
-    Tạo hoặc lấy stream_key trong session.
-    Trả về IP server public và stream_key.
+    Tạo stream_key và trả về trang setup livestream.
+    Stream_key được sinh một lần và truyền vào template.
     """
-    if "stream_key" not in request.session:
-        import random
-        import string
-        key = ''.join(random.choices(string.ascii_letters + string.digits, k=32))
-        request.session["stream_key"] = key
-
+    stream_key = generate_stream_key()
     context = {
-        "server_ip": "47.130.87.247",  # Hardcode IP vì đã xác nhận hoạt động
-        "stream_key": request.session["stream_key"],
+        "server_ip": "47.130.87.247",  # IP tĩnh đã xác nhận
+        "stream_key": stream_key,
     }
     return render(request, "livestream/stream_setup.html", context)
 
 
 @login_required
 def check_stream(request):
+    """
+    Kiểm tra trạng thái stream dựa trên stream_key từ query parameter.
+    """
     stream_key = request.GET.get("streamKey")
-    try:
-        res = requests.get(f"http://{get_server_public_ip()}:8080/stat")
-        text = res.text
+    if not stream_key or not re.match(r'^[a-zA-Z0-9_-]+$', stream_key):
+        return JsonResponse({"status": "error", "detail": "Stream key không hợp lệ"})
 
+    try:
+        res = requests.get("http://47.130.87.247:8080/stat", timeout=5)
+        res.raise_for_status()
+        text = res.text
         print("DEBUG TEXT:", text[:500])
-        
+
         if stream_key in text:
             return JsonResponse({"status": "connected"})
         else:
-            return JsonResponse({"status": "disconnected"})
-    except Exception as e:
-        return JsonResponse({"status": "error", "detail": str(e)})
+            return JsonResponse({"status": "disconnected", "detail": "Stream chưa được đẩy qua RTMP"})
+    except requests.RequestException as e:
+        return JsonResponse({"status": "error", "detail": f"Lỗi kết nối server: {str(e)}"})
 
 
 @login_required
@@ -63,18 +69,10 @@ def livestream(request):
     stream_key = request.GET.get("streamKey")
     title = request.GET.get("title", "Livestream của bạn")
 
-    # Kiểm tra stream_key hợp lệ và khớp với session
-    session_stream_key = request.session.get("stream_key")
     if not stream_key or not re.match(r'^[a-zA-Z0-9_-]+$', stream_key):
         return render(request, "livestream/livestream.html", {
             "stream_key": stream_key,
             "title": "Lỗi: Stream key không hợp lệ hoặc thiếu",
-            "stream_url": ""
-        })
-    if stream_key != session_stream_key:
-        return render(request, "livestream/livestream.html", {
-            "stream_key": stream_key,
-            "title": "Lỗi: Stream key không khớp với session",
             "stream_url": ""
         })
 
