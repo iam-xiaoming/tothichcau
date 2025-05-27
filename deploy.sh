@@ -66,8 +66,9 @@ echo "===> Building RTMP server image..."
 docker build -f Dockerfile.rtmp -t rtmp-server .
 
 # Ensure directories exist
-mkdir -p /opt/data/hls /home/ec2-user/tothichcau/www/static
-chmod -R 777 /opt/data/hls /home/ec2-user/tothichcau/www/static
+sudo mkdir -p /opt/data/hls /home/ec2-user/tothichcau/www/static
+sudo chmod -R 777 /opt/data/hls /home/ec2-user/tothichcau/www/static
+sudo chown -R ec2-user:ec2-user /opt/data/hls /home/ec2-user/tothichcau/www/static
 
 echo "===> Starting RTMP server container..."
 docker run -d \
