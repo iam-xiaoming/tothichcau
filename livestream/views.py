@@ -1,14 +1,14 @@
-# livestream/views.py
-
 from django.shortcuts import render
 from django.http import JsonResponse
 import socket, requests
 import re
+from django.contrib.auth.decorators import login_required
 
 def get_server_ip():
     hostname = socket.gethostname()
     return socket.gethostbyname(hostname)
 
+@login_required
 def stream_setup(request):
     if "stream_key" not in request.session:
         import random, string
@@ -22,6 +22,7 @@ def stream_setup(request):
     return render(request, "livestream/stream_setup.html", context)
 
 
+@login_required
 def check_stream(request):
     stream_key = request.GET.get("streamKey")
     try:
