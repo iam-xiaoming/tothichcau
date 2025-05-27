@@ -63,7 +63,14 @@ def livestream(request):
     stream_key = request.GET.get("streamKey")
     title = request.GET.get("title", "Livestream của bạn")
 
-    stream_url = f"http://{get_server_public_ip()}:8080/live/{stream_key}.m3u8" if stream_key else ""
+    # Kiểm tra stream_key hợp lệ
+    if stream_key and re.match(r'^[a-zA-Z0-9_-]+$', stream_key):
+        # Sử dụng IP tĩnh hoặc hàm lấy IP động
+        server_ip = "47.130.87.247"  # Hoặc gọi get_server_public_ip() nếu đã định nghĩa
+        stream_url = f"http://{server_ip}:8080/live/{stream_key}/index.m3u8"
+    else:
+        stream_url = ""
+        title = "Lỗi: Stream key không hợp lệ hoặc thiếu"
 
     context = {
         "stream_key": stream_key,
