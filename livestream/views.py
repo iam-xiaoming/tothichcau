@@ -44,6 +44,8 @@ def check_stream(request):
         res = requests.get("http://localhost:8080/stat")
         text = res.text
 
+        print("DEBUG TEXT:", text[:500])
+        
         if stream_key in text:
             return JsonResponse({"status": "connected"})
         else:
