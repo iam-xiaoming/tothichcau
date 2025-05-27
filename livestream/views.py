@@ -41,7 +41,7 @@ def stream_setup(request):
 def check_stream(request):
     stream_key = request.GET.get("streamKey")
     try:
-        res = requests.get("http://localhost:8080/stat")
+        res = requests.get(f"http://{get_server_public_ip()}:8080/stat")
         text = res.text
 
         print("DEBUG TEXT:", text[:500])
