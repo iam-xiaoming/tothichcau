@@ -61,4 +61,18 @@ docker run -d \
   ${IMAGE_NAME}:${IMAGE_TAG} \
   celery -A GameArt beat -l info
 
+
+# Build RTMP server
+echo "===> Building RTMP server image..."
+docker build -f Dockerfile.rtmp -t rtmp-server .
+
+echo "===> Starting RTMP server container..."
+docker run -d \
+  --name rtmp-server \
+  --network "$NETWORK_NAME" \
+  -p 1935:1935 \
+  -p 8080:80 \
+  -v /opt/data/hls:/opt/data/hls \
+  rtmp-server
+
 echo "===> Deploy complete. All services are running."
