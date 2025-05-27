@@ -22,7 +22,7 @@ echo "===> Building Docker image ${IMAGE_NAME}:${IMAGE_TAG}..."
 docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .
 
 echo "===> Removing old containers if exist..."
-docker rm -f $APP_CONTAINER_NAME $CELERY_WORKER_NAME $CELERY_BEAT_NAME $REDIS_CONTAINER_NAME $RTMP_CONTAINER_NAME 2>/dev/null || true
+docker rm -f $APP_CONTAINER_NAME $CELERY_WORKER_NAME $CELERY_BEAT_NAME $REDIS_CONTAINER_NAME 2>/dev/null || true
 
 echo "===> Starting Redis container..."
 docker run -d --name $REDIS_CONTAINER_NAME --network "$NETWORK_NAME" redis:7-alpine
