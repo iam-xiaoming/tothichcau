@@ -50,7 +50,7 @@ urlpatterns = [
     path('', include(wishlist.urls)),
     path('', include(notification.urls)),
     path('', include(list.urls)),
-    path('livestream/', include('livestream.urls')),
+    path('', include('livestream.urls')),
 ]
 
 

@@ -1,33 +1,100 @@
-<!DOCTYPE html>
-<html>
-<head>
+{% extends "livestream/stream_base.html" %}
+{% load static %}
+
+{% block title %}
     <title>Create Live Stream</title>
-    <style>
-        .error { color: red; }
-        form { margin: 20px; }
-        input, button { padding: 10px; margin: 5px; }
-    </style>
-</head>
-<body>
-    <h1>Create a New Live Stream</h1>
-    {% if error %}
-        <p class="error">{{ error }}</p>
-    {% endif %}
-    <form method="post" onsubmit="return validateForm()">
-        {% csrf_token %}
-        <label for="stream_name">Stream Name:</label>
-        <input type="text" id="stream_name" name="stream_name" placeholder="Enter stream name" required>
-        <button type="submit">Create Stream</button>
-    </form>
+{% endblock %}
+
+{% block content %}
+    <!-- Background Elements -->
+    <div class="bg-element bg-element-1"></div>
+    <div class="bg-element bg-element-2"></div>
+    <div class="bg-element bg-element-3"></div>
+    
+    <div class="container">
+        <div class="header">
+            <div class="gaming-icon">
+                <span class="icon-inner">🎮</span>
+                <span class="live-indicator"></span>
+            </div>
+            <h1 class="title">Create Live Stream</h1>
+            <p class="subtitle">Set up your gaming stream and dominate</p>
+        </div>
+
+        {% if error %}
+            <div class="error-alert">
+                <svg class="error-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 8V12M12 16H12.01M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>{{ error }}</span>
+            </div>
+        {% endif %}
+
+        <form method="post" onsubmit="return validateForm()" id="streamForm">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="stream_name">Stream Name</label>
+                <div class="input-wrapper">
+                    <input type="text" 
+                           id="stream_name" 
+                           name="stream_name" 
+                           placeholder="Enter your epic stream name..." 
+                           required 
+                           maxlength="100"
+                           oninput="updateCharCounter()">
+                    <div class="char-counter" id="charCounter">0/100</div>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn" id="submitBtn">
+                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span id="submitText">Create Stream</span>
+            </button>
+        </form>
+    </div>
+
     <script>
+        function updateCharCounter() {
+            const input = document.getElementById('stream_name');
+            const counter = document.getElementById('charCounter');
+            const length = input.value.length;
+            counter.textContent = `${length}/100`;
+            
+            if (length > 80) {
+                counter.classList.add('warning');
+            } else {
+                counter.classList.remove('warning');
+            }
+        }
+
         function validateForm() {
             const streamName = document.getElementById('stream_name').value;
+            const submitBtn = document.getElementById('submitBtn');
+            const submitText = document.getElementById('submitText');
+            
             if (streamName.length > 100) {
                 alert('Stream name must be less than 100 characters.');
                 return false;
             }
+            
+            if (streamName.length < 3) {
+                alert('Stream name must be at least 3 characters.');
+                return false;
+            }
+            
+            // Show loading state
+            submitBtn.disabled = true;
+            submitBtn.classList.add('loading');
+            submitText.innerHTML = 'Creating Stream...';
+            
             return true;
         }
+
+        // Initialize character counter
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCharCounter();
+        });
     </script>
-</body>
-</html>
+{% endblock %}
