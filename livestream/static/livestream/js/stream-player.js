@@ -34,6 +34,77 @@ class StreamPlayer {
         this.initializeStream();
         this.startStreamMonitoring();
         this.setupEventListeners();
+        this.setupUIEventListeners();
+    }
+
+    setupUIEventListeners() {
+        // Fullscreen button
+        const fullscreenBtn = document.getElementById('fullscreenBtn');
+        if (fullscreenBtn) {
+            fullscreenBtn.addEventListener('click', () => this.toggleFullscreen());
+        }
+
+        // Info button
+        const infoBtn = document.getElementById('infoBtn');
+        if (infoBtn) {
+            infoBtn.addEventListener('click', () => this.toggleStreamInfo());
+        }
+
+        // Close details button
+        const closeDetailsBtn = document.getElementById('closeDetailsBtn');
+        if (closeDetailsBtn) {
+            closeDetailsBtn.addEventListener('click', () => this.toggleStreamInfo());
+        }
+
+        // Retry button
+        const retryBtn = document.getElementById('retryBtn');
+        if (retryBtn) {
+            retryBtn.addEventListener('click', () => this.retryConnection());
+        }
+
+        // Copy buttons
+        const copyButtons = document.querySelectorAll('.copy-btn');
+        copyButtons.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const elementId = e.target.getAttribute('data-copy');
+                if (elementId) {
+                    Utils.copyToClipboard(elementId);
+                }
+            });
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            // Space bar to play/pause
+            if (e.code === 'Space' && e.target.tagName !== 'INPUT') {
+                e.preventDefault();
+                if (this.video.paused) {
+                    this.video.play();
+                } else {
+                    this.video.pause();
+                }
+            }
+            
+            // F key for fullscreen
+            if (e.code === 'KeyF' && e.target.tagName !== 'INPUT') {
+                e.preventDefault();
+                this.toggleFullscreen();
+            }
+            
+            // I key for info panel
+            if (e.code === 'KeyI' && e.target.tagName !== 'INPUT') {
+                e.preventDefault();
+                this.toggleStreamInfo();
+            }
+            
+            // Escape to close info panel
+            if (e.code === 'Escape') {
+                const details = document.getElementById('streamDetails');
+                if (details.style.display !== 'none') {
+                    this.toggleStreamInfo();
+                }
+            }
+        });
     }
 
     initializeStream() {
@@ -44,7 +115,7 @@ class StreamPlayer {
 
         console.log('Loading stream:', this.playbackUrl);
 
-        if (Hls.isSupported()) {
+        if (typeof Hls !== 'undefined' && Hls.isSupported()) {
             this.setupHLS();
         } else if (this.video.canPlayType('application/vnd.apple.mpegurl')) {
             this.setupNativeHLS();
@@ -311,7 +382,14 @@ class StreamPlayer {
     toggleStreamInfo() {
         const details = document.getElementById('streamDetails');
         const isVisible = details.style.display !== 'none';
-        details.style.display = isVisible ? 'none' : 'block';
+        
+        if (isVisible) {
+            details.style.display = 'none';
+            Utils.showToast('Stream info hidden', 'info');
+        } else {
+            details.style.display = 'block';
+            Utils.showToast('Stream info shown', 'info');
+        }
     }
 
     toggleFullscreen() {
@@ -362,6 +440,26 @@ class ChatManager {
     init() {
         console.log('Initializing Chat Manager...');
         this.initializeChat();
+        this.setupChatEventListeners();
+    }
+
+    setupChatEventListeners() {
+        // Send button
+        const sendBtn = document.getElementById('sendBtn');
+        if (sendBtn) {
+            sendBtn.addEventListener('click', () => this.sendMessage());
+        }
+
+        // Toggle chat button
+        const toggleChatBtn = document.getElementById('toggleChatBtn');
+        if (toggleChatBtn) {
+            toggleChatBtn.addEventListener('click', () => this.toggleChat());
+        }
+
+        // Message input enter key
+        if (this.messageInput) {
+            this.messageInput.addEventListener('keypress', (e) => this.handleKeyPress(e));
+        }
     }
 
     initializeChat() {
@@ -505,6 +603,8 @@ class ChatManager {
         const chatContainer = document.getElementById('chatContainer');
         const isVisible = chatContainer.style.display !== 'none';
         chatContainer.style.display = isVisible ? 'none' : 'flex';
+        
+        Utils.showToast(isVisible ? 'Chat hidden' : 'Chat shown', 'info');
     }
 
     cleanup() {
@@ -521,6 +621,11 @@ class ChatManager {
 class Utils {
     static async copyToClipboard(elementId) {
         const element = document.getElementById(elementId);
+        if (!element) {
+            this.showToast('Element not found', 'error');
+            return;
+        }
+        
         const text = element.textContent;
         
         try {
@@ -548,6 +653,8 @@ class Utils {
 
     static showToast(message, type = 'info') {
         const container = document.getElementById('toastContainer');
+        if (!container) return;
+        
         const toast = document.createElement('div');
         toast.className = `toast toast-${type}`;
         toast.textContent = message;
@@ -623,9 +730,7 @@ window.addEventListener('beforeunload', function() {
     }
 });
 
-// Export for global access
+// Export for global access (for debugging)
 window.StreamPlayer = streamPlayer;
 window.ChatManager = chatManager;
 window.Utils = Utils;
-
-// Declare Hls globally

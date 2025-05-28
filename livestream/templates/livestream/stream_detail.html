@@ -24,12 +24,12 @@
                 </div>
             </div>
             <div class="stream-actions">
-                <button class="action-btn" onclick="StreamPlayer.toggleFullscreen()">
+                <button class="action-btn" id="fullscreenBtn">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M8 3H5C3.89543 3 3 3.89543 3 5V8M21 8V5C21 3.89543 20.1046 3 19 3H16M16 21H19C20.1046 21 21 20.1046 21 19V16M8 21H5C3.89543 21 3 20.1046 3 19V16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                 </button>
-                <button class="action-btn" onclick="StreamPlayer.toggleStreamInfo()">
+                <button class="action-btn" id="infoBtn">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M13 16H12V12H11M12 8H12.01M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
@@ -59,7 +59,7 @@
                             </svg>
                             <h3>Stream Offline</h3>
                             <p>The streamer is not currently live</p>
-                            <button class="retry-btn" onclick="StreamPlayer.retryConnection()">Retry Connection</button>
+                            <button class="retry-btn" id="retryBtn">Retry Connection</button>
                         </div>
                     </div>
                 </div>
@@ -68,7 +68,7 @@
                 <div class="stream-details" id="streamDetails" style="display: none;">
                     <div class="details-header">
                         <h3>Stream Information</h3>
-                        <button class="close-btn" onclick="StreamPlayer.toggleStreamInfo()">×</button>
+                        <button class="close-btn" id="closeDetailsBtn">×</button>
                     </div>
                     <div class="details-content">
                         <div class="detail-group">
@@ -77,38 +77,21 @@
                                 <span class="detail-label">Stream Key:</span>
                                 <div class="detail-value">
                                     <code id="streamKey">{{ stream.stream_key }}</code>
-                                    <button class="copy-btn" onclick="Utils.copyToClipboard('streamKey')">Copy</button>
+                                    <button class="copy-btn" data-copy="streamKey">Copy</button>
                                 </div>
                             </div>
                             <div class="detail-item">
                                 <span class="detail-label">RTMP URL:</span>
                                 <div class="detail-value">
                                     <code id="rtmpUrl">{{ stream.rtmp_url }}</code>
-                                    <button class="copy-btn" onclick="Utils.copyToClipboard('rtmpUrl')">Copy</button>
+                                    <button class="copy-btn" data-copy="rtmpUrl">Copy</button>
                                 </div>
                             </div>
                             <div class="detail-item">
                                 <span class="detail-label">Playback URL:</span>
                                 <div class="detail-value">
                                     <code id="playbackUrl">{{ stream.playback_url }}</code>
-                                    <button class="copy-btn" onclick="Utils.copyToClipboard('playbackUrl')">Copy</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="detail-group">
-                            <h4>Steam Integration</h4>
-                            <div class="detail-item">
-                                <span class="detail-label">Steam Key:</span>
-                                <div class="detail-value">
-                                    <code id="steamKey">ABCD-EFGH-IJKL-MNOP</code>
-                                    <button class="copy-btn" onclick="Utils.copyToClipboard('steamKey')">Copy</button>
-                                </div>
-                            </div>
-                            <div class="detail-item">
-                                <span class="detail-label">Steam URL:</span>
-                                <div class="detail-value">
-                                    <code id="steamUrl">steam://connect/192.168.1.100:27015</code>
-                                    <button class="copy-btn" onclick="Utils.copyToClipboard('steamUrl')">Copy</button>
+                                    <button class="copy-btn" data-copy="playbackUrl">Copy</button>
                                 </div>
                             </div>
                         </div>
@@ -121,7 +104,7 @@
                 <div class="chat-header">
                     <h3>Live Chat</h3>
                     <div class="chat-controls">
-                        <button class="chat-btn" onclick="ChatManager.toggleChat()">
+                        <button class="chat-btn" id="toggleChatBtn">
                             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M8 12H16M8 16H16M8 8H16M3 5C3 3.89543 3.89543 3 5 3H19C20.1046 3 21 3.89543 21 5V15C21 16.1046 20.1046 17 19 17H7L3 21V5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
@@ -136,9 +119,8 @@
                         <input type="text" 
                                id="messageInput" 
                                placeholder="Type a message..." 
-                               maxlength="200"
-                               onkeypress="ChatManager.handleKeyPress(event)">
-                        <button class="send-btn" onclick="ChatManager.sendMessage()">
+                               maxlength="200">
+                        <button class="send-btn" id="sendBtn">
                             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
@@ -155,7 +137,7 @@
     <!-- Stream Configuration -->
     <script>
         window.STREAM_CONFIG = {
-            streamId: "{{ stream.id }}",
+            streamId: "{{ stream.stream_id }}",
             playbackUrl: "{{ stream.playback_url|escapejs }}",
             streamName: "{{ stream.stream_name|escapejs }}"
         };
