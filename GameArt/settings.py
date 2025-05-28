@@ -46,7 +46,7 @@ MAILJET_API_KEY=config('MAILJET_API_KEY')
 MAILJET_API_SECRET=config('MAILJET_API_SECRET')
 SENDER = config('SENDER')
 
-if True:
+if not DEBUG:
     STORAGES = {
         # Media file (image) management 
         'default': {
@@ -117,8 +117,21 @@ INSTALLED_APPS = [
     'wishlist.apps.WishlistConfig',
     'notification.apps.NotificationConfig',
     'list.apps.ListConfig',
-    'livestream.apps.LivestreamConfig'
+    'livestream.apps.LivestreamConfig',
+    
+    'channels'
 ]
+
+ASGI_APPLICATION = 'GameArt.asgi.application'
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("localhost", 6379)],
+        },
+    },
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
