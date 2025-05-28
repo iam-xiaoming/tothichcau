@@ -2,6 +2,9 @@ amqp==5.3.1
 appnope==0.1.4
 asgiref==3.8.1
 asttokens==3.0.0
+attrs==25.3.0
+autobahn==24.4.2
+Automat==25.4.16
 billiard==4.2.1
 boto3==1.38.1
 botocore==1.38.1
@@ -10,6 +13,8 @@ cachetools==5.5.2
 celery==5.5.2
 certifi==2025.1.31
 cffi==1.17.1
+channels==4.2.2
+channels_redis==4.2.1
 charset-normalizer==3.4.1
 click==8.2.0
 click-didyoumean==0.3.1
@@ -17,8 +22,10 @@ click-plugins==1.1.1
 click-repl==0.3.0
 colorama==0.4.6
 comm==0.2.2
+constantly==23.10.4
 cron-descriptor==1.4.5
 cryptography==44.0.2
+daphne==4.2.0
 debugpy==1.8.14
 decorator==5.2.1
 Django==5.2.1
@@ -48,7 +55,9 @@ grpcio==1.71.0
 grpcio-status==1.71.0
 gunicorn==23.0.0
 httplib2==0.22.0
+hyperlink==21.0.0
 idna==3.10
+incremental==24.7.2
 ipykernel==6.29.5
 ipython==9.2.0
 ipython_pygments_lexers==1.1.1
@@ -83,6 +92,7 @@ pycparser==2.22
 pycryptodome==3.22.0
 Pygments==2.19.1
 PyJWT==2.10.1
+pyOpenSSL==25.1.0
 pyparsing==3.2.3
 Pyrebase4==4.8.0
 python-crontab==3.2.0
@@ -95,6 +105,7 @@ requests==2.32.3
 requests-toolbelt==0.10.1
 rsa==4.9.1
 s3transfer==0.12.0
+service-identity==24.2.0
 setuptools==80.8.0
 six==1.17.0
 sqlparse==0.5.3
@@ -102,9 +113,12 @@ stack-data==0.6.3
 stripe==12.0.1
 tornado==6.4.2
 traitlets==5.14.3
+Twisted==24.11.0
+txaio==23.1.1
 typing_extensions==4.13.2
 tzdata==2025.2
 uritemplate==4.1.1
 urllib3==1.26.20
 vine==5.1.0
 wcwidth==0.2.13
+zope.interface==7.2
