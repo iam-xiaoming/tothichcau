@@ -49,7 +49,7 @@ def reserve_key(item_model, item_id, order_id, out_of_stock):
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def check_stock(request):
+def check_stock(request): # check còn game hay không
     try:
         items = request.data.get('items', [])
         out_of_stock = []
@@ -113,7 +113,7 @@ def add_game_to_cart(request, pk, game_pk):
     
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def add_dlc_to_cart(request, pk, game_pk):
+def add_dlc_to_cart(request, pk, game_pk): # 
     try:
         user = MyUser.objects.get(pk=pk)
         dlc = DLC.objects.get(id=game_pk)
@@ -144,7 +144,7 @@ def add_dlc_to_cart(request, pk, game_pk):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def get_cart_count(request, pk):
+def get_cart_count(request, pk): ## Hiện số game trong cart
     try:
         order_count = Order.objects.filter(user__pk=pk).count()
     except MyUser.DoesNotExist:
@@ -160,11 +160,11 @@ class CartView(LoginRequiredMixin, ListView):
     context_object_name = 'orders'
 
     def get_queryset(self):        
-        # Return only the orders of the logged-in user
+        # Chỉ trả về các đơn đặt hàng của người dùng đã đăng nhập
         return self.request.user.orders.all()
     
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, **kwargs): # lấy context để dán vào data
         context = super().get_context_data(**kwargs)
         orders = context['orders']
         
