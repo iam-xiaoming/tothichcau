@@ -23,12 +23,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-_gt&%gr$&mp@624puk$(v-8t3#efk6rbkc9mxt05_1a2ij)q4u'
 
+LIVEPEER_API_KEY = config('LIVEPEER_API_KEY')
+
 STRIPE_SECRET_KEY = config('STRIPE_SECRET_KEY')
 STRIPE_PUBLISHABLE_KEY = config('STRIPE_PUBLISHABLE_KEY')
 STRIPE_WEBHOOK_SECRET = config('STRIPE_WEBHOOK_SECRET')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 # Basic Storage configuration for Amazon S3 (Irrespective of Django versions)
 AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
@@ -115,6 +117,7 @@ INSTALLED_APPS = [
     'wishlist.apps.WishlistConfig',
     'notification.apps.NotificationConfig',
     'list.apps.ListConfig',
+    'livestream.apps.LivestreamConfig'
 ]
 
 MIDDLEWARE = [

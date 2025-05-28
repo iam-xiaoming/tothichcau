@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Live Stream</title>
+    <style>
+        .error { color: red; }
+        form { margin: 20px; }
+        input, button { padding: 10px; margin: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Create a New Live Stream</h1>
+    {% if error %}
+        <p class="error">{{ error }}</p>
+    {% endif %}
+    <form method="post" onsubmit="return validateForm()">
+        {% csrf_token %}
+        <label for="stream_name">Stream Name:</label>
+        <input type="text" id="stream_name" name="stream_name" placeholder="Enter stream name" required>
+        <button type="submit">Create Stream</button>
+    </form>
+    <script>
+        function validateForm() {
+            const streamName = document.getElementById('stream_name').value;
+            if (streamName.length > 100) {
+                alert('Stream name must be less than 100 characters.');
+                return false;
+            }
+            return true;
+        }
+    </script>
+</body>
+</html>

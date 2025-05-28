@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Live Stream Player</title>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+</head>
+<body>
+  <video id="video" controls autoplay style="width: 100%; max-width: 800px;"></video>
+
+  <script>
+    var video = document.getElementById('video');
+    var videoSrc = "{{ stream.playback_url|escapejs }}"; // <-- dùng biến từ Django template
+
+    if (Hls.isSupported()) {
+      var hls = new Hls();
+      hls.loadSource(videoSrc);
+      hls.attachMedia(video);
+    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+      video.src = videoSrc;
+    }
+  </script>
+</body>
+</html>
