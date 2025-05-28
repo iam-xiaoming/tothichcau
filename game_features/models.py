@@ -44,7 +44,7 @@ class GameImageReview(models.Model):
     
     def __str__(self):
         if self.game:
-            return f'Video Reviews of {self.game.name}'
+            return f'Image Reviews of {self.game.name}'
         return f'Image Reviews of DLC: {self.dlc.name} for {self.dlc.game.name}'
     
     def clean(self):
