@@ -9,8 +9,6 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_GET
 
 # Create your views here.
-genres = Category.objects.all()[:4]
-
 class GameListView(ListView):
     model = Game
     template_name = 'list/games-list.html'
@@ -19,7 +17,7 @@ class GameListView(ListView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['genres'] = genres
+        context['genres'] = Category.objects.all()[:4]
         context['games'] = list(context['games']) + list(DLC.objects.all())
         return context
         
@@ -48,7 +46,7 @@ def action_view(request, action):
         return HttpResponse('<h1>404</h1>')
     
     context = {
-        'genres': genres, 
+        'genres': Category.objects.all()[:4], 
     }
     
     if action == 'trending':
