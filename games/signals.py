@@ -2,6 +2,7 @@ from django.db.models.signals import post_delete, post_save, pre_save
 from django.dispatch import receiver
 from .models import Game, Rating, DLC
 from .utils import stripe_create, instance_scoring
+from cart.mailjet import send_mailjet_email_new_game_announcement
 
 # Game
 @receiver(post_delete, sender=Game)
@@ -20,7 +21,9 @@ def pre_save_game(sender, instance, **kwargs):
                 
 @receiver(post_save, sender=Game)
 def post_save_game(sender, instance, created, **kwargs):
-    stripe_create(created=created, instance=instance)
+    if created:
+        stripe_create(created=created, instance=instance)
+        send_mailjet_email_new_game_announcement(instance.name, instance.description, instance.release_date, '#')
     
 
 # DLC 
@@ -41,7 +44,9 @@ def pre_save_dlc(sender, instance, **kwargs):
                 
 @receiver(post_save, sender=DLC)
 def post_save_dlc(sender, instance, created, **kwargs):
-    stripe_create(created=created, instance=instance)
+    if created:
+        stripe_create(created=created, instance=instance)
+        send_mailjet_email_new_game_announcement(instance.name, instance.description, instance.release_date, '#')
 
 
 # rating

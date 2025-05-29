@@ -370,6 +370,8 @@ def process_order(order, user, total_amount, session_id, customer_email, card_in
 
 @csrf_exempt
 def webhook_view(request):
+    print('Webhook is now listening...')
+    
     logger = logging.getLogger(__name__)
     payload = request.body
     sig_header = request.META.get("HTTP_STRIPE_SIGNATURE")

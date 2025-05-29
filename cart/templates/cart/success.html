@@ -23,3 +23,10 @@
     <a href="{% url 'home' %}">Back to home</a>
   </div>
 {% endblock %}
+
+{% block extra_js %}
+  <script>
+    updateCartCount();
+    setInterval(updateCartCount, 5000);
+  </script>
+{% endblock %}
