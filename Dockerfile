@@ -25,5 +25,5 @@ COPY . /app/
 EXPOSE 8000
 
 # Chạy gunicorn server
-# CMD ["gunicorn", "GameArt.wsgi:application", "--bind", "0.0.0.0:8000", "--timeout", "120"]
-CMD ["daphne", "-b", "0.0.0.0", "-p", "8000", "GameArt.asgi:application"]
+CMD ["gunicorn", "GameArt.wsgi:application", "--bind", "0.0.0.0:8000", "--timeout", "120"]
+# CMD ["daphne", "-b", "0.0.0.0", "-p", "8000", "GameArt.asgi:application"]
