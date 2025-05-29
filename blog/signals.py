@@ -13,7 +13,8 @@ def save_post_like(sender, instance, created, **kwargs):
         
 @receiver(pre_delete, sender=PostLike)
 def save_post_like(sender, instance, **kwargs):
-    instance.post.count_like -= 1
+    count_like = instance.post.count_like
+    instance.post.count_like = max(0, count_like - 1)
     instance.post.save()
     
 
@@ -35,7 +36,8 @@ def save_post_like(sender, instance, created, **kwargs):
         
 @receiver(pre_delete, sender=PostCommentLike)
 def save_post_like(sender, instance, **kwargs):
-    instance.comment.count_like -= 1
+    count_like = instance.comment.count_like
+    instance.comment.count_like = max(0, count_like - 1)
     instance.comment.save()
     
 
