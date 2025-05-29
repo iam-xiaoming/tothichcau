@@ -24,15 +24,27 @@
                 <!-- Game Details -->
                 <div class="col-lg-6">
                     <div class="game-details">
-                        <img src="{{ transaction.game.image.url }}" alt="{{ transaction.game.name }}" class="img-fluid">
-                        <h3>{{ transaction.game.name }}</h3>
-                        <p>{{ transaction.game.description }}</p>
-                        <ul>
-                            <li><strong>Publisher:</strong> {{ transaction.game.publisher }}</li>
-                            <li><strong>Release Date:</strong> {{ transaction.game.release_date|date:"F d, Y" }}</li>
-                            <li><strong>Rating:</strong> {{ transaction.game.rating|title }}</li>
-                            <li><strong>Average Score:</strong> {{ transaction.game.average_score }}</li>
-                        </ul>
+                        {% if transaction.game %}
+                            <img src="{{ transaction.game.image.url }}" alt="{{ transaction.game.name }}" class="img-fluid">
+                            <h3 style="color: #000;">{{ transaction.game.name }}</h3>
+                            <p>{{ transaction.game.description }}</p>
+                            <ul>
+                                <li><strong>Publisher:</strong> {{ transaction.game.publisher }}</li>
+                                <li><strong>Release Date:</strong> {{ transaction.game.release_date|date:"F d, Y" }}</li>
+                                <li><strong>Rating:</strong> {{ transaction.game.rating|title }}</li>
+                                <li><strong>Average Score:</strong> {{ transaction.game.average_score }}</li>
+                            </ul>
+                        {% else %}
+                            <img src="{{ transaction.dlc.image.url }}" alt="{{ transaction.dlc.name }}" class="img-fluid">
+                            <h3 style="color: #000;">{{ transaction.dlc.name }}</h3>
+                            <p>{{ transaction.dlc.description }}</p>
+                            <ul>
+                                <li><strong>Publisher:</strong> {{ transaction.dlc.publisher }}</li>
+                                <li><strong>Release Date:</strong> {{ transaction.dlc.release_date|date:"F d, Y" }}</li>
+                                <li><strong>Rating:</strong> {{ transaction.dlc.rating|title }}</li>
+                                <li><strong>Average Score:</strong> {{ transaction.dlc.average_score }}</li>
+                            </ul>
+                        {% endif %}
                     </div>
                 </div>
 

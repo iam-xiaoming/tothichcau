@@ -11,6 +11,11 @@ from users.models import UserGame
 from users.documents import UserGameDocument
 from users.serializers import UserGameSerializer
 from users.documents import UserGameDocument
+from transactions.documents import TransactionDocument
+from transactions.serializers import TransactionHistorySerializer
+from cart.models import Transaction
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import TokenAuthentication 
 
 # Create your views here.
 class GameSearchAPIView(APIView):
@@ -124,6 +129,53 @@ class UserGameSearchAPIView(APIView):
             user_games = UserGame.objects.filter(user=request.user, id__in=game_ids)
             
             serializer = self.serializer_class(user_games, many=True)
+            
+            return DRFResponse(serializer.data, status=status.HTTP_200_OK)
+        
+        except Exception as e:
+            return DRFResponse(f"Error: {str(e)}", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+        
+class TransactionHistorySearchAPIView(APIView):
+    # authentication_classes = [TokenAuthentication]
+    # permission_classes = [IsAuthenticated]
+    
+    serializer_class = TransactionHistorySerializer
+    document_class = TransactionDocument
+    query_serializer_class = SearchQuerySerializer
+
+    def elasticsearch_query_expression(self, query):
+        return Q(
+            "bool",
+            should=[
+                Q('match', game_name={'query': query, 'fuzziness': 'AUTO'})
+            ]
+        )
+
+    def get(self, request):
+        if not request.user.is_authenticated:
+            return DRFResponse({"error": "Authentication required"}, status=status.HTTP_401_UNAUTHORIZED)
+
+        # Validate query
+        search_query = self.query_serializer_class(data=request.GET.dict())
+        if not search_query.is_valid():
+            return DRFResponse(f"Validation error: {search_query.errors}", status=status.HTTP_400_BAD_REQUEST)
+
+        query_data = search_query.data
+        
+        # Search
+        try:
+            q = self.elasticsearch_query_expression(query_data["query"])
+            search = self.document_class.search().query(q)
+            search = search[query_data["offset"]: query_data["offset"] + query_data["limit"]]
+            response = search.execute()
+            
+            transaction_ids = [hit.meta.id for hit in response.hits]
+            
+            
+            transactions = Transaction.objects.filter(user=request.user, id__in=transaction_ids)
+            
+            serializer = self.serializer_class(transactions, many=True)
             
             return DRFResponse(serializer.data, status=status.HTTP_200_OK)
         

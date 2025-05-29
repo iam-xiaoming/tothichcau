@@ -1,0 +1,197 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transactions History</title>
+    <link rel="stylesheet" href="{% static 'transactions/css/transactions-history.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <div class="header-left">
+                    <h1 class="title">
+                        <i class="fas fa-gamepad"></i>
+                        Transactions History
+                    </h1>
+                    <p class="subtitle">Manage and optimize your transactions</p>
+                </div>
+                <div class="header-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-receipt"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-number">{{ number_of_transactions }}</span>
+                            <span class="stat-label">Quantity</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-wallet"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-number">{{ total_amount }}$</span>
+                            <span class="stat-label">Total amount</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="controls">
+            <div class="search-section">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Searching for transactions..." id="searchInput">
+                </div>
+            </div>
+            
+            <div class="filters">
+                <select class="filter-select" id="statusFilter">
+                    <option value="">All status</option>
+                    <option value="success">Success</option>
+                    <option value="failed">Failed</option>
+                </select>
+                
+                <button id="refreshButton" class="refresh-btn">
+                    <i class="fas fa-sync-alt"></i>
+                    Refresh
+                </button>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table class="transaction-table">
+                <thead>
+                    <tr>
+                        <th>
+                            <i class="fas fa-hashtag"></i>
+                            Transaction ID
+                        </th>
+                        <th>
+                            <i class="fas fa-clock"></i>
+                            Timestamp
+                        </th>
+                        <th>
+                            <i class="fas fa-gamepad"></i>
+                            Game name
+                        </th>
+                        <th>
+                            <i class="fas fa-money-bill-wave"></i>
+                            Amount
+                        </th>
+                        <th>
+                            <i class="fas fa-info-circle"></i>
+                            Status
+                        </th>
+                        <th>
+                            <i class="fas fa-external-link-alt"></i>
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="transactionTableBody">
+                    <!-- transactions are listed here -->
+                    {% for transaction in transactions %}
+                        <tr class="transaction-row" onclick="viewTransactionDetail('{{ transaction.id }}')" data-status="{{ transaction.status }}" {% if transaction.game %}data-game="{{ transaction.game.name }}"{% else %}data-game="{{ transaction.dlc.name }}"{% endif %}>
+                            <td class="transaction-id">
+                                <code>{{ transaction.id }}</code>
+                            </td>
+                            <td class="time-cell">
+                                <div class="time-info">
+                                    <span class="datetime">{{ transaction.created_at }}</span>
+                                </div>
+                            </td>
+                            <td class="game-cell">
+                                <div class="game-info">
+                                    {% if transaction.game %}
+                                        <span class="game-name">{{ transaction.game.name }}</span>
+                                    {% else %}
+                                        <span class="game-name">{{ transaction.dlc.name }}</span>
+                                    {% endif %}
+                                </div>
+                            </td>
+                            <td class="price-cell">
+                                <span class="price">{{ transaction.total_amount }}$</span>
+                            </td>
+                            <td class="status-cell">
+                                <span class="status success">
+                                    <i class="fas fa-check-circle"></i>
+                                    {{ transaction.status }}
+                                </span>
+                            </td>
+                            <td class="action-cell">
+                                <button class="detail-btn" onclick="event.stopPropagation(); viewTransactionDetail('{{ transaction.id }}')">
+                                    <i class="fas fa-eye"></i>
+                                    Detail
+                                </button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <!-- pagination -->
+        <div class="pagination">
+            {% if page_obj.has_previous %}
+                <button class="page-btn" onclick="window.location='?page={{ page_obj.previous_page_number }}'" id="prevBtn">
+                    <i class="fas fa-chevron-left"></i> Previous
+                </button>
+            {% endif %}
+
+            <div class="page-numbers" id="pageNumbers">
+                {% if page_obj.number > 3 %}
+                    <button class="page-btn" onclick="window.location='?page=1'">1</button>
+                    <span class="page-dots">...</span>
+                {% endif %}
+
+                {% for num in page_obj.paginator.page_range %}
+                    {% if num >= page_obj.number|add:"-2" and num <= page_obj.number|add:"2" %}
+                        {% if num == page_obj.number %}
+                            <button class="page-btn active" onclick="window.location='?page={{ num }}'">{{ num }}</button>
+                        {% else %}
+                            <button class="page-btn" onclick="window.location='?page={{ num }}'">{{ num }}</button>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+
+                {% if page_obj.number < page_obj.paginator.num_pages|add:"-2" %}
+                    <span class="page-dots">...</span>
+                    <button class="page-btn" onclick="window.location='?page={{ page_obj.paginator.num_pages }}'">
+                        {{ page_obj.paginator.num_pages }}
+                    </button>
+                {% endif %}
+            </div>
+
+            {% if page_obj.has_next %}
+                <button class="page-btn" onclick="window.location='?page={{ page_obj.next_page_number }}'" id="nextBtn">
+                    Next <i class="fas fa-chevron-right"></i>
+                </button>
+            {% endif %}
+        </div>
+    </div>
+    <script>
+        function viewTransactionDetail(transactionId) {
+            window.location.href = `/transaction-detail/${transactionId}/`;
+        }
+    </script>
+    <script src="{% static 'transactions/js/transactions-history.js' %}"></script>
+    <script type="text/javascript">
+		window.$crisp = [];
+		window.CRISP_WEBSITE_ID = "11aa2c09-9aca-4c8e-8a0a-c7f00450fb76";
+		(function() {
+		  var d = document;
+		  var s = d.createElement("script");
+		  s.src = "https://client.crisp.chat/l.js";
+		  s.async = 1;
+		  d.getElementsByTagName("head")[0].appendChild(s);
+		})();
+	</script>
+</body>
+</html>

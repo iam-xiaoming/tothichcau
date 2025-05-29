@@ -111,6 +111,9 @@
 /* Tabs */
 .profile-tabs {
     margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .nav-tabs {
@@ -118,7 +121,7 @@
     list-style: none;
     padding: 0;
     margin: 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: none !important;
     overflow-x: auto;
     scrollbar-width: none; /* Firefox */
 }
@@ -758,4 +761,14 @@
 }
 .redeem-button:hover {
     background-color: #218838;
+}
+
+
+.transactions-history {
+    padding: 15px 25px;
+    color: #b7b7b7;
+    cursor: pointer;
+    white-space: nowrap;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
 }
