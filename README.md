@@ -84,6 +84,7 @@ docker-compose exec web python manage.py collectstatic --noinput
 python -m venv venv
 source venv/bin/activate    # trên Windows: venv\Scripts\activate
 pip install -r requirements.txt
+python manage.py makemigrations
 python manage.py migrate
 python manage.py runserver
 ```

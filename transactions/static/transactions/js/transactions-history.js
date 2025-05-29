@@ -27,8 +27,12 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     searchInput.addEventListener("input", async () => {
-        const keyword = searchInput.value.trim();
-        if (keyword.length < 2) return;
+        let keyword = searchInput.value.trim();
+        if (keyword.length > 0 && keyword.length < 2) return;
+
+        if (!keyword) {
+            keyword = "all";
+        }
 
         try {
             const response = await fetch(`/api/search/transactions-history/?query=${keyword}&limit=20&offset=0`);

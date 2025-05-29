@@ -163,6 +163,13 @@ class TransactionHistorySearchAPIView(APIView):
 
         query_data = search_query.data
         
+        if query_data['query'] == 'all':
+            transactions = Transaction.objects.filter(user=request.user)
+            
+            serializer = self.serializer_class(transactions, many=True)
+            
+            return DRFResponse(serializer.data, status=status.HTTP_200_OK)
+        
         # Search
         try:
             q = self.elasticsearch_query_expression(query_data["query"])
