@@ -7,4 +7,6 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
     path('profile/', views.ProfileView.as_view(), name='profile'),
     path('api/image-upload/', views.image_upload, name='api_image_upload'),
+    path('forgot_password/', views.forgot_password, name='forgot_password'),
+
 ]
