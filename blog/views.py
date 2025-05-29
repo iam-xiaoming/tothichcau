@@ -3,7 +3,7 @@ from django.views.generic import ListView, DetailView, CreateView
 from .models import Post, Tag, PostLike, PostComment, PostCommentLike
 from game_features.models import Category
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import PostForm
+from .forms import PostForm, EmailSubscriptionForm
 from django.contrib import messages
 import logging
 from django.urls import reverse
@@ -25,12 +25,31 @@ class PostListView(ListView):
     context_object_name = 'posts'
     ordering = ['-created_at']
     paginate_by = 10
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['categories'] = Category.objects.all()
         context['tags'] = Tag.objects.all().order_by('-frequency')[:10]
+
+        # them form (huyen)
+        context['subscription_form'] = EmailSubscriptionForm()
+
+
         return context
+
+    # huyen lao nhao
+    def post(self, request, *args, **kwargs): 
+        subscription_form = EmailSubscriptionForm(request.POST)
+
+        if subscription_form.is_valid():
+            subscription_form.save()
+            return redirect(request.path)  # avoid resubmission on reload
+        
+        self.object_list = self.get_queryset()
+        context = self.get_context_data()
+        context['subscription_form'] = subscription_form
+        return self.render_to_response(context)
+
 
 
 class UserPostListView(ListView):

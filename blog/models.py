@@ -70,3 +70,11 @@ class PostCommentLike(models.Model):
     
     def __str__(self):
         return f'{self.user} likes {self.comment}'
+
+# phan gui mail dang ky cua nho huyen lao nhao
+class EmailSubscription(models.Model):
+    email = models.EmailField(unique=True)
+    subscribed_at = models.DateTimeField(auto_now_add=True) # thoi gian ky ky
+    
+    def __str__(self):
+        return self.email
