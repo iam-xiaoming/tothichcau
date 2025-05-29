@@ -30,7 +30,7 @@ def category_view(request, slug):
 
     game_list = games + dlcs
     context = {
-        'genres': genres,
+        'genres': Category.objects.all()[:4],
         'games': games + dlcs 
     }
     paginator = Paginator(game_list, 21)
