@@ -2,122 +2,119 @@
 {% load static %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'cart/css/cart.css' %}" />
+<link rel="stylesheet" href="{% static 'cart/css/cart.css' %}" />
 {% endblock %}
 
 {% block content %}
-    {% if orders.count > 0 %}
-        <main class="cart-wrapper">
-          <h1 class="cart-title">My Cart</h1>
-          <div class="cart-content">
-            <!-- LEFT: Cart Item -->
-            <div class="cart-left">
-                {% for order in orders %}
-                    {% if order.game %}
-                        <div data-type="base" data-order-id="{{ order.pk }}" data-game-pk="{{ order.game.pk }}" class="cart-item">
-                            <img src="{{ order.game.image.url }}" class="item-image" alt="Game Image" />
-                            <div class="item-details">
-                                <div class="item-header">
-                                    <span class="badge">Base Game</span>
-                                    <!-- <span class="badge purple">DELUXE EDITION</span> -->
-                                </div>
-                                <h2 class="item-name">{{ order.game.name }}</h2>
-                                <div class="item-meta">
-                                    {% if order.game.discount > 0 %}
-                                        <span class="discount">-{{ order.game.discount }}%</span>
-                                        <span class="original-price">${{ order.game.price }}</span>
-                                    {% endif %}
-                                    <span class="final-price">${{ order.game.discounted_price|floatformat:2 }}</span>
-                                </div>
-                                <p class="desc line-clamp">{{ order.game.description }}</p>
-                                {% if order.game.discount > 0 %}
-                                    <p class="sale-end">Sale ends 4/24/2025 at 10:00 PM</p>
-                                {% endif %}
-                                <div class="item-actions">
-                                    <form action="{% url 'cart-delete' order.pk %}" method="POST">
-                                        <a style="display: inline-block; margin-right: 10px;" href="#">Move to wishlist</a>
-                                        {% csrf_token %}
-                                        <button type="submit">Remove</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    {% else %}
-                        <div data-type="dlc" data-order-id="{{ order.pk }}" data-game-pk="{{ order.dlc.pk }}" class="cart-item">
-                            <img src="{{ order.dlc.image.url }}" class="item-image" alt="Game Image" />
-                            <div class="item-details">
-                                <div class="item-header">
-                                    <span class="badge">Base Game</span>
-                                    <!-- <span class="badge purple">DELUXE EDITION</span> -->
-                                </div>
-                                <h2 class="item-name">{{ order.dlc.name }}</h2>
-                                <div class="item-meta">
-                                    {% if order.dlc.discount > 0 %}
-                                        <span class="discount">-{{ order.dlc.discount }}%</span>
-                                        <span class="original-price">${{ order.dlc.price }}</span>
-                                    {% endif %}
-                                    <span class="final-price">${{ order.dlc.discounted_price|floatformat:2 }}</span>
-                                </div>
-                                <p class="desc line-clamp">{{ order.dlc.description }}</p>
-                                {% if order.dlc.discount > 0 %}
-                                    <p class="sale-end">Sale ends 4/24/2025 at 10:00 PM</p>
-                                {% endif %}
-                                <div class="item-actions">
-                                    <form action="{% url 'cart-delete' order.pk %}" method="POST">
-                                        <a style="display: inline-block; margin-right: 10px;" href="#">Move to wishlist</a>
-                                        {% csrf_token %}
-                                        <button type="submit">Remove</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    {% endif %}
-                {% endfor %}
+{% if orders.count > 0 %}
+<main class="cart-wrapper">
+   <h1 class="cart-title">My Cart</h1>
+   <div class="cart-content">
+      <!-- LEFT: Cart Item -->
+      <div class="cart-left">
+         {% for order in orders %}
+         {% if order.game %}
+         <div data-type="base" data-order-id="{{ order.pk }}" data-game-pk="{{ order.game.pk }}" class="cart-item">
+            <img src="{{ order.game.image.url }}" class="item-image" alt="Game Image" />
+            <div class="item-details">
+               <div class="item-header">
+                  <span class="badge">Base Game</span>
+                  <!-- <span class="badge purple">DELUXE EDITION</span> -->
+               </div>
+               <h2 class="item-name">{{ order.game.name }}</h2>
+               <div class="item-meta">
+                  {% if order.game.discount > 0 %}
+                  <span class="discount">-{{ order.game.discount }}%</span>
+                  <span class="original-price">${{ order.game.price }}</span>
+                  {% endif %}
+                  <span class="final-price">${{ order.game.discounted_price|floatformat:2 }}</span>
+               </div>
+               <p class="desc line-clamp">{{ order.game.description }}</p>
+               {% if order.game.discount > 0 %}
+               <p class="sale-end">Sale ends 4/24/2025 at 10:00 PM</p>
+               {% endif %}
+               <div class="item-actions">
+                  <form action="{% url 'cart-delete' order.pk %}" method="POST">
+                     <a style="display: inline-block; margin-right: 10px;" href="#">Move to wishlist</a>
+                     {% csrf_token %}
+                     <button type="submit">Remove</button>
+                  </form>
+               </div>
             </div>
-            <!-- RIGHT: Summary -->
-            <div class="cart-right">
-                <h3>Games and Apps Summary</h3>
-                <div class="summary-line">
-                    <span>Price</span>
-                    <span>${{ total_price }}</span>
-                </div>
-                <div class="summary-line">
-                    <span>Sale Discount</span>
-                    <span>-${{ discount|floatformat:2 }}</span>
-                </div>
-                <div class="summary-line">
-                    <span>Taxes</span>
-                    <span>Calculated at Checkout</span>
-                </div>
-                <div class="summary-line total">
-                    <span>Subtotal</span>
-                    <span>${{ total_discounted_price|floatformat:2 }}</span>
-                </div>
-                <form action="" method="POST">
-                    {% csrf_token %}
-                    <button id="checkout-btn" class="checkout-btn">Check Out</button>
-                </form>
+         </div>
+         {% else %}
+         <div data-type="dlc" data-order-id="{{ order.pk }}" data-game-pk="{{ order.dlc.pk }}" class="cart-item">
+            <img src="{{ order.dlc.image.url }}" class="item-image" alt="Game Image" />
+            <div class="item-details">
+               <div class="item-header">
+                  <span class="badge">Base Game</span>
+                  <!-- <span class="badge purple">DELUXE EDITION</span> -->
+               </div>
+               <h2 class="item-name">{{ order.dlc.name }}</h2>
+               <div class="item-meta">
+                  {% if order.dlc.discount > 0 %}
+                  <span class="discount">-{{ order.dlc.discount }}%</span>
+                  <span class="original-price">${{ order.dlc.price }}</span>
+                  {% endif %}
+                  <span class="final-price">${{ order.dlc.discounted_price|floatformat:2 }}</span>
+               </div>
+               <p class="desc line-clamp">{{ order.dlc.description }}</p>
+               {% if order.dlc.discount > 0 %}
+               <p class="sale-end">Sale ends 4/24/2025 at 10:00 PM</p>
+               {% endif %}
+               <div class="item-actions">
+                  <form action="{% url 'cart-delete' order.pk %}" method="POST">
+                     <a style="display: inline-block; margin-right: 10px;" href="#">Move to wishlist</a>
+                     {% csrf_token %}
+                     <button type="submit">Remove</button>
+                  </form>
+               </div>
             </div>
-          </div>
-        </main>
-    {% else %}
-        <main class="cart-container">
-            <h1>My Cart</h1>
-            <div class="empty-cart">
-                <div class="empty-icon">😕</div>
-                <p class="empty-text">Your cart is empty.</p>
-                <a href="#" class="shop-btn">Shop for Games & Apps</a>
-            </div>
-        </main>
-    {% endif %}
+         </div>
+         {% endif %}
+         {% endfor %}
+      </div>
+      <!-- RIGHT: Summary -->
+      <div class="cart-right">
+         <h3>Games and Apps Summary</h3>
+         <div class="summary-line">
+            <span>Price</span>
+            <span>${{ total_price }}</span>
+         </div>
+         <div class="summary-line">
+            <span>Sale Discount</span>
+            <span>-${{ discount|floatformat:2 }}</span>
+         </div>
+         <div class="summary-line">
+            <span>Taxes</span>
+            <span>Calculated at Checkout</span>
+         </div>
+         <div class="summary-line total">
+            <span>Subtotal</span>
+            <span>${{ total_discounted_price|floatformat:2 }}</span>
+         </div>
+         <form action="" method="POST">
+            {% csrf_token %}
+            <button id="checkout-btn" class="checkout-btn">Check Out</button>
+         </form>
+      </div>
+   </div>
+</main>
+{% else %}
+<main class="cart-container">
+   <h1>My Cart</h1>
+   <div class="empty-cart">
+      <div class="empty-icon">😕</div>
+      <p class="empty-text">Your cart is empty.</p>
+      <a href="#" class="shop-btn">Shop for Games & Apps</a>
+   </div>
+</main>
+{% endif %}
 {% endblock %}
-
 {% block extra_js %}
-    <script src="https://js.stripe.com/v3/"></script>
-
-    <script>
-        const stripe = Stripe("{{ STRIPE_PUBLISHABLE_KEY }}");
-    </script>
-
-    <script src="{% static 'cart/js/checkout.js' %}"></script>
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+   const stripe = Stripe("{{ STRIPE_PUBLISHABLE_KEY }}");
+</script>
+<script src="{% static 'cart/js/checkout.js' %}"></script>
 {% endblock %}
