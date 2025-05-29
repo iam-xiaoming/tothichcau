@@ -46,7 +46,7 @@ MAILJET_API_KEY=config('MAILJET_API_KEY')
 MAILJET_API_SECRET=config('MAILJET_API_SECRET')
 SENDER = config('SENDER')
 
-if False:
+if True:
     STORAGES = {
         # Media file (image) management 
         'default': {
@@ -181,9 +181,11 @@ DATABASES = {
     }
 }
 
+ELASTICSEARCH_URL = config('ELASTICSEARCH_URL')
+
 ELASTICSEARCH_DSL = {
     'default': {
-        'hosts': 'https://d59efb21a62f446b903ba467b11cf9fb.asia-southeast1.gcp.elastic-cloud.com:443',
+        'hosts': ELASTICSEARCH_URL,
         'api_key': config('ELASTICSEARCH_DSL'),
         'verify_certs': True,
     },
