@@ -135,7 +135,7 @@
                         <p style="color: #fff;">Subscribe to our newsletter to get the latest gaming news and articles delivered to your inbox.</p>
                         <form method="POST" class="newsletter-form">
                             {% csrf_token %}
-                            {{ subscription_form }}
+                            {{ subscription_form.email }}
                             <button type="submit" class="btn-primary">Subscribe</button>
                         </form>
                     </div>

@@ -11,9 +11,9 @@ class EmailSubscriptionForm(forms.ModelForm):
         fields = ['email']
 
         # cai nay de them may cai thuoc tinh html vao form
-        # widgets = {
-        #     'email': forms.EmailInput(attrs={'placeholder': 'Enter your email to subscribe...'})
-        # }
+        widgets = {
+            'email': forms.EmailInput(attrs={'placeholder': 'Enter your email to subscribe...'})
+        }
 
     # ham kiem tra coi la email co ton tai hay chua
     def clean_email(self):

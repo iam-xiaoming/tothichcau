@@ -299,3 +299,26 @@ footer {
         gap: 2rem;
     }
 }
+
+.newsletter-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.newsletter-form input {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+    padding: 12px 15px;
+    color: var(--primary-text);
+    font-family: 'Roboto', sans-serif;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+
+.newsletter-form input:focus {
+    outline: none;
+    border-color: var(--neon-primary);
+    box-shadow: 0 0 0 2px rgba(0, 242, 255, 0.2);
+}
