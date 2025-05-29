@@ -1,6 +1,33 @@
 from django import forms
-from .models import Post, Category, Tag, PostComment
+from .models import Post, Category, Tag, PostComment, EmailSubscription
 from django.forms import CheckboxSelectMultiple
+
+
+
+# form for email subscription cho nho huyen lao nhao
+class EmailSubscriptionForm(forms.ModelForm):
+    class Meta:
+        model = EmailSubscription
+        fields = ['email']
+
+        # cai nay de them may cai thuoc tinh html vao form
+        # widgets = {
+        #     'email': forms.EmailInput(attrs={'placeholder': 'Enter your email to subscribe...'})
+        # }
+
+    # ham kiem tra coi la email co ton tai hay chua
+    def clean_email(self):
+        # lay email tu cai form
+        email = self.cleaned_data.get('email')
+
+        # exist (v): ton tai
+        # kiem tra xem email da ton tai trong bang EmailSubscription chua
+        if EmailSubscription.objects.filter(email=email).exists():
+            raise forms.ValidationError("This email is already subscribed.")
+        
+        return email
+
+
 
 class PostAdminForm(forms.ModelForm):
     tags = forms.ModelMultipleChoiceField(
