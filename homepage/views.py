@@ -6,7 +6,7 @@ from admin_manager.models import GameHero
 
 # Create your views here.
 def home(request):
-    sales = get_sales()
+    sales = get_sales()[:5]
     context = {
         'game_heros': GameHero.objects.all(),
         'sections': [
@@ -30,8 +30,8 @@ def home(request):
             }
         ],
         'top_sellers': sorted(sales, key=lambda x: -x.discount),
-        'most_played': get_mostplay(),
-        'upcoming_games': get_coming_soon(),
+        'most_played': get_mostplay()[:5],
+        'upcoming_games': get_coming_soon()[:5],
         'highlights': FeatureHighlight.objects.all(),
         'stories': GameStory.objects.all(),
         'free_games': get_free_games()

@@ -102,7 +102,7 @@
                                                     {% else %}
                                                         <span class="base-game">Downloadable Content</span>
                                                     {% endif %}
-                                                    <h5 class="line-clamp">{{ game.name|title }}</h5>
+                                                    <h5 class="line-clamp">{{ game.name }}</h5>
                                                     <span style="font-size: 12px;" class="base-game">{{ game.rating|title }}</span>
                                                 </div>
                                                 <div class="price-section">
@@ -183,8 +183,10 @@
                                     {% else %}
                                         <span class="base-game">Downloadable Content</span><br>
                                     {% endif %}
-                                    {% if game.price == 0 %}
-                                        <span class="fw-bold text-success">Free</span>
+                                    {% if game.discount > 0 %}
+                                        <span style="background: rgb(38, 187, 255) !important;" class="badge bg-primary">-{{ game.discount }}%</span>
+                                        <del class="text-muted small">${{ game.price }}</del>
+                                        <span class="fw-bold ms-1">${{ game.discounted_price|floatformat:2 }}</span>
                                     {% else %}
                                         <span class="fw-bold">${{ game.price }}</span>
                                     {% endif %}
@@ -297,18 +299,18 @@
 
             <div class="row g-2">
                 <!-- Game Card 1 -->
-                <div class="col-lg-3 col-md-4 col-6">
-                    {% for game in free_games %}
+                 {% for game in free_games %}
+                    <div class="col-lg-3 col-md-4 col-6">
                         <a class="item-click" game-pk="{{ game.pk }}" href="{% if game.status == 'base' %}{% url 'base-game-details' game.pk %}{% else %}{% url 'dlc-game-details' game.pk %}{% endif %}" style="display: block; text-decoration: none;">
                             <div class="game-card">
                                 <img src="{{ game.image.url }}" class="img-fluid rounded" alt="Game 1">
                                 <div class="game-status text-white text-center">FREE NOW</div>
-                                <h6 class="text-white">{{ game.name }}</h6>
-                                <p class="text-muted small line-clamp">{{ game.description }}</p>
+                                <h6 class="text-white line-clamp">{{ game.name }}</h6>
+                                <p class="text-muted small line-clamp">{{ game.release_date }}</p>
                             </div>
                         </a>
-                    {% endfor %}
-                </div>
+                    </div>
+                {% endfor %}
             </div>
         </div>
     </section>

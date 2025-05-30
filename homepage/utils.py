@@ -63,7 +63,7 @@ def get_new_release(status='limit'):
     games = list(Game.objects.filter(release_date__gt=thirty_days_ago).order_by('-release_date'))
     dlcs = list(DLC.objects.filter(release_date__gt=thirty_days_ago).order_by('-release_date'))
     
-    combined = games + dlcs
+    combined = sorted(games + dlcs, key=lambda x: x.release_date, reverse=True)
     if status == 'all':
         return combined
     
