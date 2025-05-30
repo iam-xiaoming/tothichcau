@@ -14,15 +14,12 @@ def save_post_like(sender, instance, created, **kwargs):
         
 @receiver(pre_delete, sender=PostLike)
 def decrease_post_like_count(sender, instance, **kwargs):
-    # Trừ trực tiếp bằng F expression để tránh race condition
-    instance.post.count_like = F('count_like') - 1
-    instance.post.save(update_fields=['count_like'])
+    post = instance.post
 
-    # Reload lại để đảm bảo không bị âm
-    instance.post.refresh_from_db()
-    if instance.post.count_like < 0:
-        instance.post.count_like = 0
-        instance.post.save(update_fields=['count_like'])
+    # Dùng F để giảm count_like, nhưng không để giá trị âm
+    if post.count_like > 0:
+        post.count_like = F('count_like') - 1
+        post.save(update_fields=['count_like'])
     
 
 # post comment count
@@ -43,15 +40,12 @@ def save_post_like(sender, instance, created, **kwargs):
         
 @receiver(pre_delete, sender=PostCommentLike)
 def decrease_comment_like_count(sender, instance, **kwargs):
-    # Trừ trực tiếp bằng F expression (tránh race condition)
-    instance.comment.count_like = F('count_like') - 1
-    instance.comment.save(update_fields=['count_like'])
-
-    # Reload lại để chắc chắn và sửa nếu count_like < 0
-    instance.comment.refresh_from_db()
-    if instance.comment.count_like < 0:
-        instance.comment.count_like = 0
-        instance.comment.save(update_fields=['count_like'])
+    comment = instance.comment
+    
+    # Dùng F để giảm count_like, nhưng không để giá trị âm
+    if comment.count_like > 0:
+        comment.count_like = F('count_like') - 1
+        comment.save(update_fields=['count_like'])
     
 
 # notification
