@@ -116,3 +116,27 @@ def spotify_refresh(request):
         return redirect('spotify-home')
     else:
         return redirect('spotify-login')
+    
+    
+def spotify_search(request):
+    access_token = request.session.get('access_token')
+    query = request.GET.get('q', '')
+    results = []
+    if query and access_token:
+        try:
+            search_url = f'https://api.spotify.com/v1/search?q={quote(query)}&type=track,album,artist&limit=10'
+            response = requests.get(search_url, headers={
+                'Authorization': f'Bearer {access_token}'
+            })
+            response.raise_for_status()
+            results = response.json()
+        except requests.RequestException as e:
+            print(f'Error searching Spotify: {e}')
+            return render(request, 'spotifyplayer/search.html', {
+                'error': 'Không thể tìm kiếm. Vui lòng thử lại.',
+                'query': query
+            })
+    return render(request, 'spotifyplayer/search.html', {
+        'results': results,
+        'query': query
+    })

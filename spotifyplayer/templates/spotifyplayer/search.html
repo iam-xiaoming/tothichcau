@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Spotify Search</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    input {
+      padding: 8px;
+      width: 400px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      padding: 8px 16px;
+      background-color: #1db954;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #17a34a;
+    }
+    .error {
+      color: red;
+      margin-top: 10px;
+    }
+    .result {
+      margin: 10px 0;
+    }
+    .result a {
+      color: #1db954;
+      text-decoration: none;
+    }
+    .result a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <h2>🎵 Tìm kiếm nhạc trên Spotify</h2>
+  {% if not request.session.access_token %}
+    <p>Vui lòng <a href="{% url 'spotify-login' %}">đăng nhập</a> để tìm kiếm.</p>
+  {% else %}
+    <form method="get">
+      <input type="text" name="q" placeholder="Tìm bài hát, nghệ sĩ, album..." value="{{ query }}" required>
+      <button type="submit">Tìm kiếm</button>
+    </form>
+    {% if error %}
+      <p class="error">{{ error }}</p>
+    {% elif results.tracks %}
+      <h3>Kết quả tìm kiếm cho "{{ query }}"</h3>
+      {% for track in results.tracks.items %}
+        <div class="result">
+          <strong>{{ track.name }}</strong> - {{ track.artists.0.name }}
+          <br>
+          <a href="{% url 'embed_spotify' %}?url={{ track.external_urls.spotify }}">Nhúng bài hát</a>
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endif %}
+</body>
+</html>
