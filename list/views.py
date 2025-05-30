@@ -32,7 +32,8 @@ def category_view(request, slug):
     game_list = games + dlcs
     context = {
         'genres': Category.objects.all()[:4],
-        'games': games + dlcs 
+        'games': games + dlcs,
+        'sidebar_genres': Category.objects.all()
     }
     paginator = Paginator(game_list, 21)
     page_number = request.GET.get('page')
@@ -47,7 +48,8 @@ def action_view(request, action):
         return HttpResponse('<h1>404</h1>')
     
     context = {
-        'genres': Category.objects.all()[:4], 
+        'genres': Category.objects.all()[:4],
+        'sidebar_genres': Category.objects.all()
     }
     
     if action == 'trending':
