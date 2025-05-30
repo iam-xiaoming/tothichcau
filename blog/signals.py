@@ -2,6 +2,7 @@ from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
 from .models import PostLike, PostCommentLike, PostComment
 from notification.models import Notification
+from django.db.models import F
 
 # post like
 @receiver(post_save, sender=PostLike)
@@ -12,10 +13,16 @@ def save_post_like(sender, instance, created, **kwargs):
         
         
 @receiver(pre_delete, sender=PostLike)
-def save_post_like(sender, instance, **kwargs):
-    count_like = instance.post.count_like
-    instance.post.count_like = max(0, count_like - 1)
-    instance.post.save()
+def decrease_post_like_count(sender, instance, **kwargs):
+    # Trừ trực tiếp bằng F expression để tránh race condition
+    instance.post.count_like = F('count_like') - 1
+    instance.post.save(update_fields=['count_like'])
+
+    # Reload lại để đảm bảo không bị âm
+    instance.post.refresh_from_db()
+    if instance.post.count_like < 0:
+        instance.post.count_like = 0
+        instance.post.save(update_fields=['count_like'])
     
 
 # post comment count
@@ -35,10 +42,16 @@ def save_post_like(sender, instance, created, **kwargs):
         
         
 @receiver(pre_delete, sender=PostCommentLike)
-def save_post_like(sender, instance, **kwargs):
-    count_like = instance.comment.count_like
-    instance.comment.count_like = max(0, count_like - 1)
-    instance.comment.save()
+def decrease_comment_like_count(sender, instance, **kwargs):
+    # Trừ trực tiếp bằng F expression (tránh race condition)
+    instance.comment.count_like = F('count_like') - 1
+    instance.comment.save(update_fields=['count_like'])
+
+    # Reload lại để chắc chắn và sửa nếu count_like < 0
+    instance.comment.refresh_from_db()
+    if instance.comment.count_like < 0:
+        instance.comment.count_like = 0
+        instance.comment.save(update_fields=['count_like'])
     
 
 # notification

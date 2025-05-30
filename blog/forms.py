@@ -37,7 +37,7 @@ class PostAdminForm(forms.ModelForm):
     
     class Meta:
         model = Post
-        fields = ['user', 'title', 'category', 'tags', 'content']
+        fields = ['user', 'title', 'category', 'count_like', 'tags', 'content']
         
         
 class PostForm(forms.ModelForm):
