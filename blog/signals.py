@@ -3,13 +3,14 @@ from django.dispatch import receiver
 from .models import PostLike, PostCommentLike, PostComment
 from notification.models import Notification
 from django.db.models import F
+from blog.models import Post
 
 # post like
 @receiver(post_save, sender=PostLike)
 def save_post_like(sender, instance, created, **kwargs):
     if created:
-        instance.post.count_like = F('count_like') + 1
-        instance.post.save(update_fields=['count_like'])
+        updated = Post.objects.filter(id=instance.post.id).update(count_like=F('count_like') + 1)
+        print(f'Updated post {instance.post.id}, rows affected: {updated}')
         
         
 @receiver(pre_delete, sender=PostLike)
