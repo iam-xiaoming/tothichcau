@@ -30,7 +30,7 @@ STRIPE_PUBLISHABLE_KEY = config('STRIPE_PUBLISHABLE_KEY')
 STRIPE_WEBHOOK_SECRET = config('STRIPE_WEBHOOK_SECRET')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 # Basic Storage configuration for Amazon S3 (Irrespective of Django versions)
 AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
@@ -75,7 +75,7 @@ CSRF_TRUSTED_ORIGINS = [
     "https://www.tothichcau.shop",
     "https://tothichcau.shop"
 ]
-ALLOWED_HOSTS = ["www.tothichcau.shop", "tothichcau.shop" ,'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ["www.tothichcau.shop", "tothichcau.shop" ,'localhost', '127.0.0.1', '47.130.87.247']
 
 
 # Application definition
