@@ -51,6 +51,7 @@ urlpatterns = [
     path('', include(notification.urls)),
     path('', include(list.urls)),
     path('', include('livestream.urls')),
+    path('', include('spotifyplayer.urls'))
 ]
 
 

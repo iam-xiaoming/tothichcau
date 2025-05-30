@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Spotify Embed</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+    }
+    input {
+      padding: 8px;
+      width: 400px;
+    }
+    button {
+      padding: 8px 16px;
+    }
+    iframe {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h2>🎵 Nhúng bài hát Spotify</h2>
+  <form method="get">
+    <input type="text" name="url" placeholder="Dán link Spotify ở đây" required>
+    <button type="submit">Nhúng</button>
+  </form>
+
+  {% if embed_html %}
+    <div>
+      {{ embed_html|safe }}
+    </div>
+  {% endif %}
+</body>
+</html>
