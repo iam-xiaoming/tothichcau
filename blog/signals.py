@@ -8,8 +8,8 @@ from django.db.models import F
 @receiver(post_save, sender=PostLike)
 def save_post_like(sender, instance, created, **kwargs):
     if created:
-        instance.post.count_like += 1
-        instance.post.save()
+        instance.post.count_like = F('count_like') + 1
+        instance.post.save(update_fields=['count_like'])
         
         
 @receiver(pre_delete, sender=PostLike)
@@ -34,8 +34,10 @@ def count_post_comment(sender, instance, created, **kwargs):
 @receiver(post_save, sender=PostCommentLike)
 def save_post_like(sender, instance, created, **kwargs):
     if created:
-        instance.comment.count_like += 1
-        instance.comment.save()
+        instance.comment.count_like = F('count_like') + 1
+        instance.comment.save(update_fields=['count_like'])
+        # instance.comment.count_like += 1
+        # instance.comment.save()
         
         
 @receiver(pre_delete, sender=PostCommentLike)
